@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Test Cases</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .summary-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .summary-item {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .summary-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .stage {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .stage-header {
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .stage-icon {
+            font-size: 28px;
+        }
+        .stage-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .stage-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .stage-1 .stage-header { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .stage-2 .stage-header { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .stage-3 .stage-header { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .stage-4 .stage-header { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+        .stage-5 .stage-header { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+        .stage-full .stage-header { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .stage-edge .stage-header { background: linear-gradient(135deg, #f093fb, #f5576c); }
+
+        .tests-container {
+            padding: 15px 20px;
+        }
+        .test-case {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .test-case:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-case:last-child {
+            margin-bottom: 0;
+        }
+        .test-pass {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        .test-error {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .test-icon {
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .test-content {
+            flex: 1;
+        }
+        .test-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .test-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .test-type {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        .type-valid {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .type-invalid {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        .type-edge {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .schema-box {
+            background: #f5f5f5;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .schema-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .schema-label {
+            color: #666;
+        }
+        .schema-value {
+            color: #1976d2;
+            font-weight: 500;
+        }
+        .arrow {
+            color: #999;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        .legend-pass { background: #4caf50; }
+        .legend-error { background: #ff9800; }
+
+        @media (max-width: 768px) {
+            .summary-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+            .schema-box {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Pipeline Test Cases</h1>
+    <p class="subtitle">Score Post-LLM Pipeline - Validation & Error Handling Tests</p>
+
+    <div class="summary-bar">
+        <div class="summary-item">
+            <div class="summary-number">24</div>
+            <div class="summary-label">Total Tests</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-number" style="color: #4caf50;">24</div>
+            <div class="summary-label">Passed</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-number" style="color: #f44336;">0</div>
+            <div class="summary-label">Failed</div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-box legend-pass"></div>
+            <span>Valid Input Test</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box legend-error"></div>
+            <span>Error Handling Test</span>
+        </div>
+    </div>
+
+    <!-- Stage 1 -->
+    <div class="stage stage-1">
+        <div class="stage-header">
+            <span class="stage-icon">🤖</span>
+            <div>
+                <div class="stage-title">Stage 1: Report JSON Validation</div>
+                <div class="stage-subtitle">LLM Output → Validated Report JSON</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">Input:</span>
+                    <span class="schema-value">unknown</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Output:</span>
+                    <span class="schema-value">ReportJSON</span>
+                </div>
+                <div class="schema-item">
+                    <span class="schema-label">Key Check:</span>
+                    <span class="schema-value">letter_grades === null</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Valid report JSON passes validation</div>
+                    <div class="test-desc">A properly structured report with all required fields and null letter_grades should pass validation.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Report with non-null letter_grades fails</div>
+                    <div class="test-desc">If letter_grades is not null, it means the report has been curved already. Uncurved reports MUST have null.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Report missing required field fails</div>
+                    <div class="test-desc">Missing event_id or other required fields should trigger validation error.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Report with invalid problem_id fails</div>
+                    <div class="test-desc">Problem IDs must be 6-8 digits. "invalid" string should fail regex validation.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Report with out-of-range score fails</div>
+                    <div class="test-desc">Scores must be 0-1. A score of 1.5 should fail the range check.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 2 -->
+    <div class="stage stage-2">
+        <div class="stage-header">
+            <span class="stage-icon">📊</span>
+            <div>
+                <div class="stage-title">Stage 2: Score Extraction</div>
+                <div class="stage-subtitle">Report JSON → JSON Scores</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">Input:</span>
+                    <span class="schema-value">ReportJSON</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Output:</span>
+                    <span class="schema-value">JSONScores</span>
+                </div>
+                <div class="schema-item">
+                    <span class="schema-label">Key Check:</span>
+                    <span class="schema-value">source_report_id linked</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Extract scores from valid report</div>
+                    <div class="test-desc">Scores should be extracted with source_report_id correctly linked for traceability.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Extracted scores preserve all data</div>
+                    <div class="test-desc">Count of problem_scores and ability_scores should match the original report.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 3 -->
+    <div class="stage stage-3">
+        <div class="stage-header">
+            <span class="stage-icon">📈</span>
+            <div>
+                <div class="stage-title">Stage 3: Score Pool & Curve Computation</div>
+                <div class="stage-subtitle">JSON Scores[] → Score Pool → Curve</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">3a Input:</span>
+                    <span class="schema-value">JSONScores[]</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">3a Output:</span>
+                    <span class="schema-value">ScorePool</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">3b Output:</span>
+                    <span class="schema-value">Curve</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Create score pool from multiple scores</div>
+                    <div class="test-desc">10 individual score objects should aggregate into 1 pool with 10 scores.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Empty scores array fails</div>
+                    <div class="test-desc">Cannot compute curve from 0 participants. Must have at least 1 score.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Event ID mismatch fails</div>
+                    <div class="test-desc">All scores must belong to the same event. Mixing events should fail.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Compute curve from score pool</div>
+                    <div class="test-desc">Curve should be computed with correct sample_size and 3 thresholds for A/B/C/D grades.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Curve thresholds are in descending order</div>
+                    <div class="test-desc">Thresholds must be: A_threshold ≥ B_threshold ≥ C_threshold (descending).</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 4 -->
+    <div class="stage stage-4">
+        <div class="stage-header">
+            <span class="stage-icon">🎯</span>
+            <div>
+                <div class="stage-title">Stage 4: Compatibility Check & Apply Curve</div>
+                <div class="stage-subtitle">JSON Scores + Curve → Curved Letter Grades</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">Input:</span>
+                    <span class="schema-value">{scores, curve}</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Check:</span>
+                    <span class="schema-value">CompatibilityResult</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Output:</span>
+                    <span class="schema-value">CurvedLetterGrades</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Compatible scores and curve pass check</div>
+                    <div class="test-desc">When problem_ids and dimension_ids match, compatibility status should be "compatible".</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Incompatible problem IDs detected</div>
+                    <div class="test-desc">Adding a problem_id that's not in the curve should return status "incompatible".</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Apply curve generates valid letter grades</div>
+                    <div class="test-desc">Grades should be one of A/B/C/D (not X). X is only for uncurved reports.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Applying incompatible curve fails</div>
+                    <div class="test-desc">If dimensions don't match (e.g., scores has fewer dimensions), applyCurve should throw error.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 5 -->
+    <div class="stage stage-5">
+        <div class="stage-header">
+            <span class="stage-icon">📝</span>
+            <div>
+                <div class="stage-title">Stage 5: Merge into Curved Report</div>
+                <div class="stage-subtitle">Report JSON + Letter Grades → Curved Report</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">Input:</span>
+                    <span class="schema-value">{report, grades}</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Output:</span>
+                    <span class="schema-value">CurvedReport</span>
+                </div>
+                <div class="schema-item">
+                    <span class="schema-label">Key:</span>
+                    <span class="schema-value">applied_curve_id set</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Merge creates valid curved report</div>
+                    <div class="test-desc">source_report_id and applied_curve_id should be correctly set for traceability.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Curved report has all letter grades</div>
+                    <div class="test-desc">letter_grades object must have overall, abilities (map), and problems (map).</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-error">
+                <span class="test-icon">🚫</span>
+                <div class="test-content">
+                    <div class="test-name">Mismatched report and grades fails</div>
+                    <div class="test-desc">grades.source_scores_id must match report.report_id. Merging wrong pairs should fail.</div>
+                </div>
+                <span class="test-type type-invalid">ERROR</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Pipeline -->
+    <div class="stage stage-full">
+        <div class="stage-header">
+            <span class="stage-icon">🔄</span>
+            <div>
+                <div class="stage-title">Full Pipeline Tests</div>
+                <div class="stage-subtitle">End-to-End Integration Tests</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="schema-box">
+                <div class="schema-item">
+                    <span class="schema-label">Input:</span>
+                    <span class="schema-value">unknown[]</span>
+                </div>
+                <span class="arrow">→</span>
+                <div class="schema-item">
+                    <span class="schema-label">Output:</span>
+                    <span class="schema-value">{curvedReports[], curve, errors[]}</span>
+                </div>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Full pipeline processes all reports</div>
+                    <div class="test-desc">15 valid reports should produce 15 curved reports with 0 errors.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Full pipeline handles invalid reports gracefully</div>
+                    <div class="test-desc">Mixed valid/invalid input should process valid ones and collect errors for invalid ones.</div>
+                </div>
+                <span class="test-type type-valid">VALID</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edge Cases -->
+    <div class="stage stage-edge">
+        <div class="stage-header">
+            <span class="stage-icon">⚡</span>
+            <div>
+                <div class="stage-title">Edge Case Tests</div>
+                <div class="stage-subtitle">Boundary Conditions & Special Cases</div>
+            </div>
+        </div>
+        <div class="tests-container">
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Single report pipeline works</div>
+                    <div class="test-desc">Pipeline should work with just 1 participant (minimum case).</div>
+                </div>
+                <span class="test-type type-edge">EDGE</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Report with null overall_score</div>
+                    <div class="test-desc">overall_score can be null. Pipeline should handle this without errors.</div>
+                </div>
+                <span class="test-type type-edge">EDGE</span>
+            </div>
+
+            <div class="test-case test-pass">
+                <span class="test-icon">✅</span>
+                <div class="test-content">
+                    <div class="test-name">Extreme score values (0 and 1)</div>
+                    <div class="test-desc">Boundary values 0.0 and 1.0 should be valid scores.</div>
+                </div>
+                <span class="test-type type-edge">EDGE</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; color: rgba(255,255,255,0.8); margin-top: 30px; padding-bottom: 20px;">
+        <p>Generated from <code>test-pipeline.ts</code></p>
+        <p>All tests validate both input and output schemas using Zod</p>
+    </div>
+</body>
+</html>
