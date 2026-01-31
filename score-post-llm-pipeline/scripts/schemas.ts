@@ -1,6 +1,16 @@
 /**
  * Score Post-LLM Pipeline Schemas
  * All schemas defined with Zod for runtime validation
+ *
+ * KEY DESIGN PRINCIPLES (from ip-02.md):
+ * 1. Uncurved reports have NO letter grades (letter_grades = null)
+ * 2. Creating a curve requires MULTIPLE scores (ScorePool)
+ * 3. Applying a curve requires only ONE score (JSONScores)
+ * 4. Pipeline starts from extracted scores, not full reports
+ *
+ * TWO CORE OUTPUT SCHEMAS:
+ * - JSONScores: Non-curved extracted scores (no letter grades)
+ * - CurvedReport: Scores + letter grades (after curve application)
  */
 
 import { z } from "zod";
@@ -119,8 +129,6 @@ export const ThresholdDefinitionSchema = z.object({
   thresholds: z.array(ScoreValueSchema),
   grades: z.array(LetterGradeSchema.exclude(["X"])),
 });
-
-export const OverallCurveSchema = ThresholdDefinitionSchema;
 
 export const AbilityCurveSchema = z.object({
   dimension_id: DimensionIdSchema,
