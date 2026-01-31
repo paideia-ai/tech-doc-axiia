@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Post-LLM Pipeline Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4a90d9;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #4a90d9;
+            margin-top: 40px;
+        }
+        .diagram-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .description {
+            background: #e8f4fd;
+            border-left: 4px solid #4a90d9;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #4a90d9;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Score Post-LLM Pipeline Design</h1>
+
+    <h2>1. Main Pipeline Overview</h2>
+    <div class="description">
+        The pipeline transforms LLM-generated reports into curved reports with letter grades.
+        Key principle: <strong>No in-place modification</strong> - each transformation creates new data.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+flowchart TD
+    subgraph Inputs["Input Sources"]
+        LM["Language Model"]
+        EventData["Event Data<br/>(people selection)"]
+        ProblemSchema["Problem Schema<br/>(题目 schema)"]
+    end
+
+    subgraph LLM_Stage["LLM Generation Stage"]
+        LM --> |"generates"| ReportJSON["Report JSON<br/>(no letter grades)"]
+    end
+
+    subgraph Extraction["Score Extraction"]
+        ReportJSON --> |"extract"| JSONScores["JSON Scores<br/>(extracted scores)"]
+    end
+
+    subgraph CurveGeneration["Curve Generation"]
+        EventData --> |"select people"| ScorePool["Score Pool"]
+        ProblemSchema --> |"select problems"| ScorePool
+        ScorePool --> |"compute"| Curve["Curve<br/>(curve thresholds)"]
+    end
+
+    subgraph CurveApplication["Curve Application"]
+        JSONScores --> |"input"| ApplyCurve{"Apply Curve<br/>(compatibility check)"}
+        Curve --> |"input"| ApplyCurve
+        ApplyCurve --> |"generate"| CurvedLetterGrades["Curved Letter Grades"]
+    end
+
+    subgraph FinalOutput["Final Output"]
+        CurvedLetterGrades --> |"merge"| MergeReport{"Merge<br/>(schema match)"}
+        ReportJSON --> |"input"| MergeReport
+        MergeReport --> |"output"| CurvedReport["Curved Report<br/>(with letter grades)"]
+    end
+
+    style ReportJSON fill:#e1f5fe
+    style JSONScores fill:#fff3e0
+    style Curve fill:#f3e5f5
+    style CurvedLetterGrades fill:#e8f5e9
+    style CurvedReport fill:#ffebee
+        </pre>
+    </div>
+
+    <h2>2. Report JSON Schema</h2>
+    <div class="description">
+        Original report from LLM - contains scores but <strong>NO letter grades</strong> (null or "X").
+        Must include <code>prompt_version_hash</code> for traceability.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+classDiagram
+    class ReportJSON {
+        +string report_id
+        +string event_id
+        +string prompt_version_hash
+        +datetime generated_at
+        +string participant_id
+        +Problem[] problems
+        +AbilityDimension[] abilities
+        +float overall_score
+        +null letter_grades
+    }
+
+    class Problem {
+        +string problem_id
+        +Record dimension_scores
+        +float objective_score
+    }
+
+    class AbilityDimension {
+        +string dimension_id
+        +float score
+    }
+
+    ReportJSON --> "1..*" Problem : contains
+    ReportJSON --> "1..*" AbilityDimension : contains
+        </pre>
+    </div>
+
+    <h2>3. JSON Scores Schema</h2>
+    <div class="description">
+        Extracted scores from Report JSON - flat structure for curve computation and application.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+classDiagram
+    class JSONScores {
+        +string source_report_id
+        +string event_id
+        +string participant_id
+        +float overall_score
+        +AbilityScore[] ability_scores
+        +ProblemScore[] problem_scores
+    }
+
+    class AbilityScore {
+        +string dimension_id
+        +float score
+    }
+
+    class ProblemScore {
+        +string problem_id
+        +float objective_score
+        +AbilityScore[] dimension_scores
+    }
+
+    JSONScores --> "1..*" AbilityScore : contains
+    JSONScores --> "1..*" ProblemScore : contains
+    ProblemScore --> "1..*" AbilityScore : contains
+        </pre>
+    </div>
+
+    <h2>4. Curve Schema</h2>
+    <div class="description">
+        Computed thresholds for grading. Can be applied to any compatible report (not just the source).
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+classDiagram
+    class Curve {
+        +string curve_id
+        +string source_event_id
+        +string prompt_version_hash
+        +string[] problem_ids
+        +string[] dimension_ids
+        +CurveMethod method
+        +int sample_size
+        +datetime computed_at
+        +OverallCurve overall
+        +AbilityCurve[] ability_curves
+        +ProblemCurve[] problem_curves
+    }
+
+    class CurveMethod {
+        &lt;&lt;discriminated union&gt;&gt;
+        +string type
+        +float[] percentiles
+        +float[] sigma_boundaries
+        +float[] thresholds
+    }
+
+    class OverallCurve {
+        +float[] thresholds
+        +string[] grades
+    }
+
+    class AbilityCurve {
+        +string dimension_id
+        +float[] thresholds
+        +string[] grades
+    }
+
+    class ProblemCurve {
+        +string problem_id
+        +float[] thresholds
+        +string[] grades
+    }
+
+    Curve --> CurveMethod : uses
+    Curve --> OverallCurve : contains
+    Curve --> "1..*" AbilityCurve : contains
+    Curve --> "1..*" ProblemCurve : contains
+        </pre>
+    </div>
+
+    <h2>5. Curved Letter Grades Schema</h2>
+    <div class="description">
+        Intermediate result - grades computed but not yet merged with report.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+classDiagram
+    class CurvedLetterGrades {
+        +string source_scores_id
+        +string curve_id
+        +datetime computed_at
+        +string overall_grade
+        +AbilityGrade[] ability_grades
+        +ProblemGrade[] problem_grades
+    }
+
+    class AbilityGrade {
+        +string dimension_id
+        +string grade
+    }
+
+    class ProblemGrade {
+        +string problem_id
+        +string grade
+    }
+
+    CurvedLetterGrades --> "1..*" AbilityGrade : contains
+    CurvedLetterGrades --> "1..*" ProblemGrade : contains
+        </pre>
+    </div>
+
+    <h2>6. Curved Report Schema</h2>
+    <div class="description">
+        Final report with letter grades. <strong>Must record <code>applied_curve_id</code></strong> for traceability.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+classDiagram
+    class CurvedReport {
+        +string curved_report_id
+        +string source_report_id
+        +string event_id
+        +string prompt_version_hash
+        +string applied_curve_id
+        +datetime curved_at
+        +string participant_id
+        +Problem[] problems
+        +AbilityDimension[] abilities
+        +float overall_score
+        +LetterGrades letter_grades
+    }
+
+    class LetterGrades {
+        +string overall
+        +Record abilities
+        +Record problems
+    }
+
+    CurvedReport --> LetterGrades : contains
+        </pre>
+    </div>
+
+    <h2>7. Compatibility Check Flow</h2>
+    <div class="description">
+        Before applying a curve to scores, compatibility must be verified.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+flowchart TD
+    Start["Check Compatibility"] --> PID["Problem IDs Match?"]
+    PID -->|"Yes"| DIM["Dimension IDs Match?"]
+    PID -->|"No"| FAIL["❌ Incompatible"]
+    DIM -->|"Yes"| VER["Prompt Version Match?"]
+    DIM -->|"No"| FAIL
+    VER -->|"Yes"| PASS["✅ Compatible"]
+    VER -->|"No"| WARN["⚠️ Manual Override Required"]
+    WARN --> OVERRIDE{"Override?"}
+    OVERRIDE -->|"Yes + Reason"| PASS_WITH_AUDIT["✅ Compatible<br/>(with audit record)"]
+    OVERRIDE -->|"No"| FAIL
+
+    style PASS fill:#c8e6c9
+    style PASS_WITH_AUDIT fill:#fff9c4
+    style FAIL fill:#ffcdd2
+    style WARN fill:#ffe0b2
+        </pre>
+    </div>
+
+    <h2>8. Problem ID Structure</h2>
+    <div class="description">
+        Problem IDs encode version and language information.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+flowchart LR
+    subgraph ProblemID["Problem ID: 90349431"]
+        BASE["903494<br/>Base ID"]
+        VER["3<br/>Version"]
+        LANG["1<br/>Language"]
+    end
+
+    BASE --> VER --> LANG
+
+    LANG -.-> |"0 = Chinese"| ZH["中文版本"]
+    LANG -.-> |"1 = English"| EN["English Version"]
+
+    VER -.-> |"Major changes"| VERINFO["Version changes<br/>increment this digit"]
+        </pre>
+    </div>
+
+    <h2>9. Dimension-Problem Dependencies</h2>
+    <div class="description">
+        Each dimension depends on specific problems. Important for subset operations.
+    </div>
+    <div class="diagram-container">
+        <pre class="mermaid">
+flowchart TD
+    subgraph Dimensions["Ability Dimensions"]
+        D1["Verification"]
+        D2["Critical Thinking"]
+        D3["Communication"]
+    end
+
+    subgraph Problems["Problems"]
+        P1["Thinking Trap"]
+        P2["Meeting Verification"]
+        P3["Prompt Optimization"]
+    end
+
+    D1 --> P1
+    D1 --> P2
+    D2 --> P1
+    D2 --> P3
+    D3 --> P2
+    D3 --> P3
+
+    style D1 fill:#e3f2fd
+    style D2 fill:#e8f5e9
+    style D3 fill:#fff3e0
+        </pre>
+    </div>
+
+    <h2>10. Complete Data Flow with Validation</h2>
+    <div class="diagram-container">
+        <pre class="mermaid">
+flowchart TB
+    subgraph Input["Inputs"]
+        LM["LLM Output"]
+        CONFIG["Event Config"]
+    end
+
+    subgraph Stage1["Stage 1: LLM → Report"]
+        LM --> V1{"Validate<br/>- Schema check<br/>- Record prompt hash"}
+        V1 --> REPORT["Report JSON<br/>(letter_grades: null)"]
+    end
+
+    subgraph Stage2["Stage 2: Extract Scores"]
+        REPORT --> V2{"Validate<br/>- Extract all scores<br/>- Check completeness"}
+        V2 --> SCORES["JSON Scores"]
+    end
+
+    subgraph Stage3["Stage 3: Compute Curve"]
+        CONFIG --> POOL["Score Pool<br/>(multiple reports)"]
+        SCORES -.-> POOL
+        POOL --> V3{"Validate<br/>- People selection<br/>- Problem selection"}
+        V3 --> CURVE["Curve"]
+    end
+
+    subgraph Stage4["Stage 4: Apply Curve"]
+        SCORES --> V4{"Validate<br/>- Compatibility check<br/>- Schema match"}
+        CURVE --> V4
+        V4 --> GRADES["Curved Letter Grades"]
+    end
+
+    subgraph Stage5["Stage 5: Final Report"]
+        REPORT --> V5{"Validate<br/>- Schema match<br/>- Record curve_id"}
+        GRADES --> V5
+        V5 --> FINAL["Curved Report"]
+    end
+
+    style REPORT fill:#e1f5fe
+    style SCORES fill:#fff3e0
+    style CURVE fill:#f3e5f5
+    style GRADES fill:#e8f5e9
+    style FINAL fill:#ffebee
+        </pre>
+    </div>
+
+    <h2>Compatibility Conditions Summary</h2>
+    <table>
+        <tr>
+            <th>Condition</th>
+            <th>Requirement</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <td>Problem IDs</td>
+            <td>Must match</td>
+            <td>Language suffix (0/1) may differ with <code>allowLanguageDifference</code> option</td>
+        </tr>
+        <tr>
+            <td>Dimension IDs</td>
+            <td>Must match</td>
+            <td>Same ability dimensions required</td>
+        </tr>
+        <tr>
+            <td>Prompt Version</td>
+            <td>Should match</td>
+            <td>Different versions require manual override with reason</td>
+        </tr>
+        <tr>
+            <td>Event ID</td>
+            <td>Can differ</td>
+            <td>Curve can apply to different events if schema matches</td>
+        </tr>
+    </table>
+
+    <h2>Design Principles</h2>
+    <table>
+        <tr>
+            <th>Principle</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>No In-Place Modification</td>
+            <td>Original data and processed data are separate entities. Never overwrite.</td>
+        </tr>
+        <tr>
+            <td>Explicit Metadata</td>
+            <td>All critical info (curve_id, prompt_version) must be explicitly recorded.</td>
+        </tr>
+        <tr>
+            <td>JSON over CSV</td>
+            <td>JSON supports hierarchy and stricter validation.</td>
+        </tr>
+        <tr>
+            <td>Validate Every Step</td>
+            <td>Each transformation arrow requires schema validation.</td>
+        </tr>
+        <tr>
+            <td>Traceability</td>
+            <td>Any output can be traced back to its inputs and configuration.</td>
+        </tr>
+    </table>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
