@@ -443,12 +443,12 @@
                 <div class="field">
                     <span class="field-name">ProblemId</span>
                     <span class="field-type type-string">string</span>
-                    <span class="field-desc">6-8 digits. Last digit = language (0=中文, 1=EN)</span>
+                    <span class="field-desc">Exactly 6 digits. Last digit = language (0=EN, 1=ZH)</span>
                 </div>
                 <div class="field">
                     <span class="field-name">DimensionId</span>
                     <span class="field-type type-string">string</span>
-                    <span class="field-desc">e.g., "verification", "critical_thinking"</span>
+                    <span class="field-desc">discovery, representation, iterative-refinement, exploratory, self-verification</span>
                 </div>
                 <div class="field">
                     <span class="field-name">EventId</span>
@@ -545,9 +545,27 @@
                     </div>
                 </div>
                 <div class="field">
-                    <span class="field-name">overall_score</span>
-                    <span class="field-type type-union">ScoreValue | null</span>
-                    <span class="field-desc">Geometric mean of ability scores</span>
+                    <span class="field-name">totals</span>
+                    <span class="field-type type-object">TotalScores</span>
+                    <span class="field-desc">Three aggregated scores</span>
+                </div>
+                <div class="nested">
+                    <div class="nested-title">TotalScores structure:</div>
+                    <div class="field">
+                        <span class="field-name">total_problem_score</span>
+                        <span class="field-type type-ref" onclick="scrollToSchema('CommonTypes')">→ScoreValue</span>
+                        <span class="field-desc">avg(problem.objective_score)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">total_ability_score</span>
+                        <span class="field-type type-ref" onclick="scrollToSchema('CommonTypes')">→ScoreValue</span>
+                        <span class="field-desc">avg(dimension.score)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">final_total_score</span>
+                        <span class="field-type type-ref" onclick="scrollToSchema('CommonTypes')">→ScoreValue</span>
+                        <span class="field-desc">√(total_problem × total_ability)</span>
+                    </div>
                 </div>
                 <div class="field" style="background: #2d1f1f;">
                     <span class="field-name">letter_grades</span>
@@ -583,9 +601,9 @@
                     <span class="field-desc">Copied from source report</span>
                 </div>
                 <div class="field">
-                    <span class="field-name">overall_score</span>
-                    <span class="field-type type-union">ScoreValue | null</span>
-                    <span class="field-desc">Total score</span>
+                    <span class="field-name">totals</span>
+                    <span class="field-type type-object">TotalScores</span>
+                    <span class="field-desc">Three aggregated scores (copied from source)</span>
                 </div>
                 <div class="field">
                     <span class="field-name">ability_scores</span>
@@ -713,20 +731,26 @@
                     <span class="field-desc">When curve was computed</span>
                 </div>
                 <div class="field">
-                    <span class="field-name">overall</span>
-                    <span class="field-type type-object">ThresholdDef</span>
-                    <span class="field-desc">Overall grade thresholds</span>
+                    <span class="field-name">totals</span>
+                    <span class="field-type type-object">TotalCurves</span>
+                    <span class="field-desc">Thresholds for three total scores</span>
                 </div>
                 <div class="nested">
+                    <div class="nested-title">TotalCurves structure:</div>
                     <div class="field">
-                        <span class="field-name">thresholds</span>
-                        <span class="field-type type-array">number[]</span>
-                        <span class="field-desc">[A_min, B_min, C_min] descending</span>
+                        <span class="field-name">total_problem</span>
+                        <span class="field-type type-object">ThresholdDef</span>
+                        <span class="field-desc">[μ+σ, μ, μ-σ] for problem scores</span>
                     </div>
                     <div class="field">
-                        <span class="field-name">grades</span>
-                        <span class="field-type type-array">string[]</span>
-                        <span class="field-desc">["A", "B", "C", "D"]</span>
+                        <span class="field-name">total_ability</span>
+                        <span class="field-type type-object">ThresholdDef</span>
+                        <span class="field-desc">[μ+σ, μ, μ-σ] for ability scores</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">final_total</span>
+                        <span class="field-type type-object">ThresholdDef</span>
+                        <span class="field-desc">[μ+σ, μ, μ-σ] for geometric mean</span>
                     </div>
                 </div>
                 <div class="field">
@@ -819,9 +843,24 @@
                     <span class="field-desc">When grades were computed</span>
                 </div>
                 <div class="field">
-                    <span class="field-name">overall_grade</span>
-                    <span class="field-type type-enum">"A"|"B"|"C"|"D"</span>
-                    <span class="field-desc">No "X" - must be curved</span>
+                    <span class="field-name">total_grades</span>
+                    <span class="field-type type-object">TotalGrades</span>
+                    <span class="field-desc">Grades for three total scores</span>
+                </div>
+                <div class="nested">
+                    <div class="nested-title">TotalGrades structure:</div>
+                    <div class="field">
+                        <span class="field-name">total_problem_grade</span>
+                        <span class="field-type type-enum">"A"|"B"|"C"|"D"</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">total_ability_grade</span>
+                        <span class="field-type type-enum">"A"|"B"|"C"|"D"</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">final_total_grade</span>
+                        <span class="field-type type-enum">"A"|"B"|"C"|"D"</span>
+                    </div>
                 </div>
                 <div class="field">
                     <span class="field-name">ability_grades</span>
@@ -902,8 +941,8 @@
                     <span class="field-desc">Copied from source (scores unchanged)</span>
                 </div>
                 <div class="field">
-                    <span class="field-name">overall_score</span>
-                    <span class="field-type type-union">ScoreValue | null</span>
+                    <span class="field-name">totals</span>
+                    <span class="field-type type-object">TotalScores</span>
                     <span class="field-desc">Copied from source</span>
                 </div>
                 <div class="field" style="background: #2d1f2f;">
@@ -913,8 +952,9 @@
                 </div>
                 <div class="nested">
                     <div class="field">
-                        <span class="field-name">overall</span>
-                        <span class="field-type type-enum">"A"|"B"|"C"|"D"</span>
+                        <span class="field-name">totals</span>
+                        <span class="field-type type-object">object</span>
+                        <span class="field-desc">{total_problem, total_ability, final_total}</span>
                     </div>
                     <div class="field">
                         <span class="field-name">abilities</span>
