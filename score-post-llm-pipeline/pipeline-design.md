@@ -1,5 +1,19 @@
 # Score Post-LLM Pipeline Design
 
+## Key Design Decisions (from ip-02.md)
+
+1. **A report that has not been curved does not have letter grades** - `letter_grades` must be `null` for uncurved reports
+2. **To create a curve, we need multiple scores** - curve is computed from a pool of participants
+3. **To apply a curve, we need only one score** - curve is applied to individual participants
+4. **Start from report-scores, not full report** - the full report has comments, pros/cons, etc. We extract just the scores first
+
+### Two Core Schemas
+
+| Schema | Description | Has Letter Grades? |
+|--------|-------------|-------------------|
+| `JSONScores` | Non-curved extracted scores | No |
+| `CurvedReport` | Scores + letter grades | Yes |
+
 ## Pipeline Overview
 
 ```mermaid
@@ -11,32 +25,31 @@ flowchart TD
     end
 
     subgraph LLM_Stage["LLM Generation Stage"]
-        LM --> |"generates"| ReportJSON["Report JSON<br/>(no letter grades)"]
+        LM --> |"generates"| FullReport["Full Report<br/>(comments, pros/cons, scores)"]
     end
 
     subgraph Extraction["Score Extraction"]
-        ReportJSON --> |"extract"| JSONScores["JSON Scores<br/>(extracted scores)"]
+        FullReport --> |"extract scores only"| JSONScores["JSON Scores<br/>(non-curved)"]
     end
 
     subgraph CurveGeneration["Curve Generation"]
-        EventData --> |"select people"| ScorePool["Score Pool"]
+        EventData --> |"select people"| ScorePool["Score Pool<br/>(multiple JSONScores)"]
         ProblemSchema --> |"select problems"| ScorePool
-        ScorePool --> |"compute"| Curve["Curve<br/>(curve thresholds)"]
+        ScorePool --> |"compute std dev"| Curve["Curve<br/>(thresholds for 3 totals)"]
     end
 
     subgraph CurveApplication["Curve Application"]
-        JSONScores --> |"input"| ApplyCurve{"Apply Curve<br/>(compatibility check)"}
-        Curve --> |"input"| ApplyCurve
-        ApplyCurve --> |"generate"| CurvedLetterGrades["Curved Letter Grades"]
+        JSONScores --> |"single score"| ApplyCurve{"Apply Curve<br/>(compatibility check)"}
+        Curve --> |"thresholds"| ApplyCurve
+        ApplyCurve --> |"generate"| CurvedLetterGrades["Letter Grades<br/>(3 total grades)"]
     end
 
     subgraph FinalOutput["Final Output"]
-        CurvedLetterGrades --> |"merge"| MergeReport{"Merge<br/>(schema match)"}
-        ReportJSON --> |"input"| MergeReport
-        MergeReport --> |"output"| CurvedReport["Curved Report<br/>(with letter grades)"]
+        CurvedLetterGrades --> |"merge"| MergeReport{"Merge"}
+        JSONScores --> |"scores"| MergeReport
+        MergeReport --> |"output"| CurvedReport["Curved Report<br/>(scores + letter grades)"]
     end
 
-    style ReportJSON fill:#e1f5fe
     style JSONScores fill:#fff3e0
     style Curve fill:#f3e5f5
     style CurvedLetterGrades fill:#e8f5e9
@@ -45,50 +58,25 @@ flowchart TD
 
 ## Data Schema Definitions
 
-### 1. Report JSON Schema (原始报告 - 无 letter grades)
+### 1. JSON Scores Schema (Non-curved - Pipeline Input)
 
-```mermaid
-classDiagram
-    class ReportJSON {
-        +string event_id
-        +string prompt_version_hash
-        +Problem[] problems
-        +AbilityDimension[] abilities
-        +null|"X" letter_grades
-    }
-
-    class Problem {
-        +string problem_id
-        +float[] dimension_scores
-        +string objective_score
-    }
-
-    class AbilityDimension {
-        +string dimension_id
-        +float score
-    }
-
-    ReportJSON --> Problem
-    ReportJSON --> AbilityDimension
-```
-
-**Key Fields:**
-- `event_id`: 事件标识符
-- `prompt_version_hash`: Git commit hash (运行时的 prompt 版本)
-- `problems`: 每道题目的分数
-- `abilities`: 每个能力维度的分数
-- `letter_grades`: 默认为 `null` 或 `"X"`，表示未 curve
-
-### 2. JSON Scores Schema (提取的分数)
+The pipeline starts from extracted scores, not the full report. This keeps the pipeline focused on scoring logic.
 
 ```mermaid
 classDiagram
     class JSONScores {
-        +string source_report_id
+        +uuid source_report_id
         +string event_id
-        +float overall_score
+        +string participant_id
+        +TotalScores totals
         +AbilityScore[] ability_scores
         +ProblemScore[] problem_scores
+    }
+
+    class TotalScores {
+        +float total_problem_score
+        +float total_ability_score
+        +float final_total_score
     }
 
     class AbilityScore {
@@ -102,71 +90,94 @@ classDiagram
         +AbilityScore[] dimension_scores
     }
 
+    JSONScores --> TotalScores
     JSONScores --> AbilityScore
     JSONScores --> ProblemScore
 ```
+
+**Key Fields:**
+- `totals.total_problem_score`: Average of all problem objective scores
+- `totals.total_ability_score`: Average of all dimension scores
+- `totals.final_total_score`: Geometric mean √(total_problem × total_ability)
+
+### 2. Score Pool Schema (Curve Computation Input)
+
+```mermaid
+classDiagram
+    class ScorePool {
+        +string event_id
+        +string prompt_version_hash
+        +string[] problem_ids
+        +string[] dimension_ids
+        +JSONScores[] scores
+    }
+
+    ScorePool --> JSONScores : contains many
+```
+
+**Requirement:** Need multiple participants' scores to compute a meaningful curve.
 
 ### 3. Curve Schema
 
 ```mermaid
 classDiagram
     class Curve {
-        +string curve_id
+        +uuid curve_id
         +string source_event_id
         +string prompt_version_hash
         +string[] problem_ids
         +string[] dimension_ids
         +CurveMethod method
-        +OverallCurve overall
+        +int sample_size
+        +datetime computed_at
+        +TotalCurves totals
         +AbilityCurve[] ability_curves
         +ProblemCurve[] problem_curves
     }
 
+    class TotalCurves {
+        +ThresholdDef total_problem
+        +ThresholdDef total_ability
+        +ThresholdDef final_total
+    }
+
     class CurveMethod {
         +string type
-        +object parameters
+        +number[] sigma_boundaries
     }
 
-    class OverallCurve {
+    class ThresholdDef {
         +float[] thresholds
         +string[] grades
     }
 
-    class AbilityCurve {
-        +string dimension_id
-        +float[] thresholds
-        +string[] grades
-    }
-
-    class ProblemCurve {
-        +string problem_id
-        +float[] thresholds
-        +string[] grades
-    }
-
+    Curve --> TotalCurves
     Curve --> CurveMethod
-    Curve --> OverallCurve
-    Curve --> AbilityCurve
-    Curve --> ProblemCurve
 ```
 
-**Key Fields:**
-- `source_event_id`: Curve 计算来源的 event
-- `prompt_version_hash`: 生成分数时使用的 prompt 版本
-- `problem_ids`: 包含的题目 ID 列表
-- `dimension_ids`: 包含的能力维度 ID 列表
-- `method`: Curve 计算方法（如：平均分 ± 标准差）
+**Curve Method:** Standard deviation based
+- A: score ≥ μ + σ
+- B: score ≥ μ
+- C: score ≥ μ - σ
+- D: score < μ - σ
 
 ### 4. Curved Letter Grades Schema
 
 ```mermaid
 classDiagram
     class CurvedLetterGrades {
-        +string source_scores_id
-        +string curve_id
-        +string overall_grade
+        +uuid source_scores_id
+        +uuid curve_id
+        +datetime computed_at
+        +TotalGrades total_grades
         +AbilityGrade[] ability_grades
         +ProblemGrade[] problem_grades
+    }
+
+    class TotalGrades {
+        +string total_problem_grade
+        +string total_ability_grade
+        +string final_total_grade
     }
 
     class AbilityGrade {
@@ -179,34 +190,47 @@ classDiagram
         +string grade
     }
 
+    CurvedLetterGrades --> TotalGrades
     CurvedLetterGrades --> AbilityGrade
     CurvedLetterGrades --> ProblemGrade
 ```
 
-### 5. Curved Report Schema (最终报告)
+### 5. Curved Report Schema (Final Output)
 
 ```mermaid
 classDiagram
     class CurvedReport {
+        +uuid curved_report_id
+        +uuid source_report_id
         +string event_id
         +string prompt_version_hash
-        +string applied_curve_id
+        +uuid applied_curve_id
+        +datetime curved_at
+        +string participant_id
         +Problem[] problems
         +AbilityDimension[] abilities
-        +LetterGrades letter_grades
+        +TotalScores totals
+        +LetterGradesInReport letter_grades
     }
 
-    class LetterGrades {
-        +string overall
+    class LetterGradesInReport {
+        +TotalLetterGrades totals
         +map~string,string~ abilities
         +map~string,string~ problems
     }
 
-    CurvedReport --> LetterGrades
+    class TotalLetterGrades {
+        +string total_problem
+        +string total_ability
+        +string final_total
+    }
+
+    CurvedReport --> LetterGradesInReport
 ```
 
 **Key Addition:**
-- `applied_curve_id`: 记录应用了哪个 curve（可追溯）
+- `applied_curve_id`: Records which curve was applied (traceability)
+- `letter_grades.totals`: Three letter grades for the three total scores
 
 ## Compatibility Rules (兼容性规则)
 
@@ -235,78 +259,53 @@ flowchart TD
 ### Problem ID Structure
 
 ```
-Problem ID: XXXXXX[V][L]
-            │     │  │
-            │     │  └─ Language: 0=Chinese, 1=English
-            │     └─── Version: Major version changes
-            └───────── Base ID: Problem identifier
+Problem ID: XXXXXX (exactly 6 digits)
+            │    │
+            │    └─ Language: 0=EN, 1=ZH
+            └────── Base ID: Problem identifier (5 digits)
 ```
 
-**Example:** `9034943[1]` → Problem 903494, Version 3, English
-
-## Transformation Rules (转换规则)
-
-```mermaid
-flowchart LR
-    subgraph Validations["每个箭头的校验"]
-        V1["LM → Report JSON<br/>✓ Schema validation<br/>✓ Record prompt hash"]
-        V2["Report JSON → JSON Scores<br/>✓ Extract all scores<br/>✓ Validate completeness"]
-        V3["Scores + Config → Curve<br/>✓ Validate people selection<br/>✓ Validate problem selection"]
-        V4["Scores + Curve → Letter Grades<br/>✓ Compatibility check<br/>✓ Apply thresholds"]
-        V5["Report + Letter → Curved Report<br/>✓ Schema match<br/>✓ Record curve_id"]
-    end
-```
+**Example:** `003401` → Problem 00340, Chinese version
 
 ## Design Principles (设计原则)
 
 1. **No In-Place Modification (不进行原地修改)**
-   - 原始数据和处理后数据分开存储
-   - 改过的数据是新的实体，不覆盖原数据
+   - Original data and processed data stored separately
+   - Modified data is a new entity, never overwrites original
 
-2. **Explicit Metadata (显式元数据)**
-   - 所有关键信息必须显式记录
-   - 不依赖约定，依赖 schema 定义
+2. **Start from Scores, Not Full Reports**
+   - Full reports contain comments, pros/cons, etc.
+   - Pipeline only needs scores for curving
+   - Separation of concerns
 
-3. **JSON over CSV (JSON 优于 CSV)**
-   - JSON 支持层级结构
-   - JSON 校验更严格、更方便
+3. **Explicit Metadata (显式元数据)**
+   - All critical info recorded explicitly
+   - Schema-defined, not convention-based
 
-4. **Validation at Every Step (每步都校验)**
-   - 每个数据转换都需要校验
-   - 确保数据正确性
+4. **JSON over CSV (JSON 优于 CSV)**
+   - JSON supports hierarchical structure
+   - Stricter validation
 
-5. **Traceability (可追溯性)**
-   - 任何 Curved Report 都能追溯到使用的 Curve
-   - 任何 Curve 都能追溯到来源 Event 和 Prompt 版本
+5. **Validation at Every Step (每步都校验)**
+   - Each transformation requires validation
+   - Ensures data correctness
 
-## Prompt Versioning Strategy (Prompt 版本策略)
+6. **Traceability (可追溯性)**
+   - Any Curved Report traces back to its Curve
+   - Any Curve traces back to source Event and Prompt version
 
-### Current Approach (当前方案)
-- 使用统一的 Git commit hash 标识所有 prompt 的版本
-- 任何 prompt 变化都会产生新的 commit hash
+## The 5 Ability Dimensions
 
-### Future Approach (未来方案)
-- 每个 prompt 单独版本化
-- Prompts 包括:
-  - Ability Summary
-  - Problem Summary
-  - Final Summary
-  - Expert Review
-  - Per-ability Expert Review
-  - Per-problem Scoring Criteria
+| Dimension ID | Chinese Name | Description |
+|--------------|--------------|-------------|
+| `discovery` | 发现与自我理解 | Discovery and self-understanding |
+| `representation` | 表达与转译 | Expression and translation |
+| `iterative-refinement` | 迭代与反馈 | Iteration and feedback |
+| `exploratory` | 探索式发现 | Exploratory discovery |
+| `self-verification` | 验证 | Verification |
 
-## Dimension-Problem Dependency (维度-题目依赖关系)
+## Schema Location
 
-```mermaid
-flowchart TD
-    subgraph DimensionDependency["Dimension Dependency Tracking"]
-        D1["Verification 维度"] --> P1["Thinking Trap"]
-        D1 --> P2["Meeting Verification"]
-        D2["其他维度"] --> P2
-        D2 --> P3["Prompt Optimization"]
-    end
-```
+**Single source of truth:** `scripts/schemas.ts`
 
-**重要:** 需要显式记录每个维度依赖哪些题目，以便：
-- 确定题目子集是否能产生有意义的维度分数
-- 支持跨 Event 的题目复用
+All Zod schemas are defined in this file. Other files import from here.

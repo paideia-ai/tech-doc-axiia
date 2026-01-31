@@ -2,6 +2,20 @@
 
 > This document captures the business logic and domain knowledge for how the assessment scoring system works.
 
+## Key Design Decisions
+
+1. **A report that has not been curved does not have letter grades** - `letter_grades` must be `null`
+2. **To create a curve, we need multiple scores** - curve is computed from a pool of participants
+3. **To apply a curve, we need only one score** - curve is applied to individual participants
+4. **Start from report-scores, not full report** - the full report has comments, pros/cons, etc. We extract just the scores
+
+### Two Core Output Schemas
+
+| Schema | Description | Has Letter Grades? |
+|--------|-------------|-------------------|
+| `JSONScores` | Non-curved extracted scores | No |
+| `CurvedReport` | Scores + letter grades | Yes |
+
 ## Overview
 
 ```
@@ -265,3 +279,9 @@ Based on this domain context, verify the schemas capture:
 | Prompt version tracking | `prompt_version_hash` | ✅ |
 
 All schemas are now aligned with the domain model.
+
+## Schema Source of Truth
+
+**Single location:** `scripts/schemas.ts`
+
+All Zod schemas are defined in this one file. Other implementation files import from here.
