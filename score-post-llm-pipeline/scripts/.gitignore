@@ -1,0 +1,9 @@
+# Generated data - do not commit
+synthetic-data/
+pipeline-output/
+
+# Dependencies
+node_modules/
+
+# Lockfiles (optional - can remove if you want to commit these)
+package-lock.json
