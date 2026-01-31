@@ -11,7 +11,7 @@ import { z } from "zod";
 
 export const ProblemIdSchema = z
   .string()
-  .regex(/^\d{6,8}$/, "Problem ID must be 6-8 digits");
+  .regex(/^\d{6}$/, "Problem ID must be exactly 6 digits");
 
 export const DimensionIdSchema = z.string().min(1);
 
@@ -40,6 +40,18 @@ export const AbilityDimensionInReportSchema = z.object({
   score: ScoreValueSchema,
 });
 
+/**
+ * Total scores breakdown:
+ * - total_problem_score: average of all problem objective scores
+ * - total_ability_score: average of all dimension scores
+ * - final_total_score: geometric mean of (total_problem_score, total_ability_score)
+ */
+export const TotalScoresSchema = z.object({
+  total_problem_score: ScoreValueSchema,  // avg(problem.objective_score for all problems)
+  total_ability_score: ScoreValueSchema,  // avg(dimension.score for all dimensions)
+  final_total_score: ScoreValueSchema,    // sqrt(total_problem_score * total_ability_score)
+});
+
 export const ReportJSONSchema = z.object({
   report_id: z.string().uuid(),
   event_id: EventIdSchema,
@@ -48,7 +60,8 @@ export const ReportJSONSchema = z.object({
   participant_id: z.string().min(1),
   problems: z.array(ProblemInReportSchema),
   abilities: z.array(AbilityDimensionInReportSchema),
-  overall_score: ScoreValueSchema.nullable(),
+  /** Breakdown of total scores */
+  totals: TotalScoresSchema,
   letter_grades: z.null(),
 });
 
@@ -73,7 +86,8 @@ export const JSONScoresSchema = z.object({
   source_report_id: z.string().uuid(),
   event_id: EventIdSchema,
   participant_id: z.string().min(1),
-  overall_score: ScoreValueSchema.nullable(),
+  /** Breakdown of total scores */
+  totals: TotalScoresSchema,
   ability_scores: z.array(AbilityScoreSchema),
   problem_scores: z.array(ProblemScoreSchema),
 });
@@ -120,6 +134,18 @@ export const ProblemCurveSchema = z.object({
   grades: z.array(LetterGradeSchema.exclude(["X"])),
 });
 
+/**
+ * Curves for total scores:
+ * - total_problem: curve for average problem scores
+ * - total_ability: curve for average dimension scores
+ * - final_total: curve for geometric mean (the ultimate score)
+ */
+export const TotalCurvesSchema = z.object({
+  total_problem: ThresholdDefinitionSchema,
+  total_ability: ThresholdDefinitionSchema,
+  final_total: ThresholdDefinitionSchema,
+});
+
 export const CurveSchema = z.object({
   curve_id: z.string().uuid(),
   source_event_id: EventIdSchema,
@@ -129,8 +155,11 @@ export const CurveSchema = z.object({
   method: CurveMethodSchema,
   sample_size: z.number().int().positive(),
   computed_at: z.string().datetime(),
-  overall: OverallCurveSchema,
+  /** Curves for the three total score types */
+  totals: TotalCurvesSchema,
+  /** Per-dimension curves */
   ability_curves: z.array(AbilityCurveSchema),
+  /** Per-problem curves */
   problem_curves: z.array(ProblemCurveSchema),
 });
 
@@ -150,11 +179,21 @@ export const ProblemGradeSchema = z.object({
   grade: LetterGradeSchema.exclude(["X"]),
 });
 
+/**
+ * Letter grades for total scores
+ */
+export const TotalGradesSchema = z.object({
+  total_problem_grade: LetterGradeSchema.exclude(["X"]),
+  total_ability_grade: LetterGradeSchema.exclude(["X"]),
+  final_total_grade: LetterGradeSchema.exclude(["X"]),
+});
+
 export const CurvedLetterGradesSchema = z.object({
   source_scores_id: z.string().uuid(),
   curve_id: z.string().uuid(),
   computed_at: z.string().datetime(),
-  overall_grade: LetterGradeSchema.exclude(["X"]),
+  /** Grades for the three total score types */
+  total_grades: TotalGradesSchema,
   ability_grades: z.array(AbilityGradeSchema),
   problem_grades: z.array(ProblemGradeSchema),
 });
@@ -166,8 +205,15 @@ export type CurvedLetterGrades = z.infer<typeof CurvedLetterGradesSchema>;
 // =============================================================================
 
 export const LetterGradesInReportSchema = z.object({
-  overall: LetterGradeSchema.exclude(["X"]),
+  /** Grades for total scores */
+  totals: z.object({
+    total_problem: LetterGradeSchema.exclude(["X"]),
+    total_ability: LetterGradeSchema.exclude(["X"]),
+    final_total: LetterGradeSchema.exclude(["X"]),
+  }),
+  /** Grade per dimension */
   abilities: z.record(DimensionIdSchema, LetterGradeSchema.exclude(["X"])),
+  /** Grade per problem */
   problems: z.record(ProblemIdSchema, LetterGradeSchema.exclude(["X"])),
 });
 
@@ -181,7 +227,9 @@ export const CurvedReportSchema = z.object({
   participant_id: z.string().min(1),
   problems: z.array(ProblemInReportSchema),
   abilities: z.array(AbilityDimensionInReportSchema),
-  overall_score: ScoreValueSchema.nullable(),
+  /** Breakdown of total scores (copied from source) */
+  totals: TotalScoresSchema,
+  /** Letter grades (now populated) */
   letter_grades: LetterGradesInReportSchema,
 });
 

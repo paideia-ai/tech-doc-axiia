@@ -74,7 +74,7 @@ export function extractScores(report: ReportJSON): JSONScores {
     source_report_id: validatedInput.report_id,
     event_id: validatedInput.event_id,
     participant_id: validatedInput.participant_id,
-    overall_score: validatedInput.overall_score,
+    totals: validatedInput.totals,
     ability_scores: validatedInput.abilities.map(a => ({
       dimension_id: a.dimension_id,
       score: a.score,
@@ -147,7 +147,8 @@ export function createScorePool(
  * INPUT: ScorePool
  * OUTPUT: Curve
  *
- * Computes grade thresholds from score pool using percentile method.
+ * Computes grade thresholds from score pool using standard deviation method.
+ * A: score >= μ+σ, B: score >= μ, C: score >= μ-σ, D: score < μ-σ
  */
 export const computeCurveInput = ScorePoolSchema;
 export const computeCurveOutput = CurveSchema;
@@ -156,22 +157,29 @@ export function computeCurve(pool: ScorePool): Curve {
   // Validate input
   const validatedPool = ScorePoolSchema.parse(pool);
 
-  // Helper: compute percentile thresholds
-  function computeThresholds(values: number[]): number[] {
-    if (values.length === 0) return [0.8, 0.6, 0.4];
-    const sorted = [...values].sort((a, b) => b - a);
-    const n = sorted.length;
+  // Helper: compute standard deviation thresholds (clamped to 0-1 range)
+  function computeStdDevThresholds(values: number[]): number[] {
+    if (values.length === 0) return [0.8, 0.5, 0.2];
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    const stdDev = Math.sqrt(variance);
+
+    // Clamp values to [0, 1] since scores cannot exceed this range
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+
     return [
-      Math.round((sorted[Math.floor(n * 0.2)] ?? 0.8) * 1000) / 1000,
-      Math.round((sorted[Math.floor(n * 0.5)] ?? 0.6) * 1000) / 1000,
-      Math.round((sorted[Math.floor(n * 0.8)] ?? 0.4) * 1000) / 1000,
+      Math.round(clamp(mean + stdDev) * 1000) / 1000,  // A: μ + σ
+      Math.round(clamp(mean) * 1000) / 1000,           // B: μ
+      Math.round(clamp(mean - stdDev) * 1000) / 1000,  // C: μ - σ
     ];
   }
 
   const scores = validatedPool.scores;
 
-  // Overall thresholds
-  const overallScores = scores.map(s => s.overall_score ?? 0);
+  // Total score thresholds
+  const totalProblemScores = scores.map(s => s.totals.total_problem_score);
+  const totalAbilityScores = scores.map(s => s.totals.total_ability_score);
+  const finalTotalScores = scores.map(s => s.totals.final_total_score);
 
   // Ability thresholds
   const abilityThresholds = validatedPool.dimension_ids.map(did => {
@@ -180,7 +188,7 @@ export function computeCurve(pool: ScorePool): Curve {
     );
     return {
       dimension_id: did,
-      thresholds: computeThresholds(dimScores),
+      thresholds: computeStdDevThresholds(dimScores),
       grades: ["A", "B", "C", "D"] as ("A" | "B" | "C" | "D")[],
     };
   });
@@ -192,7 +200,7 @@ export function computeCurve(pool: ScorePool): Curve {
     );
     return {
       problem_id: pid,
-      thresholds: computeThresholds(probScores),
+      thresholds: computeStdDevThresholds(probScores),
       grades: ["A", "B", "C", "D"] as ("A" | "B" | "C" | "D")[],
     };
   });
@@ -204,14 +212,24 @@ export function computeCurve(pool: ScorePool): Curve {
     problem_ids: validatedPool.problem_ids,
     dimension_ids: validatedPool.dimension_ids,
     method: {
-      type: "percentile",
-      percentiles: [0.8, 0.5, 0.2],
+      type: "standard_deviation",
+      sigma_boundaries: [1, 0, -1],  // A: +1σ, B: mean, C: -1σ
     },
     sample_size: scores.length,
     computed_at: new Date().toISOString(),
-    overall: {
-      thresholds: computeThresholds(overallScores),
-      grades: ["A", "B", "C", "D"],
+    totals: {
+      total_problem: {
+        thresholds: computeStdDevThresholds(totalProblemScores),
+        grades: ["A", "B", "C", "D"],
+      },
+      total_ability: {
+        thresholds: computeStdDevThresholds(totalAbilityScores),
+        grades: ["A", "B", "C", "D"],
+      },
+      final_total: {
+        thresholds: computeStdDevThresholds(finalTotalScores),
+        grades: ["A", "B", "C", "D"],
+      },
     },
     ability_curves: abilityThresholds,
     problem_curves: problemThresholds,
@@ -345,9 +363,18 @@ export function applyCurve(scores: JSONScores, curve: Curve): CurvedLetterGrades
     return "D";
   }
 
-  const overallGrade = getGrade(
-    validatedScores.overall_score ?? 0,
-    validatedCurve.overall.thresholds
+  // Grade the three total scores
+  const totalProblemGrade = getGrade(
+    validatedScores.totals.total_problem_score,
+    validatedCurve.totals.total_problem.thresholds
+  );
+  const totalAbilityGrade = getGrade(
+    validatedScores.totals.total_ability_score,
+    validatedCurve.totals.total_ability.thresholds
+  );
+  const finalTotalGrade = getGrade(
+    validatedScores.totals.final_total_score,
+    validatedCurve.totals.final_total.thresholds
   );
 
   const abilityGrades = validatedScores.ability_scores.map(a => {
@@ -370,7 +397,11 @@ export function applyCurve(scores: JSONScores, curve: Curve): CurvedLetterGrades
     source_scores_id: validatedScores.source_report_id,
     curve_id: validatedCurve.curve_id,
     computed_at: new Date().toISOString(),
-    overall_grade: overallGrade,
+    total_grades: {
+      total_problem_grade: totalProblemGrade,
+      total_ability_grade: totalAbilityGrade,
+      final_total_grade: finalTotalGrade,
+    },
     ability_grades: abilityGrades,
     problem_grades: problemGrades,
   };
@@ -420,9 +451,13 @@ export function mergeIntoCurvedReport(
     participant_id: validatedReport.participant_id,
     problems: validatedReport.problems,
     abilities: validatedReport.abilities,
-    overall_score: validatedReport.overall_score,
+    totals: validatedReport.totals,
     letter_grades: {
-      overall: validatedGrades.overall_grade,
+      totals: {
+        total_problem: validatedGrades.total_grades.total_problem_grade,
+        total_ability: validatedGrades.total_grades.total_ability_grade,
+        final_total: validatedGrades.total_grades.final_total_grade,
+      },
       abilities: Object.fromEntries(
         validatedGrades.ability_grades.map(a => [a.dimension_id, a.grade])
       ),

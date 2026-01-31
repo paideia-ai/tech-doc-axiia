@@ -19,8 +19,24 @@ import {
 // Configuration
 // =============================================================================
 
-const PROBLEM_IDS = ["9034940", "9034941", "9035030", "9035031", "9036120", "9036121"];
-const DIMENSION_IDS = ["verification", "critical_thinking", "communication", "collaboration"];
+// Problem IDs (6 digit format)
+const PROBLEM_IDS = [
+  "003400",  // meeting-verify (EN)
+  "003401",  // meeting-verify (ZH) - 会议总结校对
+  "005000",  // thinking-traps (EN)
+  "005001",  // thinking-traps (ZH) - 识别思维陷阱
+  "010000",  // ling-bing (EN)
+  "010001",  // ling-bing (ZH) - 丙语言翻译
+];
+
+// The 5 ability dimensions
+const DIMENSION_IDS = [
+  "discovery",            // 发现与自我理解
+  "representation",       // 表达与转译
+  "iterative-refinement", // 迭代与反馈
+  "exploratory",          // 探索式发现
+  "self-verification",    // 验证
+];
 const EVENT_ID = "event_2024_01";
 const PROMPT_VERSION_HASH = "abc1234def5678";
 
@@ -73,20 +89,24 @@ export function generateDimensionDependencies(): DimensionDependencyConfig {
     updated_at: now(),
     dependencies: [
       {
-        dimension_id: "verification",
-        contributing_problem_ids: ["9034940", "9034941", "9035030", "9035031"],
+        dimension_id: "discovery",
+        contributing_problem_ids: ["003400", "003401", "005000", "005001"],
       },
       {
-        dimension_id: "critical_thinking",
-        contributing_problem_ids: ["9034940", "9034941", "9036120", "9036121"],
+        dimension_id: "representation",
+        contributing_problem_ids: ["003400", "003401", "010000", "010001"],
       },
       {
-        dimension_id: "communication",
-        contributing_problem_ids: ["9035030", "9035031", "9036120", "9036121"],
+        dimension_id: "iterative-refinement",
+        contributing_problem_ids: ["005000", "005001", "010000", "010001"],
       },
       {
-        dimension_id: "collaboration",
-        contributing_problem_ids: ["9034940", "9034941", "9035030", "9035031", "9036120", "9036121"],
+        dimension_id: "exploratory",
+        contributing_problem_ids: ["003400", "003401", "005000", "005001", "010000", "010001"],
+      },
+      {
+        dimension_id: "self-verification",
+        contributing_problem_ids: ["003400", "003401", "005000", "005001"],
       },
     ],
   };
@@ -113,8 +133,16 @@ export function generateReportJSON(participantId: string): ReportJSON {
     };
   });
 
-  // Calculate overall score (geometric mean of ability scores)
-  const overall = geometricMean(abilities.map((a) => a.score));
+  // Calculate total scores
+  const total_problem_score = Math.round(
+    (problems.reduce((sum, p) => sum + p.objective_score, 0) / problems.length) * 100
+  ) / 100;
+  const total_ability_score = Math.round(
+    (abilities.reduce((sum, a) => sum + a.score, 0) / abilities.length) * 100
+  ) / 100;
+  const final_total_score = Math.round(
+    geometricMean([total_problem_score, total_ability_score]) * 100
+  ) / 100;
 
   return {
     report_id: randomUuid(),
@@ -124,7 +152,11 @@ export function generateReportJSON(participantId: string): ReportJSON {
     participant_id: participantId,
     problems,
     abilities,
-    overall_score: Math.round(overall * 100) / 100,
+    totals: {
+      total_problem_score,
+      total_ability_score,
+      final_total_score,
+    },
     letter_grades: null, // MUST be null for uncurved report
   };
 }
@@ -146,7 +178,7 @@ export function extractJSONScores(report: ReportJSON): JSONScores {
     source_report_id: report.report_id,
     event_id: report.event_id,
     participant_id: report.participant_id,
-    overall_score: report.overall_score,
+    totals: report.totals,
     ability_scores: report.abilities.map((a) => ({
       dimension_id: a.dimension_id,
       score: a.score,
@@ -181,24 +213,32 @@ export function createScorePool(scores: JSONScores[]): ScorePool {
 
 /**
  * Compute Curve from Score Pool (Stage 3 output)
+ * Uses standard deviation method: A > μ+σ, B > μ, C > μ-σ, D <= μ-σ
  */
 export function computeCurve(pool: ScorePool): Curve {
   const scores = pool.scores;
 
-  // Helper: compute percentile thresholds
-  function computeThresholds(values: number[]): number[] {
-    const sorted = [...values].sort((a, b) => b - a);
-    const n = sorted.length;
+  // Helper: compute standard deviation thresholds (clamped to 0-1 range)
+  function computeStdDevThresholds(values: number[]): number[] {
+    if (values.length === 0) return [0.8, 0.5, 0.2];
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    const stdDev = Math.sqrt(variance);
+
+    // Clamp values to [0, 1] since scores cannot exceed this range
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+
     return [
-      sorted[Math.floor(n * 0.2)] || 0.8, // Top 20% -> A
-      sorted[Math.floor(n * 0.5)] || 0.6, // Top 50% -> B
-      sorted[Math.floor(n * 0.8)] || 0.4, // Top 80% -> C
+      Math.round(clamp(mean + stdDev) * 1000) / 1000,  // A threshold: μ + σ
+      Math.round(clamp(mean) * 1000) / 1000,           // B threshold: μ
+      Math.round(clamp(mean - stdDev) * 1000) / 1000,  // C threshold: μ - σ
     ];
   }
 
-  // Compute overall thresholds
-  const overallScores = scores.map((s) => s.overall_score ?? 0);
-  const overallThresholds = computeThresholds(overallScores);
+  // Compute total score thresholds
+  const totalProblemScores = scores.map((s) => s.totals.total_problem_score);
+  const totalAbilityScores = scores.map((s) => s.totals.total_ability_score);
+  const finalTotalScores = scores.map((s) => s.totals.final_total_score);
 
   // Compute per-dimension thresholds
   const abilityThresholds = DIMENSION_IDS.map((did) => {
@@ -207,7 +247,7 @@ export function computeCurve(pool: ScorePool): Curve {
     );
     return {
       dimension_id: did,
-      thresholds: computeThresholds(dimScores),
+      thresholds: computeStdDevThresholds(dimScores),
       grades: ["A", "B", "C", "D"] as const,
     };
   });
@@ -219,7 +259,7 @@ export function computeCurve(pool: ScorePool): Curve {
     );
     return {
       problem_id: pid,
-      thresholds: computeThresholds(probScores),
+      thresholds: computeStdDevThresholds(probScores),
       grades: ["A", "B", "C", "D"] as const,
     };
   });
@@ -231,14 +271,24 @@ export function computeCurve(pool: ScorePool): Curve {
     problem_ids: pool.problem_ids,
     dimension_ids: pool.dimension_ids,
     method: {
-      type: "percentile",
-      percentiles: [0.8, 0.5, 0.2],
+      type: "standard_deviation",
+      sigma_boundaries: [1, 0, -1],  // A: +1σ, B: mean, C: -1σ
     },
     sample_size: scores.length,
     computed_at: now(),
-    overall: {
-      thresholds: overallThresholds,
-      grades: ["A", "B", "C", "D"],
+    totals: {
+      total_problem: {
+        thresholds: computeStdDevThresholds(totalProblemScores),
+        grades: ["A", "B", "C", "D"],
+      },
+      total_ability: {
+        thresholds: computeStdDevThresholds(totalAbilityScores),
+        grades: ["A", "B", "C", "D"],
+      },
+      final_total: {
+        thresholds: computeStdDevThresholds(finalTotalScores),
+        grades: ["A", "B", "C", "D"],
+      },
     },
     ability_curves: abilityThresholds,
     problem_curves: problemThresholds,
@@ -257,7 +307,10 @@ export function applyCurve(scores: JSONScores, curve: Curve): CurvedLetterGrades
     return "D";
   }
 
-  const overallGrade = getGrade(scores.overall_score ?? 0, curve.overall.thresholds);
+  // Grade the three total scores
+  const totalProblemGrade = getGrade(scores.totals.total_problem_score, curve.totals.total_problem.thresholds);
+  const totalAbilityGrade = getGrade(scores.totals.total_ability_score, curve.totals.total_ability.thresholds);
+  const finalTotalGrade = getGrade(scores.totals.final_total_score, curve.totals.final_total.thresholds);
 
   const abilityGrades = scores.ability_scores.map((a) => {
     const curveData = curve.ability_curves.find((c) => c.dimension_id === a.dimension_id);
@@ -279,7 +332,11 @@ export function applyCurve(scores: JSONScores, curve: Curve): CurvedLetterGrades
     source_scores_id: scores.source_report_id,
     curve_id: curve.curve_id,
     computed_at: now(),
-    overall_grade: overallGrade,
+    total_grades: {
+      total_problem_grade: totalProblemGrade,
+      total_ability_grade: totalAbilityGrade,
+      final_total_grade: finalTotalGrade,
+    },
     ability_grades: abilityGrades,
     problem_grades: problemGrades,
   };
@@ -302,9 +359,13 @@ export function mergeIntoCurvedReport(
     participant_id: report.participant_id,
     problems: report.problems,
     abilities: report.abilities,
-    overall_score: report.overall_score,
+    totals: report.totals,
     letter_grades: {
-      overall: grades.overall_grade,
+      totals: {
+        total_problem: grades.total_grades.total_problem_grade,
+        total_ability: grades.total_grades.total_ability_grade,
+        final_total: grades.total_grades.final_total_grade,
+      },
       abilities: Object.fromEntries(
         grades.ability_grades.map((a) => [a.dimension_id, a.grade])
       ),

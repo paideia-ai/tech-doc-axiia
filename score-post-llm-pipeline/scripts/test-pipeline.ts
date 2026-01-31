@@ -174,8 +174,8 @@ test("Compute curve from score pool", () => {
   if (curve.sample_size !== 20) {
     throw new Error("Curve sample_size should be 20");
   }
-  if (curve.overall.thresholds.length !== 3) {
-    throw new Error("Overall thresholds should have 3 values");
+  if (curve.totals.final_total.thresholds.length !== 3) {
+    throw new Error("Final total thresholds should have 3 values");
   }
 });
 
@@ -186,7 +186,7 @@ test("Curve thresholds are in descending order", () => {
   const pool = createScorePool(scores, config);
   const curve = computeCurve(pool);
 
-  const t = curve.overall.thresholds;
+  const t = curve.totals.final_total.thresholds;
   if (!(t[0] >= t[1] && t[1] >= t[2])) {
     throw new Error(`Thresholds not descending: ${t}`);
   }
@@ -223,7 +223,7 @@ test("Incompatible problem IDs detected", () => {
   modifiedScores.problem_scores = [
     ...modifiedScores.problem_scores,
     {
-      problem_id: "9999990",
+      problem_id: "999999",
       objective_score: 0.5,
       dimension_scores: [],
     },
@@ -247,8 +247,8 @@ test("Apply curve generates valid letter grades", () => {
 
   // Verify grade values
   const validGrades = ["A", "B", "C", "D"];
-  if (!validGrades.includes(grades.overall_grade)) {
-    throw new Error(`Invalid overall grade: ${grades.overall_grade}`);
+  if (!validGrades.includes(grades.total_grades.final_total_grade)) {
+    throw new Error(`Invalid final total grade: ${grades.total_grades.final_total_grade}`);
   }
 });
 
@@ -302,8 +302,14 @@ test("Curved report has all letter grades", () => {
   const curvedReport = mergeIntoCurvedReport(reports[0], grades);
 
   // Check letter_grades structure
-  if (!curvedReport.letter_grades.overall) {
-    throw new Error("Missing overall grade");
+  if (!curvedReport.letter_grades.totals.final_total) {
+    throw new Error("Missing final total grade");
+  }
+  if (!curvedReport.letter_grades.totals.total_problem) {
+    throw new Error("Missing total problem grade");
+  }
+  if (!curvedReport.letter_grades.totals.total_ability) {
+    throw new Error("Missing total ability grade");
   }
   if (Object.keys(curvedReport.letter_grades.abilities).length === 0) {
     throw new Error("Missing ability grades");
@@ -385,15 +391,21 @@ test("Single report pipeline works", () => {
   }
 });
 
-test("Report with null overall_score", () => {
+test("Report totals are preserved through extraction", () => {
   const report = generateReportJSON("test_user");
-  report.overall_score = null;
 
   const validated = validateReportJSON(report);
   const scores = extractScores(validated);
 
-  if (scores.overall_score !== null) {
-    throw new Error("Overall score should be null");
+  // Verify totals are properly extracted
+  if (scores.totals.total_problem_score !== report.totals.total_problem_score) {
+    throw new Error("Total problem score mismatch");
+  }
+  if (scores.totals.total_ability_score !== report.totals.total_ability_score) {
+    throw new Error("Total ability score mismatch");
+  }
+  if (scores.totals.final_total_score !== report.totals.final_total_score) {
+    throw new Error("Final total score mismatch");
   }
 });
 
