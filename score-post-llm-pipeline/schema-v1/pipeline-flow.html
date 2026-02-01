@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Post-LLM Pipeline Flow</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-code: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-purple: #7c3aed;
+            --accent-green: #16a34a;
+            --accent-yellow: #ca8a04;
+            --accent-red: #dc2626;
+            --accent-orange: #ea580c;
+            --border-color: #e2e8f0;
+            --border-dark: #cbd5e1;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        nav {
+            background: var(--bg-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            justify-content: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        section {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--accent-blue);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .mermaid {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--bg-secondary);
+        }
+
+        code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'SF Mono', 'Consolas', monospace;
+            font-size: 0.875em;
+            color: var(--accent-purple);
+            border: 1px solid var(--border-color);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: var(--accent-blue);
+            border: 1px solid #93c5fd;
+        }
+        .badge-purple {
+            background: #ede9fe;
+            color: var(--accent-purple);
+            border: 1px solid #c4b5fd;
+        }
+        .badge-green {
+            background: #dcfce7;
+            color: var(--accent-green);
+            border: 1px solid #86efac;
+        }
+        .badge-yellow {
+            background: #fef3c7;
+            color: var(--accent-yellow);
+            border: 1px solid #fcd34d;
+        }
+        .badge-red {
+            background: #fee2e2;
+            color: var(--accent-red);
+            border: 1px solid #fca5a5;
+        }
+
+        .alert {
+            padding: 1.25rem 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #93c5fd;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .alert strong {
+            color: var(--text-primary);
+        }
+
+        .alert ul {
+            margin-top: 0.5rem;
+            margin-left: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .alert li {
+            margin: 0.25rem 0;
+        }
+
+        .stage-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stage-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stage-header h2 {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+
+        .card li {
+            padding: 0.35rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card table {
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+
+        .card th, .card td {
+            padding: 0.5rem 0.75rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Mermaid text improvements */
+        .mermaid text {
+            font-size: 14px !important;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 1.75rem; }
+            nav ul { flex-direction: column; align-items: stretch; }
+            nav a { text-align: center; }
+            section { padding: 1.25rem; }
+            .stage-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Score Post-LLM Pipeline</h1>
+            <p class="subtitle">Complete Flow Documentation &bull; Generated from <code>schema-verify-v1.ts</code></p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#stage1">Stage 1: LLM Report</a></li>
+                <li><a href="#stage2">Stage 2: Score Extraction</a></li>
+                <li><a href="#stage3">Stage 3: Curve Generation</a></li>
+                <li><a href="#stage4">Stage 4: Curve Application</a></li>
+                <li><a href="#stage5">Stage 5: Report Merge</a></li>
+                <li><a href="#validation">Validation</a></li>
+                <li><a href="#schemas">Schema Details</a></li>
+                <li><a href="#examples">JSON Examples</a></li>
+                <li><a href="#errors">Error Messages</a></li>
+            </ul>
+        </nav>
+
+        <!-- Section 1: Overview -->
+        <section id="overview">
+            <h2>Pipeline Overview</h2>
+            <p>The pipeline transforms raw LLM evaluation reports into curved, graded reports through validated transformations.</p>
+
+            <div class="mermaid">
+flowchart TB
+    subgraph Input["Input Sources"]
+        LLM["LLM Evaluation Engine"]
+        Events["Event Selection (Manual)"]
+        Label["Curve Label (Manual Input)"]
+    end
+
+    subgraph Stage1["Stage 1: LLM Generation"]
+        LLM --> LLMReport["LLMReport\n(grades = X uncurved)"]
+    end
+
+    subgraph Stage2["Stage 2: Score Extraction"]
+        LLMReport --> |"extract scores"| JSONScores["JSONScores\n(flat score structure)"]
+    end
+
+    subgraph Stage3["Stage 3: Curve Generation"]
+        Events --> |"select events"| ScorePool["Score Pool\n(multiple JSONScores)"]
+        ScorePool --> |"validate"| CompatCheck1{"Compatibility Check"}
+        CompatCheck1 --> |"pass"| CurveCompute["Compute Thresholds"]
+        CompatCheck1 --> |"fail"| Error1["Error: Metadata Mismatch"]
+        CurveCompute --> Curve["Curve\n(A/B/C thresholds)"]
+        Label --> Curve
+    end
+
+    subgraph Stage4["Stage 4: Curve Application"]
+        JSONScores --> |"input"| CompatCheck2{"Compatibility Check"}
+        Curve --> |"input"| CompatCheck2
+        CompatCheck2 --> |"pass"| ApplyCurve["Apply Thresholds"]
+        CompatCheck2 --> |"fail"| Error2["Error: Metadata Mismatch"]
+        ApplyCurve --> CurvedGrades["CurvedLetterGrades\n(A/B/C/D assigned)"]
+    end
+
+    subgraph Stage5["Stage 5: Report Merge"]
+        CurvedGrades --> Merge["Merge"]
+        LLMReport --> Merge
+        Merge --> CurvedReport["CurvedReport\n(final output)"]
+    end
+
+    style LLMReport fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style JSONScores fill:#fef3c7,stroke:#d97706,color:#92400e
+    style Curve fill:#ede9fe,stroke:#7c3aed,color:#5b21b6
+    style CurvedGrades fill:#dcfce7,stroke:#16a34a,color:#166534
+    style CurvedReport fill:#fee2e2,stroke:#dc2626,color:#991b1b
+    style Error1 fill:#fecaca,stroke:#b91c1c,color:#7f1d1d
+    style Error2 fill:#fecaca,stroke:#b91c1c,color:#7f1d1d
+            </div>
+
+            <h3>Pipeline Stages Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Input</th>
+                        <th>Output</th>
+                        <th>Key Validation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-blue">1</span> LLM Generation</td>
+                        <td>Submission + Prompts</td>
+                        <td>LLMReport</td>
+                        <td>Schema validation</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-yellow">2</span> Score Extraction</td>
+                        <td>LLMReport</td>
+                        <td>JSONScores</td>
+                        <td>Completeness check</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-purple">3</span> Curve Generation</td>
+                        <td>JSONScores[] + Manual</td>
+                        <td>Curve</td>
+                        <td>Metadata consistency</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-green">4</span> Curve Application</td>
+                        <td>JSONScores + Curve</td>
+                        <td>CurvedLetterGrades</td>
+                        <td>Metadata consistency</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-red">5</span> Report Merge</td>
+                        <td>LLMReport + Grades</td>
+                        <td>CurvedReport</td>
+                        <td>Schema match</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 2: Stage 1 -->
+        <section id="stage1">
+            <div class="stage-header">
+                <div class="stage-number">1</div>
+                <h2>LLM Report Generation</h2>
+            </div>
+
+            <p>The LLM generates evaluation reports with placeholder grades (<code>'X'</code>) indicating uncurved status.</p>
+
+            <div class="mermaid">
+flowchart LR
+    subgraph Inputs["Inputs"]
+        Submission["Participant Submission"]
+        Problems["Problem Set"]
+        Prompts["Prompt Templates"]
+    end
+
+    subgraph Process["LLM Evaluation"]
+        Submission --> Eval["LLM Evaluation"]
+        Problems --> Eval
+        Prompts --> Eval
+        Eval --> Report["LLMReport"]
+    end
+
+    subgraph Metadata["Captured Metadata"]
+        Report --> M1["reportId (UUID)"]
+        Report --> M2["eventId"]
+        Report --> M3["participantId"]
+        Report --> M4["promptSetHash (SHA-256)"]
+        Report --> M5["entries (sorted fingerprints)"]
+        Report --> M6["dimensionProblemDependency"]
+    end
+            </div>
+
+            <h3>LLMReport Key Fields</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>metadata.reportId</code></td>
+                        <td>UUID</td>
+                        <td>Unique report identifier</td>
+                    </tr>
+                    <tr>
+                        <td><code>metadata.promptSetHash</code></td>
+                        <td>SHA-256</td>
+                        <td>Hash of entire prompt set</td>
+                    </tr>
+                    <tr>
+                        <td><code>metadata.entries</code></td>
+                        <td>Array</td>
+                        <td>Sorted prompt fingerprints (key + sha256)</td>
+                    </tr>
+                    <tr>
+                        <td><code>metadata.dimensionProblemDependency</code></td>
+                        <td>Array</td>
+                        <td>Problem-dimension mapping</td>
+                    </tr>
+                    <tr>
+                        <td><code>grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td>Uncurved placeholder</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 3: Stage 2 -->
+        <section id="stage2">
+            <div class="stage-header">
+                <div class="stage-number">2</div>
+                <h2>Score Extraction</h2>
+            </div>
+
+            <p>Extract numeric scores from the report into a flat, processable structure for curve computation.</p>
+
+            <div class="mermaid">
+flowchart LR
+    subgraph Source["Source: LLMReport"]
+        PR["problemReports[].score"]
+        DR["dimensionReports[].score"]
+        OM["overallMean"]
+    end
+
+    subgraph Extract["Extraction"]
+        PR --> PS["problemScores[]"]
+        DR --> AS["abilityScores[]"]
+        OM --> Overall["overallMean"]
+    end
+
+    subgraph Output["Output: JSONScores"]
+        PS --> JSONScores["JSONScores"]
+        AS --> JSONScores
+        Overall --> JSONScores
+    end
+
+    style JSONScores fill:#fef3c7,stroke:#d97706,color:#92400e
+            </div>
+
+            <h3>JSONScores Schema</h3>
+            <div class="mermaid">
+classDiagram
+    class JSONScores {
+        +AbilityScore[] abilityScores
+        +ProblemScore[] problemScores
+        +number overallMean
+    }
+
+    class AbilityScore {
+        +Dimension dimensionId
+        +number score [0-1]
+    }
+
+    class ProblemScore {
+        +ProblemId problemId
+        +number score [0-1]
+    }
+
+    JSONScores --> AbilityScore : contains
+    JSONScores --> ProblemScore : contains
+            </div>
+        </section>
+
+        <!-- Section 4: Stage 3 -->
+        <section id="stage3">
+            <div class="stage-header">
+                <div class="stage-number">3</div>
+                <h2>Curve Generation</h2>
+            </div>
+
+            <p>Generate grade thresholds from a population of scores. This requires <strong>manual input</strong> for event selection and curve labeling.</p>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>
+                    <strong>Manual Inputs Required:</strong>
+                    <ul>
+                        <li>Event selection (one or more events)</li>
+                        <li>Curve label (human-readable name)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mermaid">
+flowchart TB
+    subgraph ManualInput["Manual Input"]
+        EventSelect["Select Events (one or more)"]
+        LabelInput["Enter Curve Label"]
+    end
+
+    subgraph Collection["Score Collection"]
+        EventSelect --> |"fetch"| Reports["LLMReports from selected events"]
+        Reports --> |"extract"| Scores["JSONScores[] (score pool)"]
+    end
+
+    subgraph Validation["Compatibility Validation"]
+        Scores --> Check{"Check All Scores"}
+        Check --> V1["dimensionProblemDependency must be identical"]
+        Check --> V2["promptSetHash must be identical"]
+        V1 --> |"mismatch"| Fail["FAIL: Metadata Mismatch"]
+        V2 --> |"mismatch"| Fail
+        V1 --> |"match"| Pass["Proceed"]
+        V2 --> |"match"| Pass
+    end
+
+    subgraph Computation["Curve Computation"]
+        Pass --> Stats["Compute Statistics (mean, std dev)"]
+        Stats --> Thresholds["Calculate Thresholds: A > mean+std, B > mean, C > mean-std"]
+    end
+
+    subgraph Output["Output"]
+        Thresholds --> Curve["Curve"]
+        LabelInput --> Curve
+    end
+
+    style Fail fill:#fecaca,stroke:#b91c1c,color:#7f1d1d
+    style Pass fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style Curve fill:#ede9fe,stroke:#7c3aed,color:#5b21b6
+            </div>
+
+            <h3>Grade Threshold Logic</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Standard Deviation Method</h4>
+                    <table>
+                        <tr><td><strong>Grade A</strong></td><td>Score &ge; &mu; + &sigma;</td></tr>
+                        <tr><td><strong>Grade B</strong></td><td>Score &ge; &mu;</td></tr>
+                        <tr><td><strong>Grade C</strong></td><td>Score &ge; &mu; - &sigma;</td></tr>
+                        <tr><td><strong>Grade D</strong></td><td>Score &lt; &mu; - &sigma;</td></tr>
+                    </table>
+                </div>
+                <div class="card">
+                    <h4>Curve Output Fields</h4>
+                    <ul>
+                        <li><code>curveId</code>: UUID</li>
+                        <li><code>label</code>: Human-readable name</li>
+                        <li><code>sourceEventIds</code>: Array of event IDs</li>
+                        <li><code>sampleSize</code>: Number of participants</li>
+                        <li><code>method</code>: 'standard_deviation'</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Curve Schema</h3>
+            <div class="mermaid">
+classDiagram
+    class Curve {
+        +UUID curveId
+        +string label
+        +EventId[] sourceEventIds
+        +SHA256 promptSetHash
+        +PromptSnapshotEntry[] entries
+        +DimensionProblemDependency[] dimensionProblemDependency
+        +CurveMethod method
+        +number sampleSize
+        +datetime createdAt
+        +Record abilityCurves
+        +Record problemCurves
+        +GradeThresholds overall
+    }
+
+    class GradeThresholds {
+        +number A [0-1]
+        +number B [0-1]
+        +number C [0-1]
+        D implied: score less than C
+    }
+
+    Curve --> GradeThresholds : contains
+            </div>
+        </section>
+
+        <!-- Section 5: Stage 4 -->
+        <section id="stage4">
+            <div class="stage-header">
+                <div class="stage-number">4</div>
+                <h2>Curve Application</h2>
+            </div>
+
+            <p>Apply curve thresholds to individual scores to produce letter grades.</p>
+
+            <div class="mermaid">
+flowchart TB
+    subgraph Inputs["Inputs"]
+        JS["JSONScores (from Stage 2)"]
+        C["Curve (from Stage 3)"]
+    end
+
+    subgraph Validation["Compatibility Validation"]
+        JS --> Check{"Check Compatibility"}
+        C --> Check
+        Check --> V1["Compare dimensionProblemDependency"]
+        Check --> V2["Compare promptSetHash"]
+        V1 --> |"mismatch"| Fail["FAIL: Cannot apply curve"]
+        V2 --> |"mismatch"| Fail
+        V1 --> |"match"| Pass["Proceed"]
+        V2 --> |"match"| Pass
+    end
+
+    subgraph Application["Grade Assignment"]
+        Pass --> ApplyOverall["Apply overall threshold"]
+        Pass --> ApplyAbility["Apply ability thresholds"]
+        Pass --> ApplyProblem["Apply problem thresholds"]
+        ApplyOverall --> OG["overallGrade: A|B|C|D"]
+        ApplyAbility --> AG["abilityGrades: Record"]
+        ApplyProblem --> PG["problemGrades: Record"]
+    end
+
+    subgraph Output["Output"]
+        OG --> CLG["CurvedLetterGrades"]
+        AG --> CLG
+        PG --> CLG
+    end
+
+    style Fail fill:#fecaca,stroke:#b91c1c,color:#7f1d1d
+    style Pass fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style CLG fill:#dcfce7,stroke:#16a34a,color:#166534
+            </div>
+
+            <h3>CurvedLetterGrades Schema</h3>
+            <div class="mermaid">
+classDiagram
+    class CurvedLetterGrades {
+        +UUID sourceScoresId
+        +UUID curveId
+        +datetime computedAt
+        +LetterGrade overallGrade
+        +Record abilityGrades
+        +Record problemGrades
+    }
+
+    class LetterGrade {
+        A
+        B
+        C
+        D
+    }
+
+    CurvedLetterGrades --> LetterGrade : uses
+            </div>
+        </section>
+
+        <!-- Section 6: Stage 5 -->
+        <section id="stage5">
+            <div class="stage-header">
+                <div class="stage-number">5</div>
+                <h2>Report Merge</h2>
+            </div>
+
+            <p>Merge the curved letter grades back into the original report structure to produce the final output.</p>
+
+            <div class="mermaid">
+flowchart LR
+    subgraph Inputs["Inputs"]
+        LLMReport["LLMReport (grades = X)"]
+        CLG["CurvedLetterGrades"]
+    end
+
+    subgraph Merge["Merge Process"]
+        LLMReport --> M["Merge"]
+        CLG --> M
+        M --> |"replace X with A/B/C/D"| Transform["Transform"]
+    end
+
+    subgraph Output["Output: CurvedReport"]
+        Transform --> CR["CurvedReport"]
+    end
+
+    style LLMReport fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style CLG fill:#dcfce7,stroke:#16a34a,color:#166534
+    style CR fill:#fee2e2,stroke:#dc2626,color:#991b1b
+            </div>
+
+            <h3>Schema Transformation</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>LLMReport (Before)</th>
+                        <th>CurvedReport (After)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>problemReports[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionReports[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>metadata.curveId</code></td>
+                        <td>N/A</td>
+                        <td>UUID (added)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 7: Validation -->
+        <section id="validation">
+            <h2>Compatibility Validation</h2>
+
+            <p>Critical validation gates that ensure data consistency across the pipeline.</p>
+
+            <div class="alert alert-error">
+                <span class="alert-icon">&#9888;</span>
+                <div>
+                    <strong>Validation Requirements (Strict Mode):</strong>
+                    <ul>
+                        <li><code>dimensionProblemDependency</code> must be <strong>IDENTICAL</strong></li>
+                        <li><code>promptSetHash</code> must be <strong>IDENTICAL</strong></li>
+                        <li>If mismatch: <strong>Fail with error</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mermaid">
+flowchart TB
+    subgraph ValidationPoints["Validation Checkpoints"]
+        VP1["Curve Generation (Stage 3)"]
+        VP2["Curve Application (Stage 4)"]
+    end
+
+    subgraph Rules["Validation Rules"]
+        R1["dimensionProblemDependency Must be IDENTICAL"]
+        R2["promptSetHash Must be IDENTICAL"]
+    end
+
+    subgraph Outcomes["Outcomes"]
+        VP1 --> R1
+        VP1 --> R2
+        VP2 --> R1
+        VP2 --> R2
+        R1 --> |"match"| OK["Proceed"]
+        R1 --> |"mismatch"| ERR["Error and Exit"]
+        R2 --> |"match"| OK
+        R2 --> |"mismatch"| ERR
+    end
+
+    subgraph TODO["Future: Compatibility Mode"]
+        ERR -.-> |"TODO"| Compat["Handle data variance: Which to keep? Keep both? Version migration?"]
+    end
+
+    style ERR fill:#fecaca,stroke:#b91c1c,color:#7f1d1d
+    style OK fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style Compat fill:#fef3c7,stroke:#d97706,color:#92400e
+            </div>
+
+            <h3>Why These Checks Matter</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Check</th>
+                        <th>Purpose</th>
+                        <th>Failure Scenario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>dimensionProblemDependency</code></td>
+                        <td>Ensures same problem-dimension mapping</td>
+                        <td>Different problem sets produce incomparable scores</td>
+                    </tr>
+                    <tr>
+                        <td><code>promptSetHash</code></td>
+                        <td>Ensures same evaluation prompts</td>
+                        <td>Different prompts produce systematically different scores</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#128679;</span>
+                <div>
+                    <strong>TODO: Compatibility Mode</strong><br>
+                    Future implementation should handle data variance scenarios:
+                    <ul>
+                        <li>Which metadata to keep when mismatched?</li>
+                        <li>Keep both versions?</li>
+                        <li>Version migration strategy?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Schema Details -->
+        <section id="schemas">
+            <h2>Schema Details</h2>
+
+            <h3>Common Types Reference</h3>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>ProblemId</h4>
+                    <p>Format: <code>XXXXXX-title</code> (6 digits + title)</p>
+                    <table>
+                        <tr><td>Digits 1-4</td><td>Major version</td></tr>
+                        <tr><td>Digit 5</td><td>Minor version</td></tr>
+                        <tr><td>Digit 6</td><td>0=Chinese, 1=English</td></tr>
+                    </table>
+                </div>
+                <div class="card">
+                    <h4>ScoreValue</h4>
+                    <p>Normalized score in range <code>[0, 1]</code></p>
+                    <p>Used for all numeric scores throughout the pipeline.</p>
+                </div>
+                <div class="card">
+                    <h4>Sha256Hex</h4>
+                    <p>SHA-256 hex digest (64 lowercase hex chars)</p>
+                    <p>Used for <code>promptSetHash</code> and prompt fingerprints.</p>
+                </div>
+                <div class="card">
+                    <h4>PromptSnapshotEntry</h4>
+                    <p><code>{ key: string, sha256: Sha256Hex }</code></p>
+                    <p>Keys must be sorted and unique. Example keys:</p>
+                    <ul>
+                        <li><code>framework:zh:task-eval</code></li>
+                        <li><code>problem:001111:scoring</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>DimensionProblemDependency Structure</h3>
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>
+                    <strong>Critical Validation Field</strong><br>
+                    Maps each problem to the dimensions it evaluates. Must be identical when generating or applying curves.
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>problemId</code></td>
+                        <td>ProblemId</td>
+                        <td>The problem identifier</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemVersion</code></td>
+                        <td>number (int ≥ 0)</td>
+                        <td>Version of the problem</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensions</code></td>
+                        <td>Dimension[]</td>
+                        <td>Which dimensions this problem evaluates</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>1. LLMReport Schema (Complete)</h3>
+            <div class="mermaid">
+classDiagram
+    class LLMReport {
+        +Metadata metadata
+        +DimensionCard[] dimensionCards
+        +DimensionReport[] dimensionReports
+        +Overall overall
+        +ProblemCard[] problemCards
+        +ProblemReport[] problemReports
+        +number taskEvalMean
+        +number abilityMean
+        +number overallMean
+        +X grade
+    }
+
+    class Metadata {
+        +Lang lang
+        +UUID reportId
+        +string eventId
+        +string participantId
+        +Sha256Hex promptSetHash
+        +PromptSnapshotEntry[] entries
+        +DimensionProblemDependency[] dimensionProblemDependency
+        +datetime createdAt
+    }
+
+    class DimensionReport {
+        +Dimension dimension
+        +Problem[] problems
+        +string summary
+        +number score
+        +X grade
+    }
+
+    class ProblemReport {
+        +string[] bad
+        +DimensionDetail[] dimensionDetails
+        +string[] good
+        +ProblemId problemId
+        +string overview
+        +number score
+        +X grade
+    }
+
+    class DimensionDetail {
+        +Dimension dimension
+        +Proof[] proofs
+        +string summary
+        +number score
+        +X grade
+    }
+
+    class Proof {
+        +string comment
+        +boolean isStrength
+        +string observation
+    }
+
+    LLMReport --> Metadata
+    LLMReport --> DimensionReport
+    LLMReport --> ProblemReport
+    ProblemReport --> DimensionDetail
+    DimensionDetail --> Proof
+            </div>
+
+            <h4>LLMReport Field Details</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>metadata</code></td>
+                        <td>Metadata</td>
+                        <td>Report metadata including versioning info</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionCards</code></td>
+                        <td>DimensionCard[]</td>
+                        <td>Summary cards for each ability dimension</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionReports</code></td>
+                        <td>DimensionReport[]</td>
+                        <td>Detailed reports per dimension</td>
+                    </tr>
+                    <tr>
+                        <td><code>overall</code></td>
+                        <td>Overall</td>
+                        <td>Overall evaluation (good, bad, improvements, overview)</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemCards</code></td>
+                        <td>ProblemCard[]</td>
+                        <td>Summary cards for each problem</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemReports</code></td>
+                        <td>ProblemReport[]</td>
+                        <td>Detailed reports per problem</td>
+                    </tr>
+                    <tr>
+                        <td><code>taskEvalMean</code></td>
+                        <td>number | null</td>
+                        <td>Mean of all task evaluation scores</td>
+                    </tr>
+                    <tr>
+                        <td><code>abilityMean</code></td>
+                        <td>number | null</td>
+                        <td>Mean of all ability dimension scores</td>
+                    </tr>
+                    <tr>
+                        <td><code>overallMean</code></td>
+                        <td>number | null</td>
+                        <td>Combined overall mean score</td>
+                    </tr>
+                    <tr>
+                        <td><code>grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td>Uncurved placeholder grade</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Metadata Field Details</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>lang</code></td>
+                        <td><code>'en' | 'zh'</code></td>
+                        <td>Report language</td>
+                    </tr>
+                    <tr>
+                        <td><code>reportId</code></td>
+                        <td>UUID</td>
+                        <td>Unique report identifier</td>
+                    </tr>
+                    <tr>
+                        <td><code>eventId</code></td>
+                        <td>string</td>
+                        <td>Event this report belongs to</td>
+                    </tr>
+                    <tr>
+                        <td><code>participantId</code></td>
+                        <td>string</td>
+                        <td>Participant identifier</td>
+                    </tr>
+                    <tr>
+                        <td><code>promptSetHash</code></td>
+                        <td>SHA-256</td>
+                        <td>Hash of entire prompt set (sorted)</td>
+                    </tr>
+                    <tr>
+                        <td><code>entries</code></td>
+                        <td>PromptSnapshotEntry[]</td>
+                        <td>Individual prompt fingerprints</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionProblemDependency</code></td>
+                        <td>Array</td>
+                        <td>Problem-dimension mapping</td>
+                    </tr>
+                    <tr>
+                        <td><code>createdAt</code></td>
+                        <td>ISO datetime</td>
+                        <td>Report generation timestamp</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>2. JSONScores Schema</h3>
+            <div class="mermaid">
+classDiagram
+    class JSONScores {
+        +AbilityScore[] abilityScores
+        +ProblemScore[] problemScores
+        +number overallMean
+    }
+
+    class AbilityScore {
+        +Dimension dimensionId
+        +number score
+    }
+
+    class ProblemScore {
+        +ProblemId problemId
+        +number score
+    }
+
+    JSONScores --> AbilityScore
+    JSONScores --> ProblemScore
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>JSONScores Field</th>
+                        <th>Source in LLMReport</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>abilityScores[].score</code></td>
+                        <td><code>dimensionReports[].score</code></td>
+                        <td>Average ability score for dimension</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemScores[].score</code></td>
+                        <td><code>problemReports[].score</code></td>
+                        <td>Task score for problem</td>
+                    </tr>
+                    <tr>
+                        <td><code>overallMean</code></td>
+                        <td><code>overallMean</code></td>
+                        <td>Combined overall mean</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3. Curve Schema</h3>
+            <div class="mermaid">
+classDiagram
+    class Curve {
+        +UUID curveId
+        +string label
+        +EventId[] sourceEventIds
+        +Sha256Hex promptSetHash
+        +PromptSnapshotEntry[] entries
+        +DimensionProblemDependency[] dimensionProblemDependency
+        +standard_deviation method
+        +number sampleSize
+        +datetime createdAt
+        +Record abilityCurves
+        +Record problemCurves
+        +GradeThresholds overall
+    }
+
+    class GradeThresholds {
+        +number A
+        +number B
+        +number C
+        D implied
+    }
+
+    Curve --> GradeThresholds
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>curveId</code></td>
+                        <td>UUID</td>
+                        <td>Unique curve identifier</td>
+                    </tr>
+                    <tr>
+                        <td><code>label</code></td>
+                        <td>string</td>
+                        <td>Human-readable curve name (manual input)</td>
+                    </tr>
+                    <tr>
+                        <td><code>sourceEventIds</code></td>
+                        <td>string[]</td>
+                        <td>Events used to compute this curve</td>
+                    </tr>
+                    <tr>
+                        <td><code>promptSetHash</code></td>
+                        <td>SHA-256</td>
+                        <td>Must match reports being curved</td>
+                    </tr>
+                    <tr>
+                        <td><code>entries</code></td>
+                        <td>PromptSnapshotEntry[]</td>
+                        <td>Prompt fingerprints (must match)</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionProblemDependency</code></td>
+                        <td>Array</td>
+                        <td>Problem-dimension mapping (must match)</td>
+                    </tr>
+                    <tr>
+                        <td><code>method</code></td>
+                        <td><code>'standard_deviation'</code></td>
+                        <td>Computation method</td>
+                    </tr>
+                    <tr>
+                        <td><code>sampleSize</code></td>
+                        <td>number</td>
+                        <td>Number of participants in sample</td>
+                    </tr>
+                    <tr>
+                        <td><code>abilityCurves</code></td>
+                        <td>Record&lt;Dimension, Thresholds&gt;</td>
+                        <td>Per-dimension thresholds</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemCurves</code></td>
+                        <td>Record&lt;ProblemId, Thresholds&gt;</td>
+                        <td>Per-problem thresholds</td>
+                    </tr>
+                    <tr>
+                        <td><code>overall</code></td>
+                        <td>GradeThresholds</td>
+                        <td>Overall score thresholds</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4. CurvedLetterGrades Schema</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>sourceScoresId</code></td>
+                        <td>UUID</td>
+                        <td>Reference to JSONScores source</td>
+                    </tr>
+                    <tr>
+                        <td><code>curveId</code></td>
+                        <td>UUID</td>
+                        <td>Reference to Curve used</td>
+                    </tr>
+                    <tr>
+                        <td><code>computedAt</code></td>
+                        <td>datetime</td>
+                        <td>When grades were computed</td>
+                    </tr>
+                    <tr>
+                        <td><code>overallGrade</code></td>
+                        <td>A | B | C | D</td>
+                        <td>Overall letter grade</td>
+                    </tr>
+                    <tr>
+                        <td><code>abilityGrades</code></td>
+                        <td>Record&lt;Dimension, Grade&gt;</td>
+                        <td>Per-dimension grades</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemGrades</code></td>
+                        <td>Record&lt;ProblemId, Grade&gt;</td>
+                        <td>Per-problem grades</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5. CurvedReport Schema</h3>
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>
+                    <strong>CurvedReport extends LLMReport with:</strong>
+                    <ul>
+                        <li><code>metadata.curveId</code> added (UUID reference to applied curve)</li>
+                        <li>All <code>grade</code> fields changed from <code>'X'</code> to <code>'A' | 'B' | 'C' | 'D'</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Problem ID Format</h3>
+            <div class="mermaid">
+flowchart LR
+    subgraph ProblemId["Problem ID: 6 digits + title"]
+        D1["Digit 1-4"]
+        D5["Digit 5 (minor version)"]
+        D6["Digit 6 (language)"]
+        Title["Title"]
+    end
+
+    D1 --> Major["Major Version (digits 1-4)"]
+    D5 --> Minor["Minor Version"]
+    D6 --> Lang["0 = Chinese, 1 = English"]
+
+    subgraph Example["Example: 001231-thinking-trap"]
+        E1["0012"] --> EM["Major v12"]
+        E2["3"] --> Em["Minor v3"]
+        E3["1"] --> EL["English"]
+        E4["thinking-trap"] --> ET["Title"]
+    end
+            </div>
+
+            <h3>Complete Data Flow</h3>
+            <div class="mermaid">
+flowchart TB
+    subgraph Artifacts["Data Artifacts"]
+        A1["LLMReport: grade X"]
+        A2["JSONScores: scores only"]
+        A3["Curve: thresholds"]
+        A4["CurvedLetterGrades: grades only"]
+        A5["CurvedReport: grade A|B|C|D"]
+    end
+
+    subgraph Flow["Data Flow"]
+        A1 --> |"extract"| A2
+        A2 --> |"+ other JSONScores from same config"| A3
+        A2 --> |"+ Curve"| A4
+        A1 --> |"+ CurvedLetterGrades"| A5
+        A4 --> A5
+    end
+
+    subgraph Traceability["Traceability"]
+        A5 --> |"metadata.curveId"| A3
+        A4 --> |"curveId"| A3
+        A4 --> |"sourceScoresId"| A2
+        A3 --> |"sourceEventIds"| Events["Events"]
+    end
+
+    style A1 fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style A2 fill:#fef3c7,stroke:#d97706,color:#92400e
+    style A3 fill:#ede9fe,stroke:#7c3aed,color:#5b21b6
+    style A4 fill:#dcfce7,stroke:#16a34a,color:#166534
+    style A5 fill:#fee2e2,stroke:#dc2626,color:#991b1b
+            </div>
+
+            <h3>Dimension Types</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>representation</h4>
+                    <p>Problem-solving approach and solution representation</p>
+                </div>
+                <div class="card">
+                    <h4>self-verification</h4>
+                    <p>Checking and validating own work</p>
+                </div>
+                <div class="card">
+                    <h4>iterative-refinement</h4>
+                    <p>Improving and refining solutions</p>
+                </div>
+                <div class="card">
+                    <h4>discovery</h4>
+                    <p>Finding new insights and patterns</p>
+                </div>
+                <div class="card">
+                    <h4>exploratory</h4>
+                    <p>Exploring possibilities and alternatives</p>
+                </div>
+            </div>
+
+            <h3>Grade Mapping</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Raw Grade</th>
+                        <th>Meaning</th>
+                        <th>Curved Grade</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>'X'</code></td>
+                        <td>Uncurved</td>
+                        <td><span class="badge badge-green">A</span></td>
+                        <td>Top tier (&ge; &mu; + &sigma;)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><span class="badge badge-blue">B</span></td>
+                        <td>Above average (&ge; &mu;)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><span class="badge badge-yellow">C</span></td>
+                        <td>Below average (&ge; &mu; - &sigma;)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><span class="badge badge-red">D</span></td>
+                        <td>Bottom tier (&lt; &mu; - &sigma;)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 9: JSON Examples -->
+        <section id="examples">
+            <h2>JSON Examples</h2>
+
+            <h3>PromptSnapshotEntry Array</h3>
+            <pre style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5;"><code>{
+  "entries": [
+    { "key": "framework:en:expert-review", "sha256": "a1b2c3d4..." },
+    { "key": "framework:en:task-eval", "sha256": "d4e5f6g7..." },
+    { "key": "problem:001110:scoring", "sha256": "g7h8i9j0..." },
+    { "key": "problem:001111:scoring", "sha256": "j0k1l2m3..." }
+  ]
+}</code></pre>
+
+            <h3>DimensionProblemDependency</h3>
+            <pre style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5;"><code>{
+  "dimensionProblemDependency": [
+    {
+      "problemId": "001110-thinking-trap",
+      "problemVersion": 1,
+      "dimensions": ["self-verification", "representation"]
+    },
+    {
+      "problemId": "001111-meeting-verification",
+      "problemVersion": 0,
+      "dimensions": ["self-verification", "discovery"]
+    }
+  ]
+}</code></pre>
+
+            <h3>GradeThresholds</h3>
+            <pre style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5;"><code>{
+  "overall": {
+    "A": 0.85,
+    "B": 0.70,
+    "C": 0.55
+  },
+  "abilityCurves": {
+    "representation": { "A": 0.82, "B": 0.68, "C": 0.52 },
+    "self-verification": { "A": 0.88, "B": 0.72, "C": 0.58 }
+  }
+}</code></pre>
+
+            <h3>CurvedLetterGrades</h3>
+            <pre style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5;"><code>{
+  "sourceScoresId": "550e8400-e29b-41d4-a716-446655440000",
+  "curveId": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+  "computedAt": "2024-01-15T10:30:00Z",
+  "overallGrade": "B",
+  "abilityGrades": {
+    "representation": "A",
+    "self-verification": "B",
+    "iterative-refinement": "C",
+    "discovery": "B",
+    "exploratory": "A"
+  },
+  "problemGrades": {
+    "001110-thinking-trap": "A",
+    "001111-meeting-verification": "B"
+  }
+}</code></pre>
+        </section>
+
+        <!-- Section 10: Validation Errors -->
+        <section id="errors">
+            <h2>Validation Error Messages</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Schema</th>
+                        <th>Validation</th>
+                        <th>Error Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ProblemId</td>
+                        <td>Format</td>
+                        <td><code>Problem ID must be "6digits-title"</code></td>
+                    </tr>
+                    <tr>
+                        <td>ProblemId</td>
+                        <td>Title empty</td>
+                        <td><code>Problem ID title part must be non-empty</code></td>
+                    </tr>
+                    <tr>
+                        <td>ProblemId</td>
+                        <td>Language digit</td>
+                        <td><code>Problem ID last digit must be 0 (zh) or 1 (en)</code></td>
+                    </tr>
+                    <tr>
+                        <td>Sha256Hex</td>
+                        <td>Format</td>
+                        <td><code>Must be a lowercase SHA-256 hex digest</code></td>
+                    </tr>
+                    <tr>
+                        <td>PromptSnapshotEntries</td>
+                        <td>Order</td>
+                        <td><code>entries must be sorted by key (stable order)</code></td>
+                    </tr>
+                    <tr>
+                        <td>PromptSnapshotEntries</td>
+                        <td>Uniqueness</td>
+                        <td><code>entries keys must be unique</code></td>
+                    </tr>
+                    <tr>
+                        <td>ScoreValue</td>
+                        <td>Range</td>
+                        <td>Implicit: must be between 0 and 1</td>
+                    </tr>
+                    <tr>
+                        <td>PromptVersionHash</td>
+                        <td>Format</td>
+                        <td><code>Must be a valid git commit hash (short or full)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer>
+            <p>Score Post-LLM Pipeline Documentation &bull; Generated from <code>schema-verify-v1.ts</code></p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#dbeafe',
+                primaryTextColor: '#1e40af',
+                primaryBorderColor: '#2563eb',
+                lineColor: '#64748b',
+                secondaryColor: '#f1f5f9',
+                tertiaryColor: '#e2e8f0',
+                background: '#ffffff',
+                mainBkg: '#f8fafc',
+                nodeBorder: '#cbd5e1',
+                clusterBkg: '#f8fafc',
+                clusterBorder: '#e2e8f0',
+                titleColor: '#1e293b',
+                edgeLabelBackground: '#ffffff',
+                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
