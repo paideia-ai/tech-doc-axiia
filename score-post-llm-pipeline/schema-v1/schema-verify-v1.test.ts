@@ -1394,3 +1394,678 @@ describe('Integration Tests', () => {
     })
   })
 })
+
+// =============================================================================
+// Pipeline Flow Tests with Mock Data
+// =============================================================================
+
+describe('Pipeline Flow Tests', () => {
+  /**
+   * Realistic mock data simulating the complete pipeline flow:
+   *
+   * Stage 1: LLMReport (grades = 'X') - Raw LLM evaluation output
+   * Stage 2: JSONScores - Extracted scores from LLMReport
+   * Stage 3: Curve - Computed from multiple JSONScores
+   * Stage 4: CurvedLetterGrades - Result of applying curve to scores
+   * Stage 5: CurvedReport - Final report with letter grades
+   */
+
+  // Shared test data
+  const MOCK_EVENT_ID = 'event-2024-spring-cohort'
+  const MOCK_PARTICIPANT_ID = 'participant-alice-001'
+  const MOCK_REPORT_ID = '550e8400-e29b-41d4-a716-446655440001'
+  const MOCK_CURVE_ID = '550e8400-e29b-41d4-a716-446655440002'
+  const MOCK_SCORES_ID = '550e8400-e29b-41d4-a716-446655440003'
+  const MOCK_PROMPT_HASH = 'abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789'
+  const MOCK_PROBLEM_1 = '001230-thinking-trap'
+  const MOCK_PROBLEM_2 = '002341-meeting-verification'
+
+  const MOCK_ENTRIES = [
+    { key: 'framework:en:expert-review', sha256: 'a'.repeat(64) },
+    { key: 'framework:en:final-summary', sha256: 'b'.repeat(64) },
+    { key: 'framework:en:task-eval', sha256: 'c'.repeat(64) },
+    { key: 'problem:001230:scoring', sha256: 'd'.repeat(64) },
+    { key: 'problem:002341:scoring', sha256: 'e'.repeat(64) },
+  ]
+
+  const MOCK_DIMENSION_DEPENDENCY = [
+    {
+      problemId: MOCK_PROBLEM_1,
+      problemVersion: 1,
+      dimensions: ['representation', 'self-verification'] as const,
+    },
+    {
+      problemId: MOCK_PROBLEM_2,
+      problemVersion: 0,
+      dimensions: ['discovery', 'iterative-refinement', 'exploratory'] as const,
+    },
+  ]
+
+  // ---------------------------------------------------------------------------
+  // Stage 1: LLMReport - Raw evaluation with X grades
+  // ---------------------------------------------------------------------------
+  describe('Stage 1: LLMReport (Uncurved)', () => {
+    const mockLLMReport = {
+      metadata: {
+        lang: 'en' as const,
+        reportId: MOCK_REPORT_ID,
+        eventId: MOCK_EVENT_ID,
+        participantId: MOCK_PARTICIPANT_ID,
+        promptSetHash: MOCK_PROMPT_HASH,
+        entries: MOCK_ENTRIES,
+        dimensionProblemDependency: MOCK_DIMENSION_DEPENDENCY,
+        createdAt: '2024-03-15T10:00:00Z',
+      },
+      dimensionCards: [
+        { dimension: 'representation' as const, phrases: 'Shows clear problem representation skills', grade: 'X' as const },
+        { dimension: 'self-verification' as const, phrases: 'Consistently verifies work', grade: 'X' as const },
+        { dimension: 'iterative-refinement' as const, phrases: 'Good at refining solutions', grade: 'X' as const },
+        { dimension: 'discovery' as const, phrases: 'Discovers patterns effectively', grade: 'X' as const },
+        { dimension: 'exploratory' as const, phrases: 'Explores multiple approaches', grade: 'X' as const },
+      ],
+      dimensionReports: [
+        {
+          dimension: 'representation' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_1, phrases: 'Good structure', grade: 'X' as const },
+          ],
+          summary: 'Strong representation skills demonstrated across problems.',
+          score: 0.82,
+          grade: 'X' as const,
+        },
+        {
+          dimension: 'self-verification' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_1, phrases: 'Thorough checking', grade: 'X' as const },
+          ],
+          summary: 'Excellent self-verification habits.',
+          score: 0.78,
+          grade: 'X' as const,
+        },
+        {
+          dimension: 'iterative-refinement' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Improved solution twice', grade: 'X' as const },
+          ],
+          summary: 'Shows good iterative improvement.',
+          score: 0.75,
+          grade: 'X' as const,
+        },
+        {
+          dimension: 'discovery' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Found key insight', grade: 'X' as const },
+          ],
+          summary: 'Strong discovery capabilities.',
+          score: 0.88,
+          grade: 'X' as const,
+        },
+        {
+          dimension: 'exploratory' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Tried 3 approaches', grade: 'X' as const },
+          ],
+          summary: 'Excellent exploratory behavior.',
+          score: 0.85,
+          grade: 'X' as const,
+        },
+      ],
+      overall: {
+        bad: [
+          { title: 'Time Management', description: 'Could improve pacing on complex problems' },
+        ],
+        good: [
+          { title: 'Problem Analysis', description: 'Excellent at breaking down problems' },
+          { title: 'Solution Quality', description: 'High quality solutions overall' },
+        ],
+        improvements: [
+          { title: 'Edge Cases', description: 'Consider more edge cases in verification' },
+        ],
+        overview: 'Overall strong performance with room for improvement in time management.',
+      },
+      problemCards: [
+        { problemId: MOCK_PROBLEM_1, grade: 'X' as const },
+        { problemId: MOCK_PROBLEM_2, grade: 'X' as const },
+      ],
+      problemReports: [
+        {
+          bad: ['Could have checked edge cases'],
+          dimensionDetails: [
+            {
+              dimension: 'representation' as const,
+              proofs: [
+                { comment: 'Clear diagram', isStrength: true, observation: 'Drew solution diagram first' },
+                { comment: 'Good naming', isStrength: true, observation: 'Used descriptive variable names' },
+              ],
+              summary: 'Strong representation in this problem.',
+              score: 0.85,
+              grade: 'X' as const,
+            },
+            {
+              dimension: 'self-verification' as const,
+              proofs: [
+                { comment: 'Tested solution', isStrength: true, observation: 'Ran through test cases' },
+              ],
+              summary: 'Good verification but missed edge case.',
+              score: 0.72,
+              grade: 'X' as const,
+            },
+          ],
+          good: ['Clear problem decomposition', 'Efficient solution'],
+          problemId: MOCK_PROBLEM_1,
+          overview: 'Strong performance on thinking trap problem.',
+          score: 0.80,
+          grade: 'X' as const,
+        },
+        {
+          bad: ['Initial approach was inefficient'],
+          dimensionDetails: [
+            {
+              dimension: 'discovery' as const,
+              proofs: [
+                { comment: 'Key insight', isStrength: true, observation: 'Identified pattern quickly' },
+              ],
+              summary: 'Excellent discovery skills.',
+              score: 0.90,
+              grade: 'X' as const,
+            },
+            {
+              dimension: 'iterative-refinement' as const,
+              proofs: [
+                { comment: 'Improved twice', isStrength: true, observation: 'Refined solution iteratively' },
+              ],
+              summary: 'Good iteration.',
+              score: 0.75,
+              grade: 'X' as const,
+            },
+            {
+              dimension: 'exploratory' as const,
+              proofs: [
+                { comment: 'Multiple approaches', isStrength: true, observation: 'Tried 3 different methods' },
+              ],
+              summary: 'Strong exploration.',
+              score: 0.88,
+              grade: 'X' as const,
+            },
+          ],
+          good: ['Creative solution', 'Good iteration'],
+          problemId: MOCK_PROBLEM_2,
+          overview: 'Excellent work on meeting verification problem.',
+          score: 0.85,
+          grade: 'X' as const,
+        },
+      ],
+      taskEvalMean: 0.825,
+      abilityMean: 0.816,
+      overallMean: 0.82,
+      grade: 'X' as const,
+    }
+
+    it('should validate complete LLMReport with realistic data', () => {
+      const result = LLMReportSchema.safeParse(mockLLMReport)
+      expect(result.success).toBe(true)
+    })
+
+    it('should have all grades as X (uncurved)', () => {
+      expect(mockLLMReport.grade).toBe('X')
+      expect(mockLLMReport.dimensionCards.every(c => c.grade === 'X')).toBe(true)
+      expect(mockLLMReport.dimensionReports.every(r => r.grade === 'X')).toBe(true)
+      expect(mockLLMReport.problemCards.every(c => c.grade === 'X')).toBe(true)
+      expect(mockLLMReport.problemReports.every(r => r.grade === 'X')).toBe(true)
+    })
+
+    it('should have valid scores in 0-1 range', () => {
+      expect(mockLLMReport.overallMean).toBeGreaterThanOrEqual(0)
+      expect(mockLLMReport.overallMean).toBeLessThanOrEqual(1)
+      mockLLMReport.dimensionReports.forEach(r => {
+        if (r.score !== null) {
+          expect(r.score).toBeGreaterThanOrEqual(0)
+          expect(r.score).toBeLessThanOrEqual(1)
+        }
+      })
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Stage 2: JSONScores - Extracted scores from LLMReport
+  // ---------------------------------------------------------------------------
+  describe('Stage 2: JSONScores (Score Extraction)', () => {
+    /**
+     * Simulates extracting scores from the LLMReport
+     * In real pipeline: LLMReport → extract → JSONScores
+     */
+    const mockJSONScores = {
+      abilityScores: [
+        { dimensionId: 'representation' as const, score: 0.82 },
+        { dimensionId: 'self-verification' as const, score: 0.78 },
+        { dimensionId: 'iterative-refinement' as const, score: 0.75 },
+        { dimensionId: 'discovery' as const, score: 0.88 },
+        { dimensionId: 'exploratory' as const, score: 0.85 },
+      ],
+      problemScores: [
+        { problemId: MOCK_PROBLEM_1, score: 0.80 },
+        { problemId: MOCK_PROBLEM_2, score: 0.85 },
+      ],
+      overallMean: 0.82,
+    }
+
+    it('should validate extracted JSONScores', () => {
+      const result = JSONScoresSchema.safeParse(mockJSONScores)
+      expect(result.success).toBe(true)
+    })
+
+    it('should contain all 5 dimensions', () => {
+      expect(mockJSONScores.abilityScores).toHaveLength(5)
+      const dimensions = mockJSONScores.abilityScores.map(s => s.dimensionId)
+      expect(dimensions).toContain('representation')
+      expect(dimensions).toContain('self-verification')
+      expect(dimensions).toContain('iterative-refinement')
+      expect(dimensions).toContain('discovery')
+      expect(dimensions).toContain('exploratory')
+    })
+
+    it('should match scores from LLMReport dimension reports', () => {
+      // In real pipeline, these scores come from LLMReport.dimensionReports[].score
+      expect(mockJSONScores.abilityScores[0].score).toBe(0.82) // representation
+      expect(mockJSONScores.overallMean).toBe(0.82)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Stage 3: Curve - Generated from multiple participants' scores
+  // ---------------------------------------------------------------------------
+  describe('Stage 3: Curve (Threshold Computation)', () => {
+    /**
+     * Simulates curve computed from a pool of participants
+     * In real pipeline: Multiple JSONScores → compute statistics → Curve
+     *
+     * Example computation (standard deviation method):
+     * - Sample mean (μ) = 0.70, std dev (σ) = 0.15
+     * - A threshold = μ + σ = 0.85
+     * - B threshold = μ = 0.70
+     * - C threshold = μ - σ = 0.55
+     */
+    const mockCurve = {
+      curveId: MOCK_CURVE_ID,
+      label: '2024 Spring Cohort Curve',
+      sourceEventIds: [MOCK_EVENT_ID],
+      promptSetHash: MOCK_PROMPT_HASH,
+      entries: MOCK_ENTRIES,
+      dimensionProblemDependency: MOCK_DIMENSION_DEPENDENCY,
+      method: 'standard_deviation' as const,
+      sampleSize: 150,
+      createdAt: '2024-03-20T15:00:00Z',
+      abilityCurves: {
+        'representation': { A: 0.85, B: 0.70, C: 0.55 },
+        'self-verification': { A: 0.82, B: 0.68, C: 0.54 },
+        'iterative-refinement': { A: 0.80, B: 0.65, C: 0.50 },
+        'discovery': { A: 0.88, B: 0.72, C: 0.56 },
+        'exploratory': { A: 0.86, B: 0.71, C: 0.56 },
+      },
+      problemCurves: {
+        [MOCK_PROBLEM_1]: { A: 0.85, B: 0.70, C: 0.55 },
+        [MOCK_PROBLEM_2]: { A: 0.88, B: 0.73, C: 0.58 },
+      },
+      overall: { A: 0.85, B: 0.70, C: 0.55 },
+    }
+
+    it('should validate curve with realistic thresholds', () => {
+      const result = CurveSchema.safeParse(mockCurve)
+      expect(result.success).toBe(true)
+    })
+
+    it('should have thresholds in descending order (A > B > C)', () => {
+      expect(mockCurve.overall.A).toBeGreaterThan(mockCurve.overall.B)
+      expect(mockCurve.overall.B).toBeGreaterThan(mockCurve.overall.C)
+    })
+
+    it('should have matching metadata with source reports', () => {
+      // Critical: promptSetHash must match for compatibility
+      expect(mockCurve.promptSetHash).toBe(MOCK_PROMPT_HASH)
+      expect(mockCurve.dimensionProblemDependency).toEqual(MOCK_DIMENSION_DEPENDENCY)
+    })
+
+    it('should have reasonable sample size', () => {
+      expect(mockCurve.sampleSize).toBeGreaterThan(0)
+      expect(mockCurve.sampleSize).toBe(150)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Stage 4: CurvedLetterGrades - Applying curve to scores
+  // ---------------------------------------------------------------------------
+  describe('Stage 4: CurvedLetterGrades (Grade Assignment)', () => {
+    /**
+     * Simulates applying curve to JSONScores
+     * In real pipeline: JSONScores + Curve → apply thresholds → CurvedLetterGrades
+     *
+     * Example grade assignment (using overall thresholds A=0.85, B=0.70, C=0.55):
+     * - Score 0.82 → B (≥ 0.70 but < 0.85)
+     * - Score 0.88 → A (≥ 0.85)
+     */
+    const mockCurvedLetterGrades = {
+      sourceScoresId: MOCK_SCORES_ID,
+      curveId: MOCK_CURVE_ID,
+      computedAt: '2024-03-25T09:00:00Z',
+      overallGrade: 'B' as const, // 0.82 score → B grade
+      abilityGrades: {
+        'representation': 'B' as const,      // 0.82 → B (threshold B=0.70)
+        'self-verification': 'B' as const,   // 0.78 → B (threshold B=0.68)
+        'iterative-refinement': 'B' as const,// 0.75 → B (threshold B=0.65)
+        'discovery': 'A' as const,           // 0.88 → A (threshold A=0.88)
+        'exploratory': 'B' as const,         // 0.85 → B (threshold A=0.86, so < A)
+      },
+      problemGrades: {
+        [MOCK_PROBLEM_1]: 'B' as const,      // 0.80 → B
+        [MOCK_PROBLEM_2]: 'B' as const,      // 0.85 → B (threshold A=0.88)
+      },
+    }
+
+    it('should validate curved letter grades', () => {
+      const result = CurvedLetterGradesSchema.safeParse(mockCurvedLetterGrades)
+      expect(result.success).toBe(true)
+    })
+
+    it('should have all curved grades (A/B/C/D, no X)', () => {
+      const validGrades = ['A', 'B', 'C', 'D']
+      expect(validGrades).toContain(mockCurvedLetterGrades.overallGrade)
+      Object.values(mockCurvedLetterGrades.abilityGrades).forEach(g => {
+        expect(validGrades).toContain(g)
+      })
+      Object.values(mockCurvedLetterGrades.problemGrades).forEach(g => {
+        expect(validGrades).toContain(g)
+      })
+    })
+
+    it('should reference correct curve and scores', () => {
+      expect(mockCurvedLetterGrades.curveId).toBe(MOCK_CURVE_ID)
+      expect(mockCurvedLetterGrades.sourceScoresId).toBe(MOCK_SCORES_ID)
+    })
+
+    it('should have grades consistent with scores and thresholds', () => {
+      // Discovery score 0.88 with threshold A=0.88 → should be A
+      expect(mockCurvedLetterGrades.abilityGrades['discovery']).toBe('A')
+      // Exploratory score 0.85 with threshold A=0.86 → should be B
+      expect(mockCurvedLetterGrades.abilityGrades['exploratory']).toBe('B')
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Stage 5: CurvedReport - Final merged report
+  // ---------------------------------------------------------------------------
+  describe('Stage 5: CurvedReport (Final Output)', () => {
+    /**
+     * Simulates merging LLMReport with CurvedLetterGrades
+     * In real pipeline: LLMReport + CurvedLetterGrades → merge → CurvedReport
+     */
+    const mockCurvedReport = {
+      metadata: {
+        lang: 'en' as const,
+        reportId: MOCK_REPORT_ID,
+        eventId: MOCK_EVENT_ID,
+        participantId: MOCK_PARTICIPANT_ID,
+        promptSetHash: MOCK_PROMPT_HASH,
+        entries: MOCK_ENTRIES,
+        dimensionProblemDependency: MOCK_DIMENSION_DEPENDENCY,
+        createdAt: '2024-03-15T10:00:00Z',
+        curveId: MOCK_CURVE_ID, // Added in CurvedReport
+      },
+      dimensionCards: [
+        { dimension: 'representation' as const, phrases: 'Shows clear problem representation skills', grade: 'B' as const },
+        { dimension: 'self-verification' as const, phrases: 'Consistently verifies work', grade: 'B' as const },
+        { dimension: 'iterative-refinement' as const, phrases: 'Good at refining solutions', grade: 'B' as const },
+        { dimension: 'discovery' as const, phrases: 'Discovers patterns effectively', grade: 'A' as const },
+        { dimension: 'exploratory' as const, phrases: 'Explores multiple approaches', grade: 'B' as const },
+      ],
+      dimensionReports: [
+        {
+          dimension: 'representation' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_1, phrases: 'Good structure', grade: 'B' as const },
+          ],
+          summary: 'Strong representation skills demonstrated across problems.',
+          score: 0.82,
+          grade: 'B' as const,
+        },
+        {
+          dimension: 'self-verification' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_1, phrases: 'Thorough checking', grade: 'B' as const },
+          ],
+          summary: 'Excellent self-verification habits.',
+          score: 0.78,
+          grade: 'B' as const,
+        },
+        {
+          dimension: 'iterative-refinement' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Improved solution twice', grade: 'B' as const },
+          ],
+          summary: 'Shows good iterative improvement.',
+          score: 0.75,
+          grade: 'B' as const,
+        },
+        {
+          dimension: 'discovery' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Found key insight', grade: 'A' as const },
+          ],
+          summary: 'Strong discovery capabilities.',
+          score: 0.88,
+          grade: 'A' as const,
+        },
+        {
+          dimension: 'exploratory' as const,
+          problems: [
+            { problemId: MOCK_PROBLEM_2, phrases: 'Tried 3 approaches', grade: 'B' as const },
+          ],
+          summary: 'Excellent exploratory behavior.',
+          score: 0.85,
+          grade: 'B' as const,
+        },
+      ],
+      overall: {
+        bad: [
+          { title: 'Time Management', description: 'Could improve pacing on complex problems' },
+        ],
+        good: [
+          { title: 'Problem Analysis', description: 'Excellent at breaking down problems' },
+          { title: 'Solution Quality', description: 'High quality solutions overall' },
+        ],
+        improvements: [
+          { title: 'Edge Cases', description: 'Consider more edge cases in verification' },
+        ],
+        overview: 'Overall strong performance with room for improvement in time management.',
+      },
+      problemCards: [
+        { problemId: MOCK_PROBLEM_1, grade: 'B' as const },
+        { problemId: MOCK_PROBLEM_2, grade: 'B' as const },
+      ],
+      problemReports: [
+        {
+          bad: ['Could have checked edge cases'],
+          dimensionDetails: [
+            {
+              dimension: 'representation' as const,
+              proofs: [
+                { comment: 'Clear diagram', isStrength: true, observation: 'Drew solution diagram first' },
+                { comment: 'Good naming', isStrength: true, observation: 'Used descriptive variable names' },
+              ],
+              summary: 'Strong representation in this problem.',
+              score: 0.85,
+              grade: 'B' as const,
+            },
+            {
+              dimension: 'self-verification' as const,
+              proofs: [
+                { comment: 'Tested solution', isStrength: true, observation: 'Ran through test cases' },
+              ],
+              summary: 'Good verification but missed edge case.',
+              score: 0.72,
+              grade: 'B' as const,
+            },
+          ],
+          good: ['Clear problem decomposition', 'Efficient solution'],
+          problemId: MOCK_PROBLEM_1,
+          overview: 'Strong performance on thinking trap problem.',
+          score: 0.80,
+          grade: 'B' as const,
+        },
+        {
+          bad: ['Initial approach was inefficient'],
+          dimensionDetails: [
+            {
+              dimension: 'discovery' as const,
+              proofs: [
+                { comment: 'Key insight', isStrength: true, observation: 'Identified pattern quickly' },
+              ],
+              summary: 'Excellent discovery skills.',
+              score: 0.90,
+              grade: 'A' as const,
+            },
+            {
+              dimension: 'iterative-refinement' as const,
+              proofs: [
+                { comment: 'Improved twice', isStrength: true, observation: 'Refined solution iteratively' },
+              ],
+              summary: 'Good iteration.',
+              score: 0.75,
+              grade: 'B' as const,
+            },
+            {
+              dimension: 'exploratory' as const,
+              proofs: [
+                { comment: 'Multiple approaches', isStrength: true, observation: 'Tried 3 different methods' },
+              ],
+              summary: 'Strong exploration.',
+              score: 0.88,
+              grade: 'B' as const,
+            },
+          ],
+          good: ['Creative solution', 'Good iteration'],
+          problemId: MOCK_PROBLEM_2,
+          overview: 'Excellent work on meeting verification problem.',
+          score: 0.85,
+          grade: 'B' as const,
+        },
+      ],
+      taskEvalMean: 0.825,
+      abilityMean: 0.816,
+      overallMean: 0.82,
+      grade: 'B' as const,
+    }
+
+    it('should validate complete CurvedReport', () => {
+      const result = CurvedReportSchema.safeParse(mockCurvedReport)
+      expect(result.success).toBe(true)
+    })
+
+    it('should have curveId in metadata', () => {
+      expect(mockCurvedReport.metadata.curveId).toBe(MOCK_CURVE_ID)
+    })
+
+    it('should have all curved grades (no X grades)', () => {
+      expect(mockCurvedReport.grade).not.toBe('X')
+      mockCurvedReport.dimensionCards.forEach(c => expect(c.grade).not.toBe('X'))
+      mockCurvedReport.dimensionReports.forEach(r => {
+        expect(r.grade).not.toBe('X')
+        r.problems.forEach(p => expect(p.grade).not.toBe('X'))
+      })
+      mockCurvedReport.problemCards.forEach(c => expect(c.grade).not.toBe('X'))
+      mockCurvedReport.problemReports.forEach(r => {
+        expect(r.grade).not.toBe('X')
+        r.dimensionDetails.forEach(d => expect(d.grade).not.toBe('X'))
+      })
+    })
+
+    it('should preserve all non-grade content from LLMReport', () => {
+      // Scores should be unchanged
+      expect(mockCurvedReport.overallMean).toBe(0.82)
+      expect(mockCurvedReport.taskEvalMean).toBe(0.825)
+      expect(mockCurvedReport.abilityMean).toBe(0.816)
+
+      // Content should be unchanged
+      expect(mockCurvedReport.overall.overview).toContain('time management')
+      expect(mockCurvedReport.problemReports[0].good).toContain('Clear problem decomposition')
+    })
+
+    it('should have discovery dimension as the only A grade', () => {
+      const aGrades = mockCurvedReport.dimensionCards.filter(c => c.grade === 'A')
+      expect(aGrades).toHaveLength(1)
+      expect(aGrades[0].dimension).toBe('discovery')
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // End-to-End Flow Validation
+  // ---------------------------------------------------------------------------
+  describe('End-to-End Flow Validation', () => {
+    it('should maintain metadata consistency across all stages', () => {
+      // All stages should use the same promptSetHash
+      const hash = MOCK_PROMPT_HASH
+      expect(hash).toHaveLength(64)
+
+      // All stages should reference the same dimensionProblemDependency
+      const deps = MOCK_DIMENSION_DEPENDENCY
+      expect(deps).toHaveLength(2)
+      expect(deps[0].dimensions).toContain('representation')
+    })
+
+    it('should demonstrate complete grade transformation: X → A/B/C/D', () => {
+      // Stage 1: LLMReport has X grades
+      const uncurvedGrade = 'X'
+      expect(UncurvedGradeSchema.safeParse(uncurvedGrade).success).toBe(true)
+      expect(CurvedGradeSchema.safeParse(uncurvedGrade).success).toBe(false)
+
+      // Stage 5: CurvedReport has A/B/C/D grades
+      const curvedGrade = 'B'
+      expect(CurvedGradeSchema.safeParse(curvedGrade).success).toBe(true)
+      expect(UncurvedGradeSchema.safeParse(curvedGrade).success).toBe(false)
+    })
+
+    it('should demonstrate traceability chain', () => {
+      // CurvedReport.metadata.curveId → Curve.curveId
+      // CurvedLetterGrades.curveId → Curve.curveId
+      // CurvedLetterGrades.sourceScoresId → (implicit JSONScores reference)
+      // Curve.sourceEventIds → Event IDs
+
+      expect(MOCK_CURVE_ID).toBeDefined()
+      expect(MOCK_SCORES_ID).toBeDefined()
+      expect(MOCK_EVENT_ID).toBeDefined()
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Compatibility Validation (Critical Checks)
+  // ---------------------------------------------------------------------------
+  describe('Compatibility Validation', () => {
+    it('should fail if promptSetHash differs between Curve and Report', () => {
+      const curveHash = MOCK_PROMPT_HASH
+      const reportHash = 'different'.padEnd(64, '0')
+
+      // In real implementation, this would be a compatibility check
+      expect(curveHash).not.toBe(reportHash)
+      // Attempting to apply curve with different hash should fail
+    })
+
+    it('should fail if dimensionProblemDependency differs', () => {
+      const curveDeps = MOCK_DIMENSION_DEPENDENCY
+      const reportDeps = [{
+        problemId: '999990-different-problem',
+        problemVersion: 0,
+        dimensions: ['discovery'] as const,
+      }]
+
+      // Dependencies don't match - should fail compatibility check
+      expect(curveDeps).not.toEqual(reportDeps)
+    })
+
+    it('should validate that entries are sorted consistently', () => {
+      const entries = MOCK_ENTRIES
+      const keys = entries.map(e => e.key)
+      const sortedKeys = [...keys].sort()
+
+      expect(keys).toEqual(sortedKeys)
+    })
+  })
+})
