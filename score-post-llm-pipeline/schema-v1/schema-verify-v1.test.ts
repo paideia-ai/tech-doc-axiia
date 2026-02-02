@@ -922,6 +922,7 @@ describe('JSONScores Schema', () => {
       const result = ProblemScoreSchema.safeParse({
         problemId: VALID_PROBLEM_ID_ZH,
         score: 0.9,
+        dimensionDetailScores: [],
       })
       expect(result.success).toBe(true)
     })
@@ -935,7 +936,7 @@ describe('JSONScores Schema', () => {
           { dimensionId: 'self-verification', score: 0.7 },
         ],
         problemScores: [
-          { problemId: VALID_PROBLEM_ID_ZH, score: 0.85 },
+          { problemId: VALID_PROBLEM_ID_ZH, score: 0.85, dimensionDetailScores: [] },
         ],
         overallMean: 0.78,
       })
@@ -1088,9 +1089,8 @@ describe('Curve Schema', () => {
 // 5. CurvedLetterGrades Schema Tests
 // =============================================================================
 
-describe('CurvedLetterGrades Schema', () => {
+  describe('CurvedLetterGrades Schema', () => {
   const createValidCurvedLetterGrades = () => ({
-    sourceScoresId: VALID_UUID,
     curveId: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
     computedAt: VALID_DATETIME,
     overallGrade: 'B' as const,
@@ -1105,6 +1105,7 @@ describe('CurvedLetterGrades Schema', () => {
       [VALID_PROBLEM_ID_ZH]: 'A' as const,
       [VALID_PROBLEM_ID_EN]: 'B' as const,
     },
+    dimensionDetailGrades: {},
   })
 
   it('should accept valid curved letter grades', () => {
@@ -1157,6 +1158,7 @@ describe('CurvedReport Schema', () => {
       const metadata = {
         ...createValidMetadata(),
         curveId: VALID_UUID,
+        curvedAt: VALID_DATETIME,
       }
       expect(CurvedReportMetadataSchema.safeParse(metadata).success).toBe(true)
     })
@@ -1255,6 +1257,7 @@ describe('CurvedReport Schema', () => {
       metadata: {
         ...createValidMetadata(),
         curveId: VALID_UUID,
+        curvedAt: VALID_DATETIME,
       },
       dimensionCards: [
         { dimension: 'representation' as const, phrases: 'Good', grade: 'A' as const },
@@ -1643,8 +1646,23 @@ describe('Pipeline Flow Tests', () => {
         { dimensionId: 'exploratory' as const, score: 0.85 },
       ],
       problemScores: [
-        { problemId: MOCK_PROBLEM_1, score: 0.80 },
-        { problemId: MOCK_PROBLEM_2, score: 0.85 },
+        {
+          problemId: MOCK_PROBLEM_1,
+          score: 0.80,
+          dimensionDetailScores: [
+            { dimensionId: 'representation' as const, score: 0.85 },
+            { dimensionId: 'self-verification' as const, score: 0.72 },
+          ],
+        },
+        {
+          problemId: MOCK_PROBLEM_2,
+          score: 0.85,
+          dimensionDetailScores: [
+            { dimensionId: 'discovery' as const, score: 0.90 },
+            { dimensionId: 'iterative-refinement' as const, score: 0.75 },
+            { dimensionId: 'exploratory' as const, score: 0.88 },
+          ],
+        },
       ],
       overallMean: 0.82,
     }
@@ -1744,7 +1762,6 @@ describe('Pipeline Flow Tests', () => {
      * - Score 0.88 → A (≥ 0.85)
      */
     const mockCurvedLetterGrades = {
-      sourceScoresId: MOCK_SCORES_ID,
       curveId: MOCK_CURVE_ID,
       computedAt: '2024-03-25T09:00:00Z',
       overallGrade: 'B' as const, // 0.82 score → B grade
@@ -1758,6 +1775,17 @@ describe('Pipeline Flow Tests', () => {
       problemGrades: {
         [MOCK_PROBLEM_1]: 'B' as const,      // 0.80 → B
         [MOCK_PROBLEM_2]: 'B' as const,      // 0.85 → B (threshold A=0.88)
+      },
+      dimensionDetailGrades: {
+        [MOCK_PROBLEM_1]: {
+          'representation': 'A' as const, // 0.85 >= A(0.85) → A
+          'self-verification': 'B' as const,
+        },
+        [MOCK_PROBLEM_2]: {
+          'discovery': 'A' as const,
+          'iterative-refinement': 'B' as const,
+          'exploratory': 'B' as const,
+        },
       },
     }
 
@@ -1777,9 +1805,8 @@ describe('Pipeline Flow Tests', () => {
       })
     })
 
-    it('should reference correct curve and scores', () => {
+    it('should reference correct curve', () => {
       expect(mockCurvedLetterGrades.curveId).toBe(MOCK_CURVE_ID)
-      expect(mockCurvedLetterGrades.sourceScoresId).toBe(MOCK_SCORES_ID)
     })
 
     it('should have grades consistent with scores and thresholds', () => {
@@ -1809,6 +1836,7 @@ describe('Pipeline Flow Tests', () => {
         dimensionProblemDependency: MOCK_DIMENSION_DEPENDENCY,
         createdAt: '2024-03-15T10:00:00Z',
         curveId: MOCK_CURVE_ID, // Added in CurvedReport
+        curvedAt: '2024-03-25T09:00:00Z',
       },
       dimensionCards: [
         { dimension: 'representation' as const, phrases: 'Shows clear problem representation skills', grade: 'B' as const },
@@ -2026,7 +2054,7 @@ describe('Pipeline Flow Tests', () => {
     it('should demonstrate traceability chain', () => {
       // CurvedReport.metadata.curveId → Curve.curveId
       // CurvedLetterGrades.curveId → Curve.curveId
-      // CurvedLetterGrades.sourceScoresId → (implicit JSONScores reference)
+      // CurvedLetterGrades is in-memory only (no JSONScores reference)
       // Curve.sourceEventIds → Event IDs
 
       expect(MOCK_CURVE_ID).toBeDefined()

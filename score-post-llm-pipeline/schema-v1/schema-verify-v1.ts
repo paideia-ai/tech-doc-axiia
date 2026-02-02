@@ -270,10 +270,18 @@ export const AbilityScoreSchema = z.object({
   score: ScoreValueSchema,
 })
 
+export const DimensionDetailScoreSchema = z.object({
+  dimensionId: DimensionSchema,
+  /** Source: Report.problemReports[].dimensionDetails[].score */
+  score: ScoreValueSchema,
+})
+
+
 export const ProblemScoreSchema = z.object({
   problemId: ProblemIdSchema,
   /** Source: Report.problemReports[].score (task score for the problem) */
   score: ScoreValueSchema,
+  dimensionDetailScores: z.array(DimensionDetailScoreSchema),
 })
 
 /**
@@ -357,21 +365,28 @@ export type Curve = z.infer<typeof CurveSchema>
 
 /**
  * Curved Letter Grades: result of applying curve to scores.
- * This is a traceable intermediate artifact (before merging into the report).
+ * This is an in-memory intermediate artifact (before merging into the report).
  */
 export const CurvedLetterGradesSchema = z.object({
-  /** Reference to source scores */
-  sourceScoresId: z.string().uuid(),
   /** Reference to curve used */
   curveId: z.string().uuid(),
   /** Timestamp when grades were computed */
   computedAt: z.string().datetime(),
-  /** Overall grade */
+  /** Overall grade (from JSONScores.overallMean + Curve.overall) */
   overallGrade: CurvedGradeSchema,
-  /** Per-dimension grades */
+  /** Per-dimension grades (from JSONScores.abilityScores[*].score + Curve.abilityCurves[dimension]) */
   abilityGrades: z.record(DimensionSchema, CurvedGradeSchema),
-  /** Per-problem grades */
+  /** Per-problem grades (from JSONScores.problemScores[*].score + Curve.problemCurves[problemId]) */
   problemGrades: z.record(ProblemIdSchema, CurvedGradeSchema),
+  /**
+   * Per-problem per-dimension grades.
+   * - Source: JSONScores.problemScores[*].dimensionDetailScores[*].score
+   * - Curve:  Curve.abilityCurves[dimension]
+   */
+  dimensionDetailGrades: z.record(
+    ProblemIdSchema,
+    z.record(DimensionSchema, CurvedGradeSchema),
+  ),
 })
 export type CurvedLetterGrades = z.infer<typeof CurvedLetterGradesSchema>
 
@@ -383,37 +398,44 @@ export type CurvedLetterGrades = z.infer<typeof CurvedLetterGradesSchema>
 export const CurvedReportMetadataSchema = MetadataSchema.extend({
   /** Curve identifier used for grading */
   curveId: z.string().uuid(),
+  curvedAt: z.string().datetime(),
 })
 export type CurvedReportMetadata = z.infer<typeof CurvedReportMetadataSchema>
 
 export const CurvedDimensionCardSchema = DimensionCardSchema.extend({
+  /** From CurvedLetterGrades.abilityGrades[dimension] */
   grade: CurvedGradeSchema,
 })
 export type CurvedDimensionCard = z.infer<typeof CurvedDimensionCardSchema>
 
 export const CurvedProblemSchema = ProblemSchema.extend({
+  /** From CurvedLetterGrades.dimensionDetailGrades[problemId][dimension] */
   grade: CurvedGradeSchema,
 })
 export type CurvedProblem = z.infer<typeof CurvedProblemSchema>
 
 export const CurvedDimensionReportSchema = DimensionReportSchema.extend({
   problems: z.array(CurvedProblemSchema),
+  /** From CurvedLetterGrades.abilityGrades[dimension] */
   grade: CurvedGradeSchema,
 })
 export type CurvedDimensionReport = z.infer<typeof CurvedDimensionReportSchema>
 
 export const CurvedProblemCardSchema = ProblemCardSchema.extend({
+  /** From CurvedLetterGrades.problemGrades[problemId] */
   grade: CurvedGradeSchema,
 })
 export type CurvedProblemCard = z.infer<typeof CurvedProblemCardSchema>
 
 export const CurvedDimensionDetailSchema = DimensionDetailSchema.extend({
+  /** From CurvedLetterGrades.dimensionDetailGrades[problemId][dimension] */
   grade: CurvedGradeSchema,
 })
 export type CurvedDimensionDetail = z.infer<typeof CurvedDimensionDetailSchema>
 
 export const CurvedProblemReportSchema = ProblemReportSchema.extend({
   dimensionDetails: z.array(CurvedDimensionDetailSchema),
+  /** From CurvedLetterGrades.problemGrades[problemId] */
   grade: CurvedGradeSchema,
 })
 export type CurvedProblemReport = z.infer<typeof CurvedProblemReportSchema>

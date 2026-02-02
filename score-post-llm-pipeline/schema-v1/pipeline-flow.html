@@ -577,12 +577,14 @@ flowchart LR
 flowchart LR
     subgraph Source["Source: LLMReport"]
         PR["problemReports[].score"]
+        DD["problemReports[].dimensionDetails[].score"]
         DR["dimensionReports[].score"]
         OM["overallMean"]
     end
 
     subgraph Extract["Extraction"]
-        PR --> PS["problemScores[]"]
+        PR --> PS["problemScores[] (score + dimensionDetailScores)"]
+        DD --> PS
         DR --> AS["abilityScores[]"]
         OM --> Overall["overallMean"]
     end
@@ -613,10 +615,17 @@ classDiagram
     class ProblemScore {
         +ProblemId problemId
         +number score [0-1]
+        +DimensionDetailScore[] dimensionDetailScores
+    }
+
+    class DimensionDetailScore {
+        +Dimension dimensionId
+        +number score [0-1]
     }
 
     JSONScores --> AbilityScore : contains
     JSONScores --> ProblemScore : contains
+    ProblemScore --> DimensionDetailScore : contains
             </div>
         </section>
 
@@ -759,15 +768,18 @@ flowchart TB
     subgraph Application["Grade Assignment"]
         Pass --> ApplyOverall["Apply overall threshold"]
         Pass --> ApplyAbility["Apply ability thresholds"]
+        Pass --> ApplyDimensionDetail["Apply ability thresholds to (problem, dimension) scores"]
         Pass --> ApplyProblem["Apply problem thresholds"]
         ApplyOverall --> OG["overallGrade: A|B|C|D"]
         ApplyAbility --> AG["abilityGrades: Record"]
+        ApplyDimensionDetail --> DG["dimensionDetailGrades: Record"]
         ApplyProblem --> PG["problemGrades: Record"]
     end
 
     subgraph Output["Output"]
         OG --> CLG["CurvedLetterGrades"]
         AG --> CLG
+        DG --> CLG
         PG --> CLG
     end
 
@@ -780,12 +792,12 @@ flowchart TB
             <div class="mermaid">
 classDiagram
     class CurvedLetterGrades {
-        +UUID sourceScoresId
         +UUID curveId
         +datetime computedAt
         +CurvedGrade overallGrade
         +Record abilityGrades
         +Record problemGrades
+        +Record dimensionDetailGrades
     }
 
     class CurvedGrade {
@@ -796,6 +808,19 @@ classDiagram
     }
 
     CurvedLetterGrades --> CurvedGrade : uses
+            </div>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#8505;</span>
+                <div>
+                    <strong>Grade derivation:</strong>
+                    <ul>
+                        <li><code>overallGrade</code>: <code>JSONScores.overallMean</code> → <code>Curve.overall</code></li>
+                        <li><code>abilityGrades[dimension]</code>: <code>JSONScores.abilityScores[*].score</code> → <code>Curve.abilityCurves[dimension]</code></li>
+                        <li><code>problemGrades[problemId]</code>: <code>JSONScores.problemScores[*].score</code> → <code>Curve.problemCurves[problemId]</code></li>
+                        <li><code>dimensionDetailGrades[problemId][dimension]</code>: <code>JSONScores.problemScores[*].dimensionDetailScores[*].score</code> → <code>Curve.abilityCurves[dimension]</code></li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -837,6 +862,7 @@ flowchart LR
                         <th>Field</th>
                         <th>LLMReport (Before)</th>
                         <th>CurvedReport (After)</th>
+                        <th>Derived from</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -844,21 +870,55 @@ flowchart LR
                         <td><code>grade</code></td>
                         <td><code>'X'</code></td>
                         <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.overallGrade</code> (<code>JSONScores.overallMean</code> + <code>Curve.overall</code>)</td>
                     </tr>
                     <tr>
                         <td><code>problemReports[].grade</code></td>
                         <td><code>'X'</code></td>
                         <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.problemGrades[problemId]</code> (<code>JSONScores.problemScores[*].score</code> + <code>Curve.problemCurves[problemId]</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemReports[].dimensionDetails[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.dimensionDetailGrades[problemId][dimension]</code> (<code>JSONScores.problemScores[*].dimensionDetailScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
                     </tr>
                     <tr>
                         <td><code>dimensionReports[].grade</code></td>
                         <td><code>'X'</code></td>
                         <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.abilityGrades[dimension]</code> (<code>JSONScores.abilityScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionReports[].problems[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.dimensionDetailGrades[problemId][dimension]</code> (<code>JSONScores.problemScores[*].dimensionDetailScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionCards[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.abilityGrades[dimension]</code> (<code>JSONScores.abilityScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemCards[].grade</code></td>
+                        <td><code>'X'</code></td>
+                        <td><code>'A' | 'B' | 'C' | 'D'</code></td>
+                        <td><code>CurvedLetterGrades.problemGrades[problemId]</code> (<code>JSONScores.problemScores[*].score</code> + <code>Curve.problemCurves[problemId]</code>)</td>
                     </tr>
                     <tr>
                         <td><code>metadata.curveId</code></td>
                         <td>N/A</td>
                         <td>UUID (added)</td>
+                        <td><code>CurvedLetterGrades.curveId</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>metadata.curvedAt</code></td>
+                        <td>N/A</td>
+                        <td>datetime (added)</td>
+                        <td><code>CurvedLetterGrades.computedAt</code> (or merge time)</td>
                     </tr>
                 </tbody>
             </table>
@@ -1236,10 +1296,17 @@ classDiagram
     class ProblemScore {
         +ProblemId problemId
         +number score
+        +DimensionDetailScore[] dimensionDetailScores
+    }
+
+    class DimensionDetailScore {
+        +Dimension dimensionId
+        +number score
     }
 
     JSONScores --> AbilityScore
     JSONScores --> ProblemScore
+    ProblemScore --> DimensionDetailScore
             </div>
             <table>
                 <thead>
@@ -1264,6 +1331,11 @@ classDiagram
                         <td><code>overallMean</code></td>
                         <td><code>overallMean</code></td>
                         <td>Combined overall mean</td>
+                    </tr>
+                    <tr>
+                        <td><code>problemScores[].dimensionDetailScores[].score</code></td>
+                        <td><code>problemReports[].dimensionDetails[].score</code></td>
+                        <td>Ability score for (problem, dimension)</td>
                     </tr>
                 </tbody>
             </table>
@@ -1373,11 +1445,6 @@ classDiagram
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>sourceScoresId</code></td>
-                        <td>UUID</td>
-                        <td>Reference to JSONScores source</td>
-                    </tr>
-                    <tr>
                         <td><code>curveId</code></td>
                         <td>UUID</td>
                         <td>Reference to Curve used</td>
@@ -1390,17 +1457,22 @@ classDiagram
                     <tr>
                         <td><code>overallGrade</code></td>
                         <td>A | B | C | D</td>
-                        <td>Overall letter grade</td>
+                        <td>Overall letter grade (from <code>JSONScores.overallMean</code> + <code>Curve.overall</code>)</td>
                     </tr>
                     <tr>
                         <td><code>abilityGrades</code></td>
                         <td>Record&lt;Dimension, Grade&gt;</td>
-                        <td>Per-dimension grades</td>
+                        <td>Per-dimension grades (from <code>JSONScores.abilityScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
                     </tr>
                     <tr>
                         <td><code>problemGrades</code></td>
                         <td>Record&lt;ProblemId, Grade&gt;</td>
-                        <td>Per-problem grades</td>
+                        <td>Per-problem grades (from <code>JSONScores.problemScores[*].score</code> + <code>Curve.problemCurves[problemId]</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>dimensionDetailGrades</code></td>
+                        <td>Record&lt;ProblemId, Record&lt;Dimension, Grade&gt;&gt;</td>
+                        <td>Per-problem per-dimension grades (from <code>JSONScores.problemScores[*].dimensionDetailScores[*].score</code> + <code>Curve.abilityCurves[dimension]</code>)</td>
                     </tr>
                 </tbody>
             </table>
@@ -1412,6 +1484,7 @@ classDiagram
                     <strong>CurvedReport extends LLMReport with:</strong>
                     <ul>
                         <li><code>metadata.curveId</code> added (UUID reference to applied curve)</li>
+                        <li><code>metadata.curvedAt</code> added (ISO datetime of curve application)</li>
                         <li>All <code>grade</code> fields changed from <code>'X'</code> to <code>'A' | 'B' | 'C' | 'D'</code></li>
                     </ul>
                 </div>
@@ -1461,7 +1534,7 @@ flowchart TB
     subgraph Traceability["Traceability"]
         A5 --> |"metadata.curveId"| A3
         A4 --> |"curveId"| A3
-        A4 --> |"sourceScoresId"| A2
+        A4 --> |"problemScores[].dimensionDetailScores"| A2
         A3 --> |"sourceEventIds"| Events["Events"]
     end
 
@@ -1580,7 +1653,6 @@ flowchart TB
 
             <h3>CurvedLetterGrades</h3>
             <pre style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5;"><code>{
-  "sourceScoresId": "550e8400-e29b-41d4-a716-446655440000",
   "curveId": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
   "computedAt": "2024-01-15T10:30:00Z",
   "overallGrade": "B",
@@ -1594,6 +1666,16 @@ flowchart TB
   "problemGrades": {
     "001110-thinking-trap": "A",
     "001111-meeting-verification": "B"
+  },
+  "dimensionDetailGrades": {
+    "001110-thinking-trap": {
+      "representation": "A",
+      "self-verification": "B"
+    },
+    "001111-meeting-verification": {
+      "discovery": "A",
+      "self-verification": "B"
+    }
   }
 }</code></pre>
         </section>

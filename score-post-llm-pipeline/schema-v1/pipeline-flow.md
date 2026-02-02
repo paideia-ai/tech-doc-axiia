@@ -122,12 +122,14 @@ Extract numeric scores from the report into a flat, processable structure.
 flowchart LR
     subgraph Source["Source: LLMReport"]
         PR["problemReports[]<br/>.score"]
+        DD["problemReports[]<br/>.dimensionDetails[]<br/>.score"]
         DR["dimensionReports[]<br/>.score"]
         OM["overallMean"]
     end
 
     subgraph Extract["Extraction"]
-        PR --> PS["problemScores[]"]
+        PR --> PS["problemScores[]<br/>(score + dimensionDetailScores)"]
+        DD --> PS
         DR --> AS["abilityScores[]"]
         OM --> Overall["overallMean"]
     end
@@ -157,10 +159,17 @@ classDiagram
     class ProblemScore {
         +ProblemId problemId
         +number score [0-1]
+        +DimensionDetailScore[] dimensionDetailScores
+    }
+
+    class DimensionDetailScore {
+        +Dimension dimensionId
+        +number score [0-1]
     }
 
     JSONScores --> AbilityScore : contains
     JSONScores --> ProblemScore : contains
+    ProblemScore --> DimensionDetailScore : contains
 ```
 
 ---
@@ -276,17 +285,20 @@ flowchart TB
     subgraph Application["Grade Assignment"]
         Pass --> ApplyOverall["Apply overall threshold"]
         Pass --> ApplyAbility["Apply ability thresholds"]
+        Pass --> ApplyDimensionDetail["Apply ability thresholds<br/>to (problem, dimension) scores"]
         Pass --> ApplyProblem["Apply problem thresholds"]
         ApplyOverall --> OG["overallGrade: A|B|C|D"]
         ApplyAbility --> AG["abilityGrades: Record"]
+        ApplyDimensionDetail --> DG["dimensionDetailGrades: Record"]
         ApplyProblem --> PG["problemGrades: Record"]
     end
 
     subgraph Output["Output"]
         OG --> CLG["🅰️ CurvedLetterGrades"]
         AG --> CLG
+        DG --> CLG
         PG --> CLG
-        CLG --> Meta["sourceScoresId: UUID<br/>curveId: UUID<br/>computedAt: datetime"]
+        CLG --> Meta["curveId: UUID<br/>computedAt: datetime"]
     end
 
     style Fail fill:#ffcdd2,stroke:#c62828
@@ -298,12 +310,12 @@ flowchart TB
 ```mermaid
 classDiagram
     class CurvedLetterGrades {
-        +UUID sourceScoresId
         +UUID curveId
         +datetime computedAt
         +CurvedGrade overallGrade
         +Record~Dimension,CurvedGrade~ abilityGrades
         +Record~ProblemId,CurvedGrade~ problemGrades
+        +Record~ProblemId,Record~Dimension,CurvedGrade~~ dimensionDetailGrades
     }
 
     class CurvedGrade {
@@ -316,6 +328,12 @@ classDiagram
 
     CurvedLetterGrades --> CurvedGrade : uses
 ```
+
+**Grade derivation (inputs → curve field):**
+- `overallGrade`: `JSONScores.overallMean` → `Curve.overall`
+- `abilityGrades[dimension]`: `JSONScores.abilityScores[*].score` → `Curve.abilityCurves[dimension]`
+- `problemGrades[problemId]`: `JSONScores.problemScores[*].score` → `Curve.problemCurves[problemId]`
+- `dimensionDetailGrades[problemId][dimension]`: `JSONScores.problemScores[*].dimensionDetailScores[*].score` → `Curve.abilityCurves[dimension]`
 
 ---
 
@@ -339,9 +357,12 @@ flowchart LR
     subgraph Output["Output: CurvedReport"]
         Transform --> CR["📋 CurvedReport"]
         CR --> F1["metadata.curveId added"]
+        CR --> F9["metadata.curvedAt added"]
         CR --> F2["grade: A|B|C|D"]
         CR --> F3["problemReports[].grade: A|B|C|D"]
+        CR --> F7["problemReports[].dimensionDetails[].grade: A|B|C|D"]
         CR --> F4["dimensionReports[].grade: A|B|C|D"]
+        CR --> F8["dimensionReports[].problems[].grade: A|B|C|D"]
         CR --> F5["dimensionCards[].grade: A|B|C|D"]
         CR --> F6["problemCards[].grade: A|B|C|D"]
     end
@@ -351,14 +372,17 @@ flowchart LR
 
 ### Schema Transformation
 
-| LLMReport Field | Type Before | Type After (CurvedReport) |
-|-----------------|-------------|---------------------------|
-| `grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` |
-| `problemReports[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` |
-| `dimensionReports[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` |
-| `dimensionCards[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` |
-| `problemCards[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` |
-| `metadata.curveId` | N/A | UUID (added) |
+| CurvedReport Field | Before (LLMReport) | After (CurvedReport) | Derived from |
+|---|---|---|---|
+| `grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.overallGrade` (`JSONScores.overallMean` + `Curve.overall`) |
+| `dimensionCards[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.abilityGrades[dimension]` (`JSONScores.abilityScores[*].score` + `Curve.abilityCurves[dimension]`) |
+| `dimensionReports[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.abilityGrades[dimension]` (`JSONScores.abilityScores[*].score` + `Curve.abilityCurves[dimension]`) |
+| `dimensionReports[].problems[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.dimensionDetailGrades[problemId][dimension]` (`JSONScores.problemScores[*].dimensionDetailScores[*].score` + `Curve.abilityCurves[dimension]`) |
+| `problemCards[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.problemGrades[problemId]` (`JSONScores.problemScores[*].score` + `Curve.problemCurves[problemId]`) |
+| `problemReports[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.problemGrades[problemId]` (`JSONScores.problemScores[*].score` + `Curve.problemCurves[problemId]`) |
+| `problemReports[].dimensionDetails[].grade` | `'X'` | `'A' \| 'B' \| 'C' \| 'D'` | `CurvedLetterGrades.dimensionDetailGrades[problemId][dimension]` (`JSONScores.problemScores[*].dimensionDetailScores[*].score` + `Curve.abilityCurves[dimension]`) |
+| `metadata.curveId` | N/A | UUID (added) | `CurvedLetterGrades.curveId` |
+| `metadata.curvedAt` | N/A | datetime (added) | `CurvedLetterGrades.computedAt` (or merge time) |
 
 ---
 
@@ -620,6 +644,12 @@ AbilityScoreSchema = z.object({
 ProblemScoreSchema = z.object({
   problemId: ProblemIdSchema,
   score: ScoreValueSchema,  // Source: Report.problemReports[].score
+  dimensionDetailScores: z.array(DimensionDetailScoreSchema),
+})
+
+DimensionDetailScoreSchema = z.object({
+  dimensionId: DimensionSchema,
+  score: ScoreValueSchema,  // Source: Report.problemReports[].dimensionDetails[].score
 })
 ```
 
@@ -627,6 +657,7 @@ ProblemScoreSchema = z.object({
 |-------|---------------------|-------------|
 | `abilityScores[].score` | `dimensionReports[].score` | Average ability score for dimension |
 | `problemScores[].score` | `problemReports[].score` | Task score for problem |
+| `problemScores[].dimensionDetailScores[].score` | `problemReports[].dimensionDetails[].score` | Ability score for (problem, dimension) |
 | `overallMean` | `overallMean` | Combined overall mean |
 
 ---
@@ -678,16 +709,20 @@ GradeThresholdsSchema = z.object({
 
 ```typescript
 CurvedLetterGradesSchema = z.object({
-  sourceScoresId: z.string().uuid(),   // Reference to JSONScores
   curveId: z.string().uuid(),          // Reference to Curve used
   computedAt: z.string().datetime(),   // When grades were computed
+  // Derived from: JSONScores.overallMean + Curve.overall
   overallGrade: CurvedGradeSchema,     // 'A' | 'B' | 'C' | 'D'
+  // Derived from: JSONScores.abilityScores[*].score + Curve.abilityCurves[dimension]
   abilityGrades: z.record(DimensionSchema, CurvedGradeSchema),
+  // Derived from: JSONScores.problemScores[*].score + Curve.problemCurves[problemId]
   problemGrades: z.record(ProblemIdSchema, CurvedGradeSchema),
+  // Derived from: JSONScores.problemScores[*].dimensionDetailScores[*].score + Curve.abilityCurves[dimension]
+  dimensionDetailGrades: z.record(ProblemIdSchema, z.record(DimensionSchema, CurvedGradeSchema)),
 })
 ```
 
-**Purpose:** Intermediate artifact that captures the grade assignment result before merging into the final report. Enables traceability and audit.
+**Purpose:** In-memory intermediate artifact that captures the grade assignment result before merging into the final report (including nested per-problem-per-dimension grades).
 
 ---
 
@@ -720,6 +755,7 @@ classDiagram
         +DimensionProblemDependency[] dimensionProblemDependency
         +datetime createdAt
         +UUID curveId
+        +datetime curvedAt
     }
 
     class CurvedDimensionCard {
@@ -833,7 +869,7 @@ flowchart TB
     subgraph Traceability["🔍 Traceability"]
         A5 --> |"metadata.curveId"| A3
         A4 --> |"curveId"| A3
-        A4 --> |"sourceScoresId"| A2
+        A4 --> |"problemScores[].dimensionDetailScores"| A2
         A3 --> |"sourceEventIds"| Events["Events"]
     end
 
@@ -940,7 +976,6 @@ mindmap
 
 ```json
 {
-  "sourceScoresId": "550e8400-e29b-41d4-a716-446655440000",
   "curveId": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
   "computedAt": "2024-01-15T10:30:00Z",
   "overallGrade": "B",
@@ -954,6 +989,16 @@ mindmap
   "problemGrades": {
     "001110-thinking-trap": "A",
     "001111-meeting-verification": "B"
+  },
+  "dimensionDetailGrades": {
+    "001110-thinking-trap": {
+      "representation": "A",
+      "self-verification": "B"
+    },
+    "001111-meeting-verification": {
+      "discovery": "A",
+      "self-verification": "B"
+    }
   }
 }
 ```
