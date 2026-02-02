@@ -783,19 +783,19 @@ classDiagram
         +UUID sourceScoresId
         +UUID curveId
         +datetime computedAt
-        +LetterGrade overallGrade
+        +CurvedGrade overallGrade
         +Record abilityGrades
         +Record problemGrades
     }
 
-    class LetterGrade {
+    class CurvedGrade {
         A
         B
         C
         D
     }
 
-    CurvedLetterGrades --> LetterGrade : uses
+    CurvedLetterGrades --> CurvedGrade : uses
             </div>
         </section>
 
@@ -1022,6 +1022,20 @@ flowchart TB
                     </tr>
                 </tbody>
             </table>
+
+            <h3>Grade Types</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>CurvedGrade</h4>
+                    <p><code>z.enum(['A', 'B', 'C', 'D'])</code></p>
+                    <p>Letter grades for curved reports.</p>
+                </div>
+                <div class="card">
+                    <h4>UncurvedGrade</h4>
+                    <p><code>z.literal('X')</code></p>
+                    <p>Placeholder grade for uncurved reports.</p>
+                </div>
+            </div>
 
             <h3>1. LLMReport Schema (Complete)</h3>
             <div class="mermaid">

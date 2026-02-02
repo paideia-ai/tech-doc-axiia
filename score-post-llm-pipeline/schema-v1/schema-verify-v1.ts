@@ -14,7 +14,7 @@ import { z } from 'zod'
 export const ProblemIdSchema = z
   .string()
   .regex(/^\d{6}-.+$/, 'Problem ID must be "6digits-title"')
-  .superRefine((value: string, ctx: z.ZodSuperRefineContext) => {
+  .superRefine((value: string, ctx) => {
     const match = value.match(/^(\d{6})-(.+)$/)
     if (!match) return
 
@@ -43,8 +43,8 @@ export type EventId = z.infer<typeof EventIdSchema>
 /**
  * Letter grades: A, B, C, D
  */
-export const LetterGradeSchema = z.enum(['A', 'B', 'C', 'D'])
-export type LetterGrade = z.infer<typeof LetterGradeSchema>
+export const CurvedGradeSchema = z.enum(['A', 'B', 'C', 'D'])
+export type CurvedGrade = z.infer<typeof CurvedGradeSchema>
 
 /**
  * Uncurved grade: X
@@ -84,7 +84,7 @@ export type PromptSnapshotEntry = z.infer<typeof PromptSnapshotEntrySchema>
 
 export const PromptSnapshotEntriesSchema = z
   .array(PromptSnapshotEntrySchema)
-  .superRefine((entries: PromptSnapshotEntry[], ctx: z.ZodSuperRefineContext) => {
+  .superRefine((entries: PromptSnapshotEntry[], ctx) => {
     const keys = entries.map((e) => e.key)
     const sorted = [...keys].sort((a, b) => a.localeCompare(b))
     for (let i = 0; i < keys.length; i++) {
@@ -354,9 +354,6 @@ export type Curve = z.infer<typeof CurveSchema>
 // =============================================================================
 // 4. Curved Letter Grades Schema
 // =============================================================================
-
-export const CurvedGradeSchema = LetterGradeSchema.exclude(['X'])
-export type CurvedGrade = z.infer<typeof CurvedGradeSchema>
 
 /**
  * Curved Letter Grades: result of applying curve to scores.

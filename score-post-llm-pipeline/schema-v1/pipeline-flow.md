@@ -301,12 +301,12 @@ classDiagram
         +UUID sourceScoresId
         +UUID curveId
         +datetime computedAt
-        +LetterGrade overallGrade
-        +Record~Dimension,LetterGrade~ abilityGrades
-        +Record~ProblemId,LetterGrade~ problemGrades
+        +CurvedGrade overallGrade
+        +Record~Dimension,CurvedGrade~ abilityGrades
+        +Record~ProblemId,CurvedGrade~ problemGrades
     }
 
-    class LetterGrade {
+    class CurvedGrade {
         <<enumeration>>
         A
         B
@@ -314,7 +314,7 @@ classDiagram
         D
     }
 
-    CurvedLetterGrades --> LetterGrade : uses
+    CurvedLetterGrades --> CurvedGrade : uses
 ```
 
 ---
@@ -461,6 +461,20 @@ DimensionProblemDependencySchema = z.object({
   problemVersion: z.number().int().nonnegative(),
   dimensions: z.array(DimensionSchema),  // Which dimensions this problem evaluates
 })
+```
+
+#### CurvedGrade
+
+```typescript
+// Letter grades: A, B, C, D
+CurvedGradeSchema = z.enum(['A', 'B', 'C', 'D'])
+```
+
+#### UncurvedGrade
+
+```typescript
+// Uncurved grade: X
+UncurvedGradeSchema = z.literal('X')
 ```
 
 ---
