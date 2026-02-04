@@ -4,17 +4,18 @@
 
 ## Key Design Decisions
 
-1. **A report that has not been curved does not have letter grades** - `letter_grades` must be `null`
+1. **Only scores matter, not reports** - merged report and scores schemas (ip-03.md)
 2. **To create a curve, we need multiple scores** - curve is computed from a pool of participants
 3. **To apply a curve, we need only one score** - curve is applied to individual participants
-4. **Start from report-scores, not full report** - the full report has comments, pros/cons, etc. We extract just the scores
+4. **Before curve: NO letter grade field** - not even null, the field doesn't exist (ip-03.md)
+5. **After curve: letter grades are A/B/C/D only** - no X option (ip-03.md)
 
 ### Two Core Output Schemas
 
 | Schema | Description | Has Letter Grades? |
 |--------|-------------|-------------------|
-| `JSONScores` | Non-curved extracted scores | No |
-| `CurvedReport` | Scores + letter grades | Yes |
+| `JSONScores` | Pre-curve scores | No (field doesn't exist) |
+| `CurvedScores` | Post-curve scores + letter grades | Yes (A/B/C/D only) |
 
 ## Overview
 
@@ -235,7 +236,7 @@ Group A Curve ──────► Group B
    │   → Compute total_problem_score, total_ability_score        │
    │   → Compute final_total_score (geometric mean)              │
    │                                                             │
-   │ Output: ReportJSON (with letter_grades = null)              │
+   │ Output: JSONScores (no letter_grades field)                 │
    └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
@@ -253,9 +254,9 @@ Group A Curve ──────► Group B
    ┌─────────────────────────────────────────────────────────────┐
    │ For each participant (same or compatible group):            │
    │   → Check compatibility (if different group)                │
-   │   → Apply thresholds to get letter grades                   │
+   │   → Apply thresholds to get letter grades (A/B/C/D)         │
    │                                                             │
-   │ Output: CurvedReport (with letter_grades populated)         │
+   │ Output: CurvedScores (with letter_grades A/B/C/D)           │
    └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -268,17 +269,19 @@ Based on this domain context, verify the schemas capture:
 | Domain Concept | Schema Location | Status |
 |----------------|-----------------|--------|
 | Problem-Dimension mapping | `DimensionDependencyConfig` | ✅ |
-| Problem score (objective) | `Problem.objective_score` | ✅ |
-| Dimension scores per problem | `Problem.dimension_scores` | ✅ |
-| Aggregated dimension scores | `abilities[]` | ✅ |
-| Total problem score | `totals.total_problem_score` | ✅ |
-| Total ability score | `totals.total_ability_score` | ✅ |
-| Final total (geometric mean) | `totals.final_total_score` | ✅ |
+| Problem score (objective) | `ProblemScoreSchema.objective_score` | ✅ |
+| Dimension scores per problem | `ProblemScoreSchema.dimension_scores` | ✅ |
+| Aggregated dimension scores | `JSONScoresSchema.ability_scores` | ✅ |
+| Total problem score | `TotalScoresSchema.total_problem_score` | ✅ |
+| Total ability score | `TotalScoresSchema.total_ability_score` | ✅ |
+| Final total (geometric mean) | `TotalScoresSchema.final_total_score` | ✅ |
 | Curve method (std dev) | `CurveMethod.standard_deviation` | ✅ |
 | Compatibility check | `CompatibilityResult` | ✅ |
 | Prompt version tracking | `prompt_version_hash` | ✅ |
+| Pre-curve output (no grades) | `JSONScoresSchema` | ✅ |
+| Post-curve output (A/B/C/D) | `CurvedScoresSchema` | ✅ |
 
-All schemas are now aligned with the domain model.
+All schemas are now aligned with the domain model (ip-02.md, ip-03.md).
 
 ## Schema Source of Truth
 

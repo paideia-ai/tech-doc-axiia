@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "generate": "npx tsx generate-synthetic-data.ts",
-    "pipeline": "npx tsx run-pipeline.ts",
-    "test": "npx tsx test-pipeline.ts"
+    "generate:docs": "npx tsx generate-schema-docs.ts",
+    "test:e2e": "npx playwright test"
   },
   "dependencies": {
     "zod": "^3.22.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^20.10.0",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.0",
-    "@types/node": "^20.10.0"
+    "typescript": "^5.3.0"
   }
 }

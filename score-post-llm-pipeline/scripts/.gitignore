@@ -7,3 +7,9 @@ node_modules/
 
 # Lockfiles (optional - can remove if you want to commit these)
 package-lock.json
+
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+schema-docs-screenshot.png
