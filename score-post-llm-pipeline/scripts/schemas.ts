@@ -2,53 +2,101 @@
  * Score Post-LLM Pipeline Schemas
  * All schemas defined with Zod for runtime validation
  *
- * KEY DESIGN PRINCIPLES (from ip-02.md):
- * 1. Uncurved reports have NO letter grades (letter_grades = null)
- * 2. Creating a curve requires MULTIPLE scores (ScorePool)
+ * KEY DESIGN PRINCIPLES (from ip-02.md, ip-03.md, ip-04.md):
+ * 1. Scores are separate from reports (extract → curve → merge back)
+ * 2. Creating a curve requires MULTIPLE scores (ScorePool, multi-event)
  * 3. Applying a curve requires only ONE score (JSONScores)
- * 4. Pipeline starts from extracted scores, not full reports
- *
- * TWO CORE OUTPUT SCHEMAS:
- * - JSONScores: Non-curved extracted scores (no letter grades)
- * - CurvedReport: Scores + letter grades (after curve application)
+ * 4. Before curve: NO letter grade field at all
+ * 5. After curve: letter grades are A, B, C, D only
+ * 6. Use record format for curves (O(1) lookup)
+ * 7. Embed dependency in Curve for compatibility checking
  */
 
 import { z } from "zod";
 
 // =============================================================================
-// Common Types
+// 1. Common Types
 // =============================================================================
 
+/**
+ * Problem ID format: exactly 6 digits
+ * - Last digit indicates language: 0=Chinese, 1=English
+ * - Second last digit indicates minor version
+ * - Remaining digits indicate major version
+ */
 export const ProblemIdSchema = z
   .string()
-  .regex(/^\d{6}$/, "Problem ID must be exactly 6 digits");
+  .regex(/^\d{6}$/, "Problem ID must be exactly 6 digits")
+  .superRefine((value, ctx) => {
+    const langDigit = value[5];
+    if (langDigit !== "0" && langDigit !== "1") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Problem ID last digit must be 0 (zh) or 1 (en)",
+      });
+    }
+  });
 
-export const DimensionIdSchema = z.string().min(1);
+export type ProblemId = z.infer<typeof ProblemIdSchema>;
+
+/**
+ * 5 Core Dimensions of AI Collaboration (enum)
+ * 1. Discovery-Self-Understanding (发现与自我理解)
+ * 2. Expression-Translation (表达与转译)
+ * 3. Exploratory-Discovery (探索式发现)
+ * 4. Verification-Confirmation (验证与确认)
+ * 5. Iterative-Optimization (迭代优化与反馈)
+ */
+export const DimensionSchema = z.enum([
+  "Discovery-Self-Understanding",
+  "Expression-Translation",
+  "Exploratory-Discovery",
+  "Verification-Confirmation",
+  "Iterative-Optimization",
+]);
+
+export type Dimension = z.infer<typeof DimensionSchema>;
 
 export const EventIdSchema = z.string().min(1);
+export type EventId = z.infer<typeof EventIdSchema>;
+
+export const LangSchema = z.enum(["zh", "en"]);
+export type Lang = z.infer<typeof LangSchema>;
 
 export const PromptVersionHashSchema = z
   .string()
   .regex(/^[a-f0-9]{7,40}$/, "Must be a valid git commit hash");
 
-export const LetterGradeSchema = z.enum(["A", "B", "C", "D", "X"]);
+export type PromptVersionHash = z.infer<typeof PromptVersionHashSchema>;
+
+export const LetterGradeSchema = z.enum(["A", "B", "C", "D"]);
+export type LetterGrade = z.infer<typeof LetterGradeSchema>;
 
 export const ScoreValueSchema = z.number().min(0).max(1);
+export type ScoreValue = z.infer<typeof ScoreValueSchema>;
 
 // =============================================================================
-// 1. Report JSON Schema (原始报告 - 无 letter grades)
+// 2. Dimension-Problem Dependency Schema
 // =============================================================================
 
-export const ProblemInReportSchema = z.object({
+/**
+ * Maps which problems contribute to each dimension's score.
+ * Embedded in both Curve and ScorePool for compatibility checking.
+ */
+export const DimensionProblemDependencySchema = z.object({
   problem_id: ProblemIdSchema,
-  dimension_scores: z.record(DimensionIdSchema, ScoreValueSchema),
-  objective_score: ScoreValueSchema,
+  problem_version: z.number().int().nonnegative(),
+  dimensions: z.array(DimensionSchema),
 });
 
-export const AbilityDimensionInReportSchema = z.object({
-  dimension_id: DimensionIdSchema,
-  score: ScoreValueSchema,
-});
+export type DimensionProblemDependency = z.infer<typeof DimensionProblemDependencySchema>;
+
+export const DimensionProblemDependencyListSchema = z.array(DimensionProblemDependencySchema);
+export type DimensionProblemDependencyList = z.infer<typeof DimensionProblemDependencyListSchema>;
+
+// =============================================================================
+// 3. Total Scores Schema
+// =============================================================================
 
 /**
  * Total scores breakdown:
@@ -57,57 +105,73 @@ export const AbilityDimensionInReportSchema = z.object({
  * - final_total_score: geometric mean of (total_problem_score, total_ability_score)
  */
 export const TotalScoresSchema = z.object({
-  total_problem_score: ScoreValueSchema,  // avg(problem.objective_score for all problems)
-  total_ability_score: ScoreValueSchema,  // avg(dimension.score for all dimensions)
-  final_total_score: ScoreValueSchema,    // sqrt(total_problem_score * total_ability_score)
+  total_problem_score: ScoreValueSchema,
+  total_ability_score: ScoreValueSchema,
+  final_total_score: ScoreValueSchema,
 });
 
-export const ReportJSONSchema = z.object({
-  report_id: z.string().uuid(),
+export type TotalScores = z.infer<typeof TotalScoresSchema>;
+
+// =============================================================================
+// 4. JSONScores Schema (PRE-CURVE - no letter grades)
+// =============================================================================
+
+export const AbilityScoreSchema = z.object({
+  dimension: DimensionSchema,
+  score: ScoreValueSchema,
+});
+
+export type AbilityScore = z.infer<typeof AbilityScoreSchema>;
+
+/**
+ * Per-problem per-dimension score
+ */
+export const DimensionDetailScoreSchema = z.object({
+  dimension: DimensionSchema,
+  score: ScoreValueSchema,
+});
+
+export type DimensionDetailScore = z.infer<typeof DimensionDetailScoreSchema>;
+
+export const ProblemScoreSchema = z.object({
+  problem_id: ProblemIdSchema,
+  /** Task/objective score for this problem */
+  task_score: ScoreValueSchema,
+  /** Per-dimension scores within this problem */
+  dimension_scores: z.array(DimensionDetailScoreSchema),
+});
+
+export type ProblemScore = z.infer<typeof ProblemScoreSchema>;
+
+/**
+ * JSONScores: Pre-curve scores extracted from LLM report.
+ * NO letter grade field - grades are computed after curving.
+ */
+export const JSONScoresSchema = z.object({
+  scores_id: z.string().uuid(),
   event_id: EventIdSchema,
   prompt_version_hash: PromptVersionHashSchema,
   generated_at: z.string().datetime(),
   participant_id: z.string().min(1),
-  problems: z.array(ProblemInReportSchema),
-  abilities: z.array(AbilityDimensionInReportSchema),
   /** Breakdown of total scores */
   totals: TotalScoresSchema,
-  letter_grades: z.null(),
-});
-
-export type ReportJSON = z.infer<typeof ReportJSONSchema>;
-
-// =============================================================================
-// 2. JSON Scores Schema (提取的分数)
-// =============================================================================
-
-export const AbilityScoreSchema = z.object({
-  dimension_id: DimensionIdSchema,
-  score: ScoreValueSchema,
-});
-
-export const ProblemScoreSchema = z.object({
-  problem_id: ProblemIdSchema,
-  objective_score: ScoreValueSchema,
-  dimension_scores: z.array(AbilityScoreSchema),
-});
-
-export const JSONScoresSchema = z.object({
-  source_report_id: z.string().uuid(),
-  event_id: EventIdSchema,
-  participant_id: z.string().min(1),
-  /** Breakdown of total scores */
-  totals: TotalScoresSchema,
-  ability_scores: z.array(AbilityScoreSchema),
+  /** 5 ability scores (one per dimension) */
+  ability_scores: z.array(AbilityScoreSchema).length(5),
+  /** Per-problem scores with nested dimension scores */
   problem_scores: z.array(ProblemScoreSchema),
+  // NOTE: No letter_grades field - this is pre-curve
 });
 
 export type JSONScores = z.infer<typeof JSONScoresSchema>;
 
 // =============================================================================
-// 3. Curve Schema
+// 5. Curve Schema
 // =============================================================================
 
+/**
+ * Curve computation method (discriminated union for extensibility)
+ * Currently only standard_deviation is implemented.
+ */
 export const CurveMethodSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("percentile"),
@@ -115,6 +179,7 @@ export const CurveMethodSchema = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal("standard_deviation"),
+    /** e.g., [1, 0, -1] means A > μ+1σ, B > μ, C > μ-1σ, D ≤ μ-1σ */
     sigma_boundaries: z.array(z.number()),
   }),
   z.object({
@@ -125,140 +190,133 @@ export const CurveMethodSchema = z.discriminatedUnion("type", [
 
 export type CurveMethod = z.infer<typeof CurveMethodSchema>;
 
-export const ThresholdDefinitionSchema = z.object({
-  thresholds: z.array(ScoreValueSchema),
-  grades: z.array(LetterGradeSchema.exclude(["X"])),
+/**
+ * Grade thresholds (v1 format)
+ * A/B/C are minimum scores for each grade.
+ * D is implied: score < C threshold.
+ */
+export const GradeThresholdsSchema = z.object({
+  A: ScoreValueSchema,
+  B: ScoreValueSchema,
+  C: ScoreValueSchema,
 });
 
-export const AbilityCurveSchema = z.object({
-  dimension_id: DimensionIdSchema,
-  thresholds: z.array(ScoreValueSchema),
-  grades: z.array(LetterGradeSchema.exclude(["X"])),
-});
-
-export const ProblemCurveSchema = z.object({
-  problem_id: ProblemIdSchema,
-  thresholds: z.array(ScoreValueSchema),
-  grades: z.array(LetterGradeSchema.exclude(["X"])),
-});
+export type GradeThresholds = z.infer<typeof GradeThresholdsSchema>;
 
 /**
- * Curves for total scores:
- * - total_problem: curve for average problem scores
- * - total_ability: curve for average dimension scores
- * - final_total: curve for geometric mean (the ultimate score)
+ * Curves for total scores
  */
 export const TotalCurvesSchema = z.object({
-  total_problem: ThresholdDefinitionSchema,
-  total_ability: ThresholdDefinitionSchema,
-  final_total: ThresholdDefinitionSchema,
+  total_problem: GradeThresholdsSchema,
+  total_ability: GradeThresholdsSchema,
+  final_total: GradeThresholdsSchema,
 });
 
+export type TotalCurves = z.infer<typeof TotalCurvesSchema>;
+
+/**
+ * Curve: Computed from ScorePool, used to assign letter grades.
+ * - Supports multiple source events
+ * - Embeds dependency for compatibility checking
+ * - Uses record format for O(1) lookup
+ */
 export const CurveSchema = z.object({
   curve_id: z.string().uuid(),
-  source_event_id: EventIdSchema,
+  label: z.string().min(1),
+  /** Multiple source events allowed */
+  source_event_ids: z.array(EventIdSchema).min(1),
   prompt_version_hash: PromptVersionHashSchema,
-  problem_ids: z.array(ProblemIdSchema),
-  dimension_ids: z.array(DimensionIdSchema),
+  /** Embedded dependency for compatibility check when applying curve */
+  dimension_problem_dependency: DimensionProblemDependencyListSchema,
   method: CurveMethodSchema,
   sample_size: z.number().int().positive(),
   computed_at: z.string().datetime(),
   /** Curves for the three total score types */
   totals: TotalCurvesSchema,
-  /** Per-dimension curves */
-  ability_curves: z.array(AbilityCurveSchema),
-  /** Per-problem curves */
-  problem_curves: z.array(ProblemCurveSchema),
+  /** Per-dimension curves (record for O(1) lookup) */
+  ability_curves: z.record(DimensionSchema, GradeThresholdsSchema),
+  /** Per-problem curves (record for O(1) lookup) */
+  problem_curves: z.record(ProblemIdSchema, GradeThresholdsSchema),
 });
 
 export type Curve = z.infer<typeof CurveSchema>;
 
 // =============================================================================
-// 4. Curved Letter Grades Schema
+// 6. CurvedScores Schema (POST-CURVE - with letter grades A/B/C/D)
 // =============================================================================
-
-export const AbilityGradeSchema = z.object({
-  dimension_id: DimensionIdSchema,
-  grade: LetterGradeSchema.exclude(["X"]),
-});
-
-export const ProblemGradeSchema = z.object({
-  problem_id: ProblemIdSchema,
-  grade: LetterGradeSchema.exclude(["X"]),
-});
 
 /**
  * Letter grades for total scores
  */
 export const TotalGradesSchema = z.object({
-  total_problem_grade: LetterGradeSchema.exclude(["X"]),
-  total_ability_grade: LetterGradeSchema.exclude(["X"]),
-  final_total_grade: LetterGradeSchema.exclude(["X"]),
+  total_problem_grade: LetterGradeSchema,
+  total_ability_grade: LetterGradeSchema,
+  final_total_grade: LetterGradeSchema,
 });
 
-export const CurvedLetterGradesSchema = z.object({
+export type TotalGrades = z.infer<typeof TotalGradesSchema>;
+
+/**
+ * CurvedScores: Post-curve output with scores + letter grades.
+ * Includes dimensionDetailGrades for per-problem per-dimension grades.
+ */
+export const CurvedScoresSchema = z.object({
+  curved_scores_id: z.string().uuid(),
   source_scores_id: z.string().uuid(),
-  curve_id: z.string().uuid(),
-  computed_at: z.string().datetime(),
-  /** Grades for the three total score types */
-  total_grades: TotalGradesSchema,
-  ability_grades: z.array(AbilityGradeSchema),
-  problem_grades: z.array(ProblemGradeSchema),
-});
-
-export type CurvedLetterGrades = z.infer<typeof CurvedLetterGradesSchema>;
-
-// =============================================================================
-// 5. Curved Report Schema (最终报告)
-// =============================================================================
-
-export const LetterGradesInReportSchema = z.object({
-  /** Grades for total scores */
-  totals: z.object({
-    total_problem: LetterGradeSchema.exclude(["X"]),
-    total_ability: LetterGradeSchema.exclude(["X"]),
-    final_total: LetterGradeSchema.exclude(["X"]),
-  }),
-  /** Grade per dimension */
-  abilities: z.record(DimensionIdSchema, LetterGradeSchema.exclude(["X"])),
-  /** Grade per problem */
-  problems: z.record(ProblemIdSchema, LetterGradeSchema.exclude(["X"])),
-});
-
-export const CurvedReportSchema = z.object({
-  curved_report_id: z.string().uuid(),
-  source_report_id: z.string().uuid(),
   event_id: EventIdSchema,
   prompt_version_hash: PromptVersionHashSchema,
   applied_curve_id: z.string().uuid(),
   curved_at: z.string().datetime(),
   participant_id: z.string().min(1),
-  problems: z.array(ProblemInReportSchema),
-  abilities: z.array(AbilityDimensionInReportSchema),
-  /** Breakdown of total scores (copied from source) */
+  /** Original scores (copied from source JSONScores) */
   totals: TotalScoresSchema,
-  /** Letter grades (now populated) */
-  letter_grades: LetterGradesInReportSchema,
+  ability_scores: z.array(AbilityScoreSchema),
+  problem_scores: z.array(ProblemScoreSchema),
+  /** Letter grades (A/B/C/D, computed from curve) */
+  letter_grades: z.object({
+    totals: TotalGradesSchema,
+    /** Per-dimension grades */
+    abilities: z.record(DimensionSchema, LetterGradeSchema),
+    /** Per-problem grades */
+    problems: z.record(ProblemIdSchema, LetterGradeSchema),
+    /** Per-problem per-dimension grades (#10 from ip-04) */
+    dimension_details: z.record(
+      ProblemIdSchema,
+      z.record(DimensionSchema, LetterGradeSchema)
+    ),
+  }),
 });
 
-export type CurvedReport = z.infer<typeof CurvedReportSchema>;
+export type CurvedScores = z.infer<typeof CurvedScoresSchema>;
 
 // =============================================================================
-// 6. Score Pool Schema (for curve computation input)
+// 7. Score Pool Schema (for curve computation input)
 // =============================================================================
 
+/**
+ * ScorePool: Collection of scores for curve computation.
+ * - Allows scores from multiple events
+ * - All scores must contain the specified problem_ids and dimensions
+ * - Embeds dependency for consistency
+ */
 export const ScorePoolSchema = z.object({
-  event_id: EventIdSchema,
+  pool_id: z.string().uuid(),
+  label: z.string().min(1),
+  /** Multiple source events allowed */
+  source_event_ids: z.array(EventIdSchema).min(1),
   prompt_version_hash: PromptVersionHashSchema,
+  /** Required problems - must be present in all scores */
   problem_ids: z.array(ProblemIdSchema),
-  dimension_ids: z.array(DimensionIdSchema),
+  /** Embedded dependency */
+  dimension_problem_dependency: DimensionProblemDependencyListSchema,
+  created_at: z.string().datetime(),
   scores: z.array(JSONScoresSchema),
 });
 
 export type ScorePool = z.infer<typeof ScorePoolSchema>;
 
 // =============================================================================
-// 7. Compatibility Result Schema
+// 8. Compatibility Result Schema
 // =============================================================================
 
 export const CompatibilityResultSchema = z.discriminatedUnion("status", [
@@ -275,7 +333,7 @@ export const CompatibilityResultSchema = z.discriminatedUnion("status", [
     differences: z.object({
       prompt_version_mismatch: z.boolean(),
       problem_id_differences: z.array(z.string()).optional(),
-      dimension_id_differences: z.array(z.string()).optional(),
+      dimension_differences: z.array(z.string()).optional(),
     }),
   }),
 ]);
@@ -283,33 +341,17 @@ export const CompatibilityResultSchema = z.discriminatedUnion("status", [
 export type CompatibilityResult = z.infer<typeof CompatibilityResultSchema>;
 
 // =============================================================================
-// 8. Event Config Schema
+// 9. Event Config Schema
 // =============================================================================
 
 export const EventConfigSchema = z.object({
   event_id: EventIdSchema,
   name: z.string().min(1),
+  /** Human-readable problem names (keyed by problem_id) */
+  problem_names: z.record(ProblemIdSchema, z.string()),
   problem_ids: z.array(ProblemIdSchema),
-  dimension_ids: z.array(DimensionIdSchema),
-  language: z.enum(["zh", "en"]),
+  language: LangSchema,
   prompt_version_hash: PromptVersionHashSchema,
 });
 
 export type EventConfig = z.infer<typeof EventConfigSchema>;
-
-// =============================================================================
-// 9. Dimension-Problem Dependency Schema
-// =============================================================================
-
-export const DimensionProblemDependencySchema = z.object({
-  dimension_id: DimensionIdSchema,
-  contributing_problem_ids: z.array(ProblemIdSchema),
-});
-
-export const DimensionDependencyConfigSchema = z.object({
-  version: z.string(),
-  updated_at: z.string().datetime(),
-  dependencies: z.array(DimensionProblemDependencySchema),
-});
-
-export type DimensionDependencyConfig = z.infer<typeof DimensionDependencyConfigSchema>;
