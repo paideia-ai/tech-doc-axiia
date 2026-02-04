@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schema Sample Data Viewer</title>
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border-color: #30363d;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-green: #3fb950;
+      --accent-purple: #a371f7;
+      --accent-orange: #d29922;
+      --accent-red: #f85149;
+      --accent-cyan: #39c5cf;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1em;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .tab:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-blue);
+    }
+
+    .tab.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .tab.v1 { border-left: 3px solid var(--accent-purple); }
+    .tab.master { border-left: 3px solid var(--accent-green); }
+    .tab.diff { border-left: 3px solid var(--accent-orange); }
+
+    .content-area {
+      display: none;
+    }
+
+    .content-area.active {
+      display: block;
+    }
+
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    .schema-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .schema-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .card-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .badge-v1 { background: var(--accent-purple); color: white; }
+    .badge-master { background: var(--accent-green); color: white; }
+    .badge-common { background: var(--accent-blue); color: white; }
+
+    .card-body {
+      padding: 16px 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .card-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    pre {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* JSON Syntax Highlighting */
+    .json-key { color: var(--accent-cyan); }
+    .json-string { color: var(--accent-green); }
+    .json-number { color: var(--accent-orange); }
+    .json-boolean { color: var(--accent-purple); }
+    .json-null { color: var(--accent-red); }
+    .json-bracket { color: var(--text-secondary); }
+
+    /* Differences Table */
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .diff-table th,
+    .diff-table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .diff-table th {
+      background: var(--bg-tertiary);
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+
+    .diff-table tr:hover {
+      background: var(--bg-secondary);
+    }
+
+    .diff-v1 {
+      color: var(--accent-purple);
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .diff-master {
+      color: var(--accent-green);
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    /* Pipeline Flow */
+    .pipeline-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .pipeline-stage {
+      padding: 20px 30px;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid var(--border-color);
+      min-width: 150px;
+    }
+
+    .pipeline-stage.active {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+    }
+
+    .pipeline-arrow {
+      font-size: 24px;
+      color: var(--accent-blue);
+    }
+
+    .stage-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .stage-schema {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: monospace;
+    }
+
+    /* Search */
+    .search-box {
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+    }
+
+    .search-box::placeholder {
+      color: var(--text-secondary);
+    }
+
+    /* Section headers */
+    .section-header {
+      font-size: 1.5em;
+      margin: 30px 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .section-header span {
+      color: var(--text-secondary);
+      font-size: 0.7em;
+      font-weight: normal;
+    }
+
+    /* Copy button */
+    .copy-btn {
+      padding: 6px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px;
+      margin-top: 40px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Schema Sample Data Viewer</h1>
+      <p class="subtitle">Interactive viewer for v1 and master schema sample data</p>
+    </header>
+
+    <!-- Pipeline Flow Diagram -->
+    <div class="pipeline-flow">
+      <div class="pipeline-stage">
+        <div class="stage-name">LLM Report</div>
+        <div class="stage-schema">LLMReportSchema (v1)</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage active">
+        <div class="stage-name">Extract Scores</div>
+        <div class="stage-schema">JSONScoresSchema</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-name">Score Pool</div>
+        <div class="stage-schema">ScorePoolSchema</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-name">Compute Curve</div>
+        <div class="stage-schema">CurveSchema</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-name">Apply Curve</div>
+        <div class="stage-schema">CurvedScoresSchema</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab v1 active" onclick="showTab('v1')">v1 Schema (Anna)</button>
+      <button class="tab master" onclick="showTab('master')">Master Schema</button>
+      <button class="tab diff" onclick="showTab('diff')">Differences</button>
+    </div>
+
+    <!-- Search -->
+    <input type="text" class="search-box" placeholder="Search schemas... (e.g., 'curve', 'problem', 'grade')" oninput="filterCards(this.value)">
+
+    <!-- V1 Content -->
+    <div id="v1-content" class="content-area active">
+      <h2 class="section-header">Common Types <span>(v1)</span></h2>
+      <div class="schema-grid" id="v1-common"></div>
+
+      <h2 class="section-header">1. LLM Report <span>(原始报告)</span></h2>
+      <div class="schema-grid" id="v1-report"></div>
+
+      <h2 class="section-header">2. JSON Scores <span>(提取的分数)</span></h2>
+      <div class="schema-grid" id="v1-scores"></div>
+
+      <h2 class="section-header">3. Curve</h2>
+      <div class="schema-grid" id="v1-curve"></div>
+
+      <h2 class="section-header">4. Curved Letter Grades</h2>
+      <div class="schema-grid" id="v1-grades"></div>
+
+      <h2 class="section-header">5. Curved Report <span>(最终报告)</span></h2>
+      <div class="schema-grid" id="v1-curved-report"></div>
+    </div>
+
+    <!-- Master Content -->
+    <div id="master-content" class="content-area">
+      <h2 class="section-header">Common Types <span>(master)</span></h2>
+      <div class="schema-grid" id="master-common"></div>
+
+      <h2 class="section-header">Dimension-Problem Dependency</h2>
+      <div class="schema-grid" id="master-dependency"></div>
+
+      <h2 class="section-header">JSONScores <span>(PRE-CURVE)</span></h2>
+      <div class="schema-grid" id="master-scores"></div>
+
+      <h2 class="section-header">Curve</h2>
+      <div class="schema-grid" id="master-curve"></div>
+
+      <h2 class="section-header">CurvedScores <span>(POST-CURVE)</span></h2>
+      <div class="schema-grid" id="master-curved"></div>
+
+      <h2 class="section-header">Score Pool & Config</h2>
+      <div class="schema-grid" id="master-pool"></div>
+    </div>
+
+    <!-- Differences Content -->
+    <div id="diff-content" class="content-area">
+      <h2 class="section-header">Key Differences Between v1 and Master</h2>
+      <table class="diff-table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>v1 (Anna)</th>
+            <th>Master</th>
+          </tr>
+        </thead>
+        <tbody id="diff-table-body">
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      Generated from sample-data.ts | Schema Design Review
+    </footer>
+  </div>
+
+  <script>
+    // Sample Data (embedded from sample-data.ts)
+    const v1Data = {
+      // Common Types
+      common: {
+        problemId: "001230-quadratic-equations",
+        eventId: "event-2024-spring-cohort-a",
+        curvedGrade: "B",
+        uncurvedGrade: "X",
+        promptVersionHash: "7a8b9c0d1e2f3a4b",
+        sha256Hex: "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+        lang: "zh",
+        promptKey: "framework:zh:task-eval",
+        dimension: "representation",
+        scoreValue: 0.75
+      },
+      promptSnapshotEntry: {
+        key: "framework:zh:task-eval",
+        sha256: "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e"
+      },
+      promptSnapshotEntries: [
+        { key: "framework:en:ability-summary", sha256: "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b" },
+        { key: "framework:zh:task-eval", sha256: "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c" },
+        { key: "problems:001230-quadratic-equations:scoring", sha256: "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d" }
+      ],
+      dimensionProblemDependency: {
+        problemId: "001230-quadratic-equations",
+        problemVersion: 1,
+        dimensions: ["representation", "self-verification"]
+      },
+      // Report
+      metadata: {
+        lang: "zh",
+        reportId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        eventId: "event-2024-spring-cohort-a",
+        participantId: "participant-001",
+        promptSetHash: "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+        entries: [
+          { key: "framework:zh:task-eval", sha256: "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b" }
+        ],
+        dimensionProblemDependency: [
+          { problemId: "001230-quadratic-equations", problemVersion: 1, dimensions: ["representation", "self-verification"] }
+        ],
+        createdAt: "2024-03-15T10:30:00Z"
+      },
+      dimensionCard: { dimension: "representation", phrases: "能够清晰地表达问题", grade: "X" },
+      problem: { problemId: "001230-quadratic-equations", phrases: "解决一元二次方程", grade: "X" },
+      dimensionReport: {
+        dimension: "representation",
+        problems: [{ problemId: "001230-quadratic-equations", phrases: "解决一元二次方程", grade: "X" }],
+        summary: "学生在表达能力方面表现良好",
+        score: 0.78,
+        grade: "X"
+      },
+      overall: {
+        bad: [{ title: "计算粗心", description: "在运算过程中有小错误" }],
+        good: [{ title: "清晰表达", description: "能够用数学语言准确描述问题" }],
+        improvements: [{ title: "验证答案", description: "建议在完成后验证答案的正确性" }],
+        overview: "总体表现良好，有进步空间"
+      },
+      proof: { comment: "学生展示了清晰的解题思路", isStrength: true, observation: "正确使用了求根公式" },
+      dimensionDetail: {
+        dimension: "representation",
+        proofs: [{ comment: "学生展示了清晰的解题思路", isStrength: true, observation: "正确使用了求根公式" }],
+        summary: "在问题表达方面表现优秀",
+        score: 0.82,
+        grade: "X"
+      },
+      problemReport: {
+        bad: ["计算过程有小错误"],
+        dimensionDetails: [
+          { dimension: "representation", proofs: [{ comment: "清晰表达问题", isStrength: true, observation: "使用正确的数学符号" }], summary: "表达能力良好", score: 0.82, grade: "X" },
+          { dimension: "self-verification", proofs: [{ comment: "验证了答案", isStrength: true, observation: "代入原方程检验" }], summary: "验证能力中等", score: 0.65, grade: "X" }
+        ],
+        good: ["解题思路清晰", "使用正确的公式"],
+        problemId: "001230-quadratic-equations",
+        overview: "该题目完成度较高",
+        score: 0.75,
+        grade: "X"
+      },
+      // Scores
+      abilityScore: { dimensionId: "representation", score: 0.78 },
+      problemScore: {
+        problemId: "001230-quadratic-equations",
+        score: 0.75,
+        dimensionDetailScores: [
+          { dimensionId: "representation", score: 0.82 },
+          { dimensionId: "self-verification", score: 0.65 }
+        ]
+      },
+      jsonScores: {
+        abilityScores: [
+          { dimensionId: "representation", score: 0.78 },
+          { dimensionId: "self-verification", score: 0.72 },
+          { dimensionId: "iterative-refinement", score: 0.68 },
+          { dimensionId: "discovery", score: 0.75 },
+          { dimensionId: "exploratory", score: 0.70 }
+        ],
+        problemScores: [
+          { problemId: "001230-quadratic-equations", score: 0.75, dimensionDetailScores: [{ dimensionId: "representation", score: 0.82 }, { dimensionId: "self-verification", score: 0.65 }] }
+        ],
+        overallMean: 0.73
+      },
+      // Curve
+      gradeThresholds: { A: 0.85, B: 0.70, C: 0.55 },
+      curve: {
+        curveId: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        label: "2024 Spring Cohort Curve",
+        sourceEventIds: ["event-2024-spring-cohort-a", "event-2024-spring-cohort-b"],
+        promptSetHash: "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+        entries: [{ key: "framework:zh:task-eval", sha256: "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b" }],
+        dimensionProblemDependency: [{ problemId: "001230-quadratic-equations", problemVersion: 1, dimensions: ["representation", "self-verification"] }],
+        method: "standard_deviation",
+        sampleSize: 150,
+        createdAt: "2024-03-20T14:00:00Z",
+        abilityCurves: {
+          representation: { A: 0.88, B: 0.72, C: 0.56 },
+          "self-verification": { A: 0.80, B: 0.65, C: 0.50 },
+          "iterative-refinement": { A: 0.85, B: 0.70, C: 0.55 },
+          discovery: { A: 0.82, B: 0.67, C: 0.52 },
+          exploratory: { A: 0.79, B: 0.64, C: 0.49 }
+        },
+        problemCurves: { "001230-quadratic-equations": { A: 0.90, B: 0.75, C: 0.60 } },
+        overall: { A: 0.83, B: 0.69, C: 0.53 }
+      },
+      // Curved Letter Grades
+      curvedLetterGrades: {
+        curveId: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        computedAt: "2024-03-21T09:00:00Z",
+        overallGrade: "B",
+        abilityGrades: { representation: "B", "self-verification": "B", "iterative-refinement": "C", discovery: "B", exploratory: "B" },
+        problemGrades: { "001230-quadratic-equations": "B" },
+        dimensionDetailGrades: { "001230-quadratic-equations": { representation: "B", "self-verification": "C" } }
+      },
+      // Curved Report
+      curvedReportMetadata: {
+        lang: "zh",
+        reportId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        eventId: "event-2024-spring-cohort-a",
+        participantId: "participant-001",
+        promptSetHash: "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+        curveId: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        curvedAt: "2024-03-21T09:00:00Z"
+      },
+      curvedDimensionCard: { dimension: "representation", phrases: "表达能力", grade: "B" },
+      curvedProblemCard: { problemId: "001230-quadratic-equations", grade: "B" }
+    };
+
+    const masterData = {
+      common: {
+        problemId: "001230",
+        eventId: "event-2024-spring-cohort-a",
+        lang: "zh",
+        promptVersionHash: "7a8b9c0d1e2f3a4b",
+        letterGrade: "B",
+        scoreValue: 0.75,
+        dimension: "Discovery-Self-Understanding"
+      },
+      dimensionProblemDependency: {
+        problem_id: "001230",
+        problem_version: 1,
+        dimensions: ["Discovery-Self-Understanding", "Expression-Translation"]
+      },
+      totalScores: {
+        total_problem_score: 0.75,
+        total_ability_score: 0.72,
+        final_total_score: 0.73
+      },
+      abilityScore: { dimension: "Discovery-Self-Understanding", score: 0.78 },
+      problemScore: {
+        problem_id: "001230",
+        task_score: 0.75,
+        dimension_scores: [
+          { dimension: "Discovery-Self-Understanding", score: 0.82 },
+          { dimension: "Expression-Translation", score: 0.65 }
+        ]
+      },
+      jsonScores: {
+        scores_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+        event_id: "event-2024-spring-cohort-a",
+        prompt_version_hash: "7a8b9c0d1e2f3a4b",
+        generated_at: "2024-03-15T10:30:00Z",
+        participant_id: "participant-001",
+        totals: { total_problem_score: 0.75, total_ability_score: 0.72, final_total_score: 0.73 },
+        ability_scores: [
+          { dimension: "Discovery-Self-Understanding", score: 0.78 },
+          { dimension: "Expression-Translation", score: 0.72 },
+          { dimension: "Exploratory-Discovery", score: 0.68 },
+          { dimension: "Verification-Confirmation", score: 0.75 },
+          { dimension: "Iterative-Optimization", score: 0.70 }
+        ],
+        problem_scores: [
+          { problem_id: "001230", task_score: 0.75, dimension_scores: [{ dimension: "Discovery-Self-Understanding", score: 0.82 }, { dimension: "Expression-Translation", score: 0.65 }] }
+        ]
+      },
+      curveMethodPercentile: { type: "percentile", percentiles: [0.9, 0.7, 0.5] },
+      curveMethodStdDev: { type: "standard_deviation", sigma_boundaries: [1, 0, -1] },
+      curveMethodAbsolute: { type: "absolute", thresholds: [0.85, 0.70, 0.55] },
+      gradeThresholds: { A: 0.85, B: 0.70, C: 0.55 },
+      totalCurves: {
+        total_problem: { A: 0.85, B: 0.70, C: 0.55 },
+        total_ability: { A: 0.82, B: 0.68, C: 0.52 },
+        final_total: { A: 0.83, B: 0.69, C: 0.53 }
+      },
+      curve: {
+        curve_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        label: "2024 Spring Cohort Curve",
+        source_event_ids: ["event-2024-spring-cohort-a", "event-2024-spring-cohort-b"],
+        prompt_version_hash: "7a8b9c0d1e2f3a4b",
+        dimension_problem_dependency: [{ problem_id: "001230", problem_version: 1, dimensions: ["Discovery-Self-Understanding", "Expression-Translation"] }],
+        method: { type: "standard_deviation", sigma_boundaries: [1, 0, -1] },
+        sample_size: 150,
+        computed_at: "2024-03-20T14:00:00Z",
+        totals: { total_problem: { A: 0.85, B: 0.70, C: 0.55 }, total_ability: { A: 0.82, B: 0.68, C: 0.52 }, final_total: { A: 0.83, B: 0.69, C: 0.53 } },
+        ability_curves: {
+          "Discovery-Self-Understanding": { A: 0.88, B: 0.72, C: 0.56 },
+          "Expression-Translation": { A: 0.80, B: 0.65, C: 0.50 },
+          "Exploratory-Discovery": { A: 0.85, B: 0.70, C: 0.55 },
+          "Verification-Confirmation": { A: 0.82, B: 0.67, C: 0.52 },
+          "Iterative-Optimization": { A: 0.79, B: 0.64, C: 0.49 }
+        },
+        problem_curves: { "001230": { A: 0.90, B: 0.75, C: 0.60 } }
+      },
+      totalGrades: { total_problem_grade: "B", total_ability_grade: "B", final_total_grade: "B" },
+      curvedScores: {
+        curved_scores_id: "d4e5f6a7-b8c9-0123-def0-456789012345",
+        source_scores_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+        event_id: "event-2024-spring-cohort-a",
+        prompt_version_hash: "7a8b9c0d1e2f3a4b",
+        applied_curve_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        curved_at: "2024-03-21T09:00:00Z",
+        participant_id: "participant-001",
+        totals: { total_problem_score: 0.75, total_ability_score: 0.72, final_total_score: 0.73 },
+        ability_scores: [
+          { dimension: "Discovery-Self-Understanding", score: 0.78 },
+          { dimension: "Expression-Translation", score: 0.72 }
+        ],
+        letter_grades: {
+          totals: { total_problem_grade: "B", total_ability_grade: "B", final_total_grade: "B" },
+          abilities: { "Discovery-Self-Understanding": "B", "Expression-Translation": "B" },
+          problems: { "001230": "B" },
+          dimension_details: { "001230": { "Discovery-Self-Understanding": "B", "Expression-Translation": "C" } }
+        }
+      },
+      scorePool: {
+        pool_id: "e5f6a7b8-c9d0-1234-ef01-567890123456",
+        label: "2024 Spring Combined Pool",
+        source_event_ids: ["event-2024-spring-cohort-a", "event-2024-spring-cohort-b"],
+        prompt_version_hash: "7a8b9c0d1e2f3a4b",
+        problem_ids: ["001230", "001241"],
+        dimension_problem_dependency: [{ problem_id: "001230", problem_version: 1, dimensions: ["Discovery-Self-Understanding", "Expression-Translation"] }],
+        created_at: "2024-03-18T12:00:00Z",
+        scores: ["[... array of JSONScores ...]"]
+      },
+      eventConfig: {
+        event_id: "event-2024-spring-cohort-a",
+        name: "2024 Spring Cohort A Assessment",
+        problem_names: { "001230": "Quadratic Equations", "001241": "Data Analysis" },
+        problem_ids: ["001230", "001241"],
+        language: "zh",
+        prompt_version_hash: "7a8b9c0d1e2f3a4b"
+      },
+      compatibilityResultCompatible: { status: "compatible" },
+      compatibilityResultIncompatible: { status: "incompatible", reasons: ["Prompt version mismatch", "Missing problem: 001250"] },
+      compatibilityResultRequiresOverride: { status: "requires_override", warnings: ["Prompt version differs"], differences: { prompt_version_mismatch: true } }
+    };
+
+    const differences = {
+      problemId: { v1: "001230-quadratic-equations", master: "001230" },
+      dimensions: {
+        v1: '["representation", "self-verification", ...]',
+        master: '["Discovery-Self-Understanding", "Expression-Translation", ...]'
+      },
+      namingConvention: { v1: "camelCase (problemId)", master: "snake_case (problem_id)" },
+      curveMethod: { v1: "literal('standard_deviation') only", master: "discriminatedUnion (3 options)" },
+      promptVersioning: { v1: "SHA-256 + entries array", master: "git commit hash only" },
+      uncurvedGrade: { v1: "has 'X' grade", master: "no uncurved grade concept" },
+      reportSchema: { v1: "full LLMReportSchema", master: "no report schema" }
+    };
+
+    // JSON Syntax Highlighting
+    function syntaxHighlight(json) {
+      if (typeof json !== 'string') {
+        json = JSON.stringify(json, null, 2);
+      }
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        let cls = 'json-number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'json-key';
+          } else {
+            cls = 'json-string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'json-boolean';
+        } else if (/null/.test(match)) {
+          cls = 'json-null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
+    }
+
+    // Create Card
+    function createCard(title, data, badge = 'common') {
+      const card = document.createElement('div');
+      card.className = 'schema-card';
+      card.dataset.title = title.toLowerCase();
+      card.dataset.content = JSON.stringify(data).toLowerCase();
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="card-title">${title}</span>
+          <div>
+            <button class="copy-btn" onclick="copyToClipboard(this, ${JSON.stringify(JSON.stringify(data))})">Copy</button>
+            <span class="card-badge badge-${badge}">${badge}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <pre>${syntaxHighlight(data)}</pre>
+        </div>
+      `;
+      return card;
+    }
+
+    // Copy to clipboard
+    function copyToClipboard(btn, text) {
+      navigator.clipboard.writeText(JSON.parse(text)).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Initialize
+    function init() {
+      // V1 Common
+      const v1Common = document.getElementById('v1-common');
+      v1Common.appendChild(createCard('Common Types', v1Data.common, 'v1'));
+      v1Common.appendChild(createCard('PromptSnapshotEntry', v1Data.promptSnapshotEntry, 'v1'));
+      v1Common.appendChild(createCard('PromptSnapshotEntries', v1Data.promptSnapshotEntries, 'v1'));
+      v1Common.appendChild(createCard('DimensionProblemDependency', v1Data.dimensionProblemDependency, 'v1'));
+
+      // V1 Report
+      const v1Report = document.getElementById('v1-report');
+      v1Report.appendChild(createCard('Metadata', v1Data.metadata, 'v1'));
+      v1Report.appendChild(createCard('DimensionCard', v1Data.dimensionCard, 'v1'));
+      v1Report.appendChild(createCard('Problem', v1Data.problem, 'v1'));
+      v1Report.appendChild(createCard('DimensionReport', v1Data.dimensionReport, 'v1'));
+      v1Report.appendChild(createCard('Overall', v1Data.overall, 'v1'));
+      v1Report.appendChild(createCard('Proof', v1Data.proof, 'v1'));
+      v1Report.appendChild(createCard('DimensionDetail', v1Data.dimensionDetail, 'v1'));
+      v1Report.appendChild(createCard('ProblemReport', v1Data.problemReport, 'v1'));
+
+      // V1 Scores
+      const v1Scores = document.getElementById('v1-scores');
+      v1Scores.appendChild(createCard('AbilityScore', v1Data.abilityScore, 'v1'));
+      v1Scores.appendChild(createCard('ProblemScore', v1Data.problemScore, 'v1'));
+      v1Scores.appendChild(createCard('JSONScores', v1Data.jsonScores, 'v1'));
+
+      // V1 Curve
+      const v1Curve = document.getElementById('v1-curve');
+      v1Curve.appendChild(createCard('GradeThresholds', v1Data.gradeThresholds, 'v1'));
+      v1Curve.appendChild(createCard('Curve', v1Data.curve, 'v1'));
+
+      // V1 Grades
+      const v1Grades = document.getElementById('v1-grades');
+      v1Grades.appendChild(createCard('CurvedLetterGrades', v1Data.curvedLetterGrades, 'v1'));
+
+      // V1 Curved Report
+      const v1CurvedReport = document.getElementById('v1-curved-report');
+      v1CurvedReport.appendChild(createCard('CurvedReportMetadata', v1Data.curvedReportMetadata, 'v1'));
+      v1CurvedReport.appendChild(createCard('CurvedDimensionCard', v1Data.curvedDimensionCard, 'v1'));
+      v1CurvedReport.appendChild(createCard('CurvedProblemCard', v1Data.curvedProblemCard, 'v1'));
+
+      // Master Common
+      const masterCommon = document.getElementById('master-common');
+      masterCommon.appendChild(createCard('Common Types', masterData.common, 'master'));
+
+      // Master Dependency
+      const masterDep = document.getElementById('master-dependency');
+      masterDep.appendChild(createCard('DimensionProblemDependency', masterData.dimensionProblemDependency, 'master'));
+      masterDep.appendChild(createCard('TotalScores', masterData.totalScores, 'master'));
+
+      // Master Scores
+      const masterScores = document.getElementById('master-scores');
+      masterScores.appendChild(createCard('AbilityScore', masterData.abilityScore, 'master'));
+      masterScores.appendChild(createCard('ProblemScore', masterData.problemScore, 'master'));
+      masterScores.appendChild(createCard('JSONScores', masterData.jsonScores, 'master'));
+
+      // Master Curve
+      const masterCurve = document.getElementById('master-curve');
+      masterCurve.appendChild(createCard('CurveMethod: Percentile', masterData.curveMethodPercentile, 'master'));
+      masterCurve.appendChild(createCard('CurveMethod: StdDev', masterData.curveMethodStdDev, 'master'));
+      masterCurve.appendChild(createCard('CurveMethod: Absolute', masterData.curveMethodAbsolute, 'master'));
+      masterCurve.appendChild(createCard('GradeThresholds', masterData.gradeThresholds, 'master'));
+      masterCurve.appendChild(createCard('TotalCurves', masterData.totalCurves, 'master'));
+      masterCurve.appendChild(createCard('Curve', masterData.curve, 'master'));
+
+      // Master Curved
+      const masterCurved = document.getElementById('master-curved');
+      masterCurved.appendChild(createCard('TotalGrades', masterData.totalGrades, 'master'));
+      masterCurved.appendChild(createCard('CurvedScores', masterData.curvedScores, 'master'));
+
+      // Master Pool
+      const masterPool = document.getElementById('master-pool');
+      masterPool.appendChild(createCard('ScorePool', masterData.scorePool, 'master'));
+      masterPool.appendChild(createCard('EventConfig', masterData.eventConfig, 'master'));
+      masterPool.appendChild(createCard('CompatibilityResult: Compatible', masterData.compatibilityResultCompatible, 'master'));
+      masterPool.appendChild(createCard('CompatibilityResult: Incompatible', masterData.compatibilityResultIncompatible, 'master'));
+      masterPool.appendChild(createCard('CompatibilityResult: Override', masterData.compatibilityResultRequiresOverride, 'master'));
+
+      // Differences table
+      const diffBody = document.getElementById('diff-table-body');
+      for (const [key, val] of Object.entries(differences)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${key}</strong></td>
+          <td class="diff-v1">${val.v1}</td>
+          <td class="diff-master">${val.master}</td>
+        `;
+        diffBody.appendChild(row);
+      }
+    }
+
+    // Tab switching
+    function showTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
+
+      document.querySelector(`.tab.${tab}`).classList.add('active');
+      document.getElementById(`${tab}-content`).classList.add('active');
+    }
+
+    // Filter cards
+    function filterCards(query) {
+      const q = query.toLowerCase();
+      document.querySelectorAll('.schema-card').forEach(card => {
+        const matches = card.dataset.title.includes(q) || card.dataset.content.includes(q);
+        card.style.display = matches ? 'block' : 'none';
+      });
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
