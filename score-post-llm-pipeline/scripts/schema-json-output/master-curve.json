@@ -1,0 +1,85 @@
+{
+  "curve_id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+  "label": "2024 Spring Cohort Curve",
+  "source_event_ids": [
+    "event-2024-spring-cohort-a",
+    "event-2024-spring-cohort-b"
+  ],
+  "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+  "dimension_problem_dependency": [
+    {
+      "problem_id": "001230",
+      "problem_version": 1,
+      "dimensions": [
+        "Discovery-Self-Understanding",
+        "Expression-Translation"
+      ]
+    }
+  ],
+  "method": {
+    "type": "standard_deviation",
+    "sigma_boundaries": [
+      1,
+      0,
+      -1
+    ]
+  },
+  "sample_size": 150,
+  "computed_at": "2024-03-20T14:00:00Z",
+  "totals": {
+    "total_problem": {
+      "A": 0.85,
+      "B": 0.7,
+      "C": 0.55
+    },
+    "total_ability": {
+      "A": 0.82,
+      "B": 0.68,
+      "C": 0.52
+    },
+    "final_total": {
+      "A": 0.83,
+      "B": 0.69,
+      "C": 0.53
+    }
+  },
+  "ability_curves": {
+    "Discovery-Self-Understanding": {
+      "A": 0.88,
+      "B": 0.72,
+      "C": 0.56
+    },
+    "Expression-Translation": {
+      "A": 0.8,
+      "B": 0.65,
+      "C": 0.5
+    },
+    "Exploratory-Discovery": {
+      "A": 0.85,
+      "B": 0.7,
+      "C": 0.55
+    },
+    "Verification-Confirmation": {
+      "A": 0.82,
+      "B": 0.67,
+      "C": 0.52
+    },
+    "Iterative-Optimization": {
+      "A": 0.79,
+      "B": 0.64,
+      "C": 0.49
+    }
+  },
+  "problem_curves": {
+    "001230": {
+      "A": 0.9,
+      "B": 0.75,
+      "C": 0.6
+    },
+    "001241": {
+      "A": 0.85,
+      "B": 0.7,
+      "C": 0.55
+    }
+  }
+}
