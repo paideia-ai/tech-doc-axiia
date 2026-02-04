@@ -374,14 +374,16 @@ describe('Common Types', () => {
 
     it('should reject invalid sha256', () => {
       const result = PromptSnapshotEntrySchema.safeParse({
-        key: 'test',
+        key: 'framework:en:task-eval',
         sha256: 'invalid',
       })
       expect(result.success).toBe(false)
     })
 
     it('should reject missing fields', () => {
-      expect(PromptSnapshotEntrySchema.safeParse({ key: 'test' }).success).toBe(false)
+      expect(
+        PromptSnapshotEntrySchema.safeParse({ key: 'framework:en:task-eval' }).success,
+      ).toBe(false)
       expect(PromptSnapshotEntrySchema.safeParse({ sha256: VALID_SHA256 }).success).toBe(false)
     })
   })
@@ -397,16 +399,16 @@ describe('Common Types', () => {
 
       it('should accept single entry', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('key1'),
+          createValidPromptEntry('framework:en:expert-review'),
         ])
         expect(result.success).toBe(true)
       })
 
       it('should accept sorted entries', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('a-key'),
-          createValidPromptEntry('b-key'),
-          createValidPromptEntry('c-key'),
+          createValidPromptEntry('framework:en:ability-summary'),
+          createValidPromptEntry('framework:en:expert-review'),
+          createValidPromptEntry('framework:en:final-summary'),
         ])
         expect(result.success).toBe(true)
       })
@@ -415,7 +417,7 @@ describe('Common Types', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
           createValidPromptEntry('framework:en:expert-review'),
           createValidPromptEntry('framework:en:task-eval'),
-          createValidPromptEntry('problem:001110:scoring'),
+          createValidPromptEntry(`problems:${VALID_PROBLEM_ID_ZH}:scoring`),
         ])
         expect(result.success).toBe(true)
       })
@@ -424,8 +426,8 @@ describe('Common Types', () => {
     describe('invalid cases - sorting', () => {
       it('should reject unsorted entries', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('b-key'),
-          createValidPromptEntry('a-key'),
+          createValidPromptEntry('framework:en:final-summary'),
+          createValidPromptEntry('framework:en:ability-summary'),
         ])
         expect(result.success).toBe(false)
         if (!result.success) {
@@ -435,9 +437,9 @@ describe('Common Types', () => {
 
       it('should reject reverse sorted entries', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('z'),
-          createValidPromptEntry('y'),
-          createValidPromptEntry('x'),
+          createValidPromptEntry('framework:en:task-eval'),
+          createValidPromptEntry('framework:en:final-summary'),
+          createValidPromptEntry('framework:en:ability-summary'),
         ])
         expect(result.success).toBe(false)
       })
@@ -446,8 +448,8 @@ describe('Common Types', () => {
     describe('invalid cases - uniqueness', () => {
       it('should reject duplicate keys', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('same-key'),
-          createValidPromptEntry('same-key'),
+          createValidPromptEntry('framework:en:task-eval'),
+          createValidPromptEntry('framework:en:task-eval'),
         ])
         expect(result.success).toBe(false)
         if (!result.success) {
@@ -457,10 +459,10 @@ describe('Common Types', () => {
 
       it('should reject multiple duplicates', () => {
         const result = PromptSnapshotEntriesSchema.safeParse([
-          createValidPromptEntry('a'),
-          createValidPromptEntry('a'),
-          createValidPromptEntry('b'),
-          createValidPromptEntry('b'),
+          createValidPromptEntry('framework:en:expert-review'),
+          createValidPromptEntry('framework:en:expert-review'),
+          createValidPromptEntry('framework:en:task-eval'),
+          createValidPromptEntry('framework:en:task-eval'),
         ])
         expect(result.success).toBe(false)
       })
@@ -658,8 +660,8 @@ describe('LLMReport Schema', () => {
     it('should reject unsorted entries', () => {
       const metadata = createValidMetadata()
       metadata.entries = [
-        createValidPromptEntry('z-key'),
-        createValidPromptEntry('a-key'),
+        createValidPromptEntry('framework:en:task-eval'),
+        createValidPromptEntry('framework:en:ability-summary'),
       ]
       expect(MetadataSchema.safeParse(metadata).success).toBe(false)
     })
@@ -1427,8 +1429,8 @@ describe('Pipeline Flow Tests', () => {
     { key: 'framework:en:expert-review', sha256: 'a'.repeat(64) },
     { key: 'framework:en:final-summary', sha256: 'b'.repeat(64) },
     { key: 'framework:en:task-eval', sha256: 'c'.repeat(64) },
-    { key: 'problem:001230:scoring', sha256: 'd'.repeat(64) },
-    { key: 'problem:002341:scoring', sha256: 'e'.repeat(64) },
+    { key: `problems:${MOCK_PROBLEM_1}:scoring`, sha256: 'd'.repeat(64) },
+    { key: `problems:${MOCK_PROBLEM_2}:scoring`, sha256: 'e'.repeat(64) },
   ]
 
   const MOCK_DIMENSION_DEPENDENCY = [

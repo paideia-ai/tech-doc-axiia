@@ -68,13 +68,62 @@ export const Sha256HexSchema = z
   .regex(/^[a-f0-9]{64}$/, 'Must be a lowercase SHA-256 hex digest')
 export type Sha256Hex = z.infer<typeof Sha256HexSchema>
 
+export const LangSchema = z.enum(['en', 'zh'])
+export type Lang = z.infer<typeof LangSchema>
+
+/**
+ * Prompt key is derived from prompt file path segments under `materials/prompts`.
+ *
+ * Example mappings:
+ * - materials/prompts/framework/en/task-eval.liquid      -> framework:en:task-eval
+ * - materials/prompts/problems/001231-meeting-verify/scoring.md -> problems:001231-meeting-verify:scoring
+ */
+export const PromptTypeSchema = z.enum(['framework', 'problems'])
+export type PromptType = z.infer<typeof PromptTypeSchema>
+
+export const FrameworkPromptNameSchema = z.enum([
+  'ability-summary',
+  'expert-review',
+  'final-summary',
+  'problem-ability',
+  'problem-summary',
+  'task-eval',
+])
+export type FrameworkPromptName = z.infer<typeof FrameworkPromptNameSchema>
+
+export const ProblemPromptNameSchema = z.enum(['scoring', 'task-eval'])
+export type ProblemPromptName = z.infer<typeof ProblemPromptNameSchema>
+
+const PromptKeyPartsSchema = z.string().transform((value, ctx) => {
+  const parts = value.split(':')
+  if (parts.length !== 3) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message:
+        'Prompt key must have exactly 3 colon-separated segments: <type>:<scope>:<name>',
+    })
+    return z.NEVER
+  }
+  return parts as [string, string, string]
+})
+
+const PromptKeyPartsValidatedSchema = z.union([
+  z.tuple([z.literal('framework'), LangSchema, FrameworkPromptNameSchema]),
+  z.tuple([z.literal('problems'), ProblemIdSchema, ProblemPromptNameSchema]),
+])
+
+export const PromptKeySchema = PromptKeyPartsSchema
+  .pipe(PromptKeyPartsValidatedSchema)
+  .transform((parts) => parts.join(':'))
+export type PromptKey = z.infer<typeof PromptKeySchema>
+
 export const PromptSnapshotEntrySchema = z.object({
   /**
    * Logical prompt key, e.g.:
    * - framework:zh:task-eval
-   * - problem:001111:scoring
+   * - problems:001231-meeting-verify:scoring
    */
-  key: z.string().min(1),
+  key: PromptKeySchema,
   /**
    * SHA-256 of the prompt file content
    */
@@ -112,9 +161,6 @@ export type PromptSnapshotEntries = z.infer<typeof PromptSnapshotEntriesSchema>
  */
 export const ScoreValueSchema = z.number().min(0).max(1)
 export type ScoreValue = z.infer<typeof ScoreValueSchema>
-
-export const LangSchema = z.enum(['en', 'zh'])
-export type Lang = z.infer<typeof LangSchema>
 
 export const DimensionSchema = z.enum([
   'representation',
