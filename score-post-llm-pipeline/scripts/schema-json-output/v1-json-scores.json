@@ -1,0 +1,41 @@
+{
+  "abilityScores": [
+    {
+      "dimensionId": "representation",
+      "score": 0.78
+    },
+    {
+      "dimensionId": "self-verification",
+      "score": 0.72
+    },
+    {
+      "dimensionId": "iterative-refinement",
+      "score": 0.68
+    },
+    {
+      "dimensionId": "discovery",
+      "score": 0.75
+    },
+    {
+      "dimensionId": "exploratory",
+      "score": 0.7
+    }
+  ],
+  "problemScores": [
+    {
+      "problemId": "001230-quadratic-equations",
+      "score": 0.75,
+      "dimensionDetailScores": [
+        {
+          "dimensionId": "representation",
+          "score": 0.82
+        },
+        {
+          "dimensionId": "self-verification",
+          "score": 0.65
+        }
+      ]
+    }
+  ],
+  "overallMean": 0.73
+}

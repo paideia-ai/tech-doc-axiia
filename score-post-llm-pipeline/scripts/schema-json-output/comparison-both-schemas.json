@@ -1,0 +1,680 @@
+{
+  "v1_schema": {
+    "llmReport": {
+      "metadata": {
+        "lang": "zh",
+        "reportId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "eventId": "event-2024-spring-cohort-a",
+        "participantId": "participant-001",
+        "promptSetHash": "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+        "entries": [
+          {
+            "key": "framework:zh:task-eval",
+            "sha256": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"
+          }
+        ],
+        "dimensionProblemDependency": [
+          {
+            "problemId": "001230-quadratic-equations",
+            "problemVersion": 1,
+            "dimensions": [
+              "representation",
+              "self-verification"
+            ]
+          }
+        ],
+        "createdAt": "2024-03-15T10:30:00Z"
+      },
+      "dimensionCards": [
+        {
+          "dimension": "representation",
+          "phrases": "表达能力",
+          "grade": "X"
+        },
+        {
+          "dimension": "self-verification",
+          "phrases": "验证能力",
+          "grade": "X"
+        },
+        {
+          "dimension": "iterative-refinement",
+          "phrases": "迭代优化",
+          "grade": "X"
+        },
+        {
+          "dimension": "discovery",
+          "phrases": "发现能力",
+          "grade": "X"
+        },
+        {
+          "dimension": "exploratory",
+          "phrases": "探索能力",
+          "grade": "X"
+        }
+      ],
+      "dimensionReports": [
+        {
+          "dimension": "representation",
+          "problems": [
+            {
+              "problemId": "001230-quadratic-equations",
+              "phrases": "二次方程",
+              "grade": "X"
+            }
+          ],
+          "summary": "表达能力总结",
+          "score": 0.78,
+          "grade": "X"
+        }
+      ],
+      "overall": {
+        "bad": [
+          {
+            "title": "粗心",
+            "description": "计算有误"
+          }
+        ],
+        "good": [
+          {
+            "title": "清晰",
+            "description": "表达清晰"
+          }
+        ],
+        "improvements": [
+          {
+            "title": "验证",
+            "description": "加强验证"
+          }
+        ],
+        "overview": "总体良好"
+      },
+      "problemCards": [
+        {
+          "problemId": "001230-quadratic-equations",
+          "grade": "X"
+        }
+      ],
+      "problemReports": [
+        {
+          "bad": [
+            "小错误"
+          ],
+          "dimensionDetails": [
+            {
+              "dimension": "representation",
+              "proofs": [
+                {
+                  "comment": "好",
+                  "isStrength": true,
+                  "observation": "清晰"
+                }
+              ],
+              "summary": "表达良好",
+              "score": 0.82,
+              "grade": "X"
+            }
+          ],
+          "good": [
+            "思路清晰"
+          ],
+          "problemId": "001230-quadratic-equations",
+          "overview": "完成度高",
+          "score": 0.75,
+          "grade": "X"
+        }
+      ],
+      "taskEvalMean": 0.75,
+      "abilityMean": 0.72,
+      "overallMean": 0.73,
+      "grade": "X"
+    },
+    "jsonScores": {
+      "abilityScores": [
+        {
+          "dimensionId": "representation",
+          "score": 0.78
+        },
+        {
+          "dimensionId": "self-verification",
+          "score": 0.72
+        },
+        {
+          "dimensionId": "iterative-refinement",
+          "score": 0.68
+        },
+        {
+          "dimensionId": "discovery",
+          "score": 0.75
+        },
+        {
+          "dimensionId": "exploratory",
+          "score": 0.7
+        }
+      ],
+      "problemScores": [
+        {
+          "problemId": "001230-quadratic-equations",
+          "score": 0.75,
+          "dimensionDetailScores": [
+            {
+              "dimensionId": "representation",
+              "score": 0.82
+            },
+            {
+              "dimensionId": "self-verification",
+              "score": 0.65
+            }
+          ]
+        }
+      ],
+      "overallMean": 0.73
+    },
+    "curve": {
+      "curveId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "label": "2024 Spring Cohort Curve",
+      "sourceEventIds": [
+        "event-2024-spring-cohort-a",
+        "event-2024-spring-cohort-b"
+      ],
+      "promptSetHash": "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c0d3e",
+      "entries": [
+        {
+          "key": "framework:zh:task-eval",
+          "sha256": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"
+        }
+      ],
+      "dimensionProblemDependency": [
+        {
+          "problemId": "001230-quadratic-equations",
+          "problemVersion": 1,
+          "dimensions": [
+            "representation",
+            "self-verification"
+          ]
+        }
+      ],
+      "method": "standard_deviation",
+      "sampleSize": 150,
+      "createdAt": "2024-03-20T14:00:00Z",
+      "abilityCurves": {
+        "representation": {
+          "A": 0.88,
+          "B": 0.72,
+          "C": 0.56
+        },
+        "self-verification": {
+          "A": 0.8,
+          "B": 0.65,
+          "C": 0.5
+        },
+        "iterative-refinement": {
+          "A": 0.85,
+          "B": 0.7,
+          "C": 0.55
+        },
+        "discovery": {
+          "A": 0.82,
+          "B": 0.67,
+          "C": 0.52
+        },
+        "exploratory": {
+          "A": 0.79,
+          "B": 0.64,
+          "C": 0.49
+        }
+      },
+      "problemCurves": {
+        "001230-quadratic-equations": {
+          "A": 0.9,
+          "B": 0.75,
+          "C": 0.6
+        }
+      },
+      "overall": {
+        "A": 0.83,
+        "B": 0.69,
+        "C": 0.53
+      }
+    },
+    "curvedReport": {
+      "metadata": {
+        "lang": "zh",
+        "reportId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "eventId": "event-2024-spring-cohort-a",
+        "participantId": "participant-001",
+        "promptSetHash": "3a7bd3e2360a7d9e5f8c1b4a6d9e2f5a8b1c4d7e0f3a6b9c2d5e8f1a4b7c8d9e0f3e",
+        "entries": [
+          {
+            "key": "framework:zh:task-eval",
+            "sha256": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"
+          }
+        ],
+        "dimensionProblemDependency": [
+          {
+            "problemId": "001230-quadratic-equations",
+            "problemVersion": 1,
+            "dimensions": [
+              "representation",
+              "self-verification"
+            ]
+          }
+        ],
+        "createdAt": "2024-03-15T10:30:00Z",
+        "curveId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        "curvedAt": "2024-03-21T09:00:00Z"
+      },
+      "dimensionCards": [
+        {
+          "dimension": "representation",
+          "phrases": "表达能力",
+          "grade": "B"
+        },
+        {
+          "dimension": "self-verification",
+          "phrases": "验证能力",
+          "grade": "B"
+        },
+        {
+          "dimension": "iterative-refinement",
+          "phrases": "迭代优化",
+          "grade": "C"
+        },
+        {
+          "dimension": "discovery",
+          "phrases": "发现能力",
+          "grade": "B"
+        },
+        {
+          "dimension": "exploratory",
+          "phrases": "探索能力",
+          "grade": "B"
+        }
+      ],
+      "dimensionReports": [
+        {
+          "dimension": "representation",
+          "problems": [
+            {
+              "problemId": "001230-quadratic-equations",
+              "phrases": "二次方程",
+              "grade": "B"
+            }
+          ],
+          "summary": "表达能力总结",
+          "score": 0.78,
+          "grade": "B"
+        }
+      ],
+      "overall": {
+        "bad": [
+          {
+            "title": "粗心",
+            "description": "计算有误"
+          }
+        ],
+        "good": [
+          {
+            "title": "清晰",
+            "description": "表达清晰"
+          }
+        ],
+        "improvements": [
+          {
+            "title": "验证",
+            "description": "加强验证"
+          }
+        ],
+        "overview": "总体良好"
+      },
+      "problemCards": [
+        {
+          "problemId": "001230-quadratic-equations",
+          "grade": "B"
+        }
+      ],
+      "problemReports": [
+        {
+          "bad": [
+            "小错误"
+          ],
+          "dimensionDetails": [
+            {
+              "dimension": "representation",
+              "proofs": [
+                {
+                  "comment": "好",
+                  "isStrength": true,
+                  "observation": "清晰"
+                }
+              ],
+              "summary": "表达良好",
+              "score": 0.82,
+              "grade": "B"
+            }
+          ],
+          "good": [
+            "思路清晰"
+          ],
+          "problemId": "001230-quadratic-equations",
+          "overview": "完成度高",
+          "score": 0.75,
+          "grade": "B"
+        }
+      ],
+      "taskEvalMean": 0.75,
+      "abilityMean": 0.72,
+      "overallMean": 0.73,
+      "grade": "B"
+    }
+  },
+  "master_schema": {
+    "jsonScores": {
+      "scores_id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "event_id": "event-2024-spring-cohort-a",
+      "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+      "generated_at": "2024-03-15T10:30:00Z",
+      "participant_id": "participant-001",
+      "totals": {
+        "total_problem_score": 0.75,
+        "total_ability_score": 0.72,
+        "final_total_score": 0.73
+      },
+      "ability_scores": [
+        {
+          "dimension": "Discovery-Self-Understanding",
+          "score": 0.78
+        },
+        {
+          "dimension": "Expression-Translation",
+          "score": 0.72
+        },
+        {
+          "dimension": "Exploratory-Discovery",
+          "score": 0.68
+        },
+        {
+          "dimension": "Verification-Confirmation",
+          "score": 0.75
+        },
+        {
+          "dimension": "Iterative-Optimization",
+          "score": 0.7
+        }
+      ],
+      "problem_scores": [
+        {
+          "problem_id": "001230",
+          "task_score": 0.75,
+          "dimension_scores": [
+            {
+              "dimension": "Discovery-Self-Understanding",
+              "score": 0.82
+            },
+            {
+              "dimension": "Expression-Translation",
+              "score": 0.65
+            }
+          ]
+        },
+        {
+          "problem_id": "001241",
+          "task_score": 0.7,
+          "dimension_scores": [
+            {
+              "dimension": "Iterative-Optimization",
+              "score": 0.72
+            },
+            {
+              "dimension": "Exploratory-Discovery",
+              "score": 0.68
+            }
+          ]
+        }
+      ]
+    },
+    "curve": {
+      "curve_id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "label": "2024 Spring Cohort Curve",
+      "source_event_ids": [
+        "event-2024-spring-cohort-a",
+        "event-2024-spring-cohort-b"
+      ],
+      "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+      "dimension_problem_dependency": [
+        {
+          "problem_id": "001230",
+          "problem_version": 1,
+          "dimensions": [
+            "Discovery-Self-Understanding",
+            "Expression-Translation"
+          ]
+        }
+      ],
+      "method": {
+        "type": "standard_deviation",
+        "sigma_boundaries": [
+          1,
+          0,
+          -1
+        ]
+      },
+      "sample_size": 150,
+      "computed_at": "2024-03-20T14:00:00Z",
+      "totals": {
+        "total_problem": {
+          "A": 0.85,
+          "B": 0.7,
+          "C": 0.55
+        },
+        "total_ability": {
+          "A": 0.82,
+          "B": 0.68,
+          "C": 0.52
+        },
+        "final_total": {
+          "A": 0.83,
+          "B": 0.69,
+          "C": 0.53
+        }
+      },
+      "ability_curves": {
+        "Discovery-Self-Understanding": {
+          "A": 0.88,
+          "B": 0.72,
+          "C": 0.56
+        },
+        "Expression-Translation": {
+          "A": 0.8,
+          "B": 0.65,
+          "C": 0.5
+        },
+        "Exploratory-Discovery": {
+          "A": 0.85,
+          "B": 0.7,
+          "C": 0.55
+        },
+        "Verification-Confirmation": {
+          "A": 0.82,
+          "B": 0.67,
+          "C": 0.52
+        },
+        "Iterative-Optimization": {
+          "A": 0.79,
+          "B": 0.64,
+          "C": 0.49
+        }
+      },
+      "problem_curves": {
+        "001230": {
+          "A": 0.9,
+          "B": 0.75,
+          "C": 0.6
+        },
+        "001241": {
+          "A": 0.85,
+          "B": 0.7,
+          "C": 0.55
+        }
+      }
+    },
+    "curvedScores": {
+      "curved_scores_id": "d4e5f6a7-b8c9-0123-def0-456789012345",
+      "source_scores_id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "event_id": "event-2024-spring-cohort-a",
+      "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+      "applied_curve_id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "curved_at": "2024-03-21T09:00:00Z",
+      "participant_id": "participant-001",
+      "totals": {
+        "total_problem_score": 0.75,
+        "total_ability_score": 0.72,
+        "final_total_score": 0.73
+      },
+      "ability_scores": [
+        {
+          "dimension": "Discovery-Self-Understanding",
+          "score": 0.78
+        },
+        {
+          "dimension": "Expression-Translation",
+          "score": 0.72
+        },
+        {
+          "dimension": "Exploratory-Discovery",
+          "score": 0.68
+        },
+        {
+          "dimension": "Verification-Confirmation",
+          "score": 0.75
+        },
+        {
+          "dimension": "Iterative-Optimization",
+          "score": 0.7
+        }
+      ],
+      "problem_scores": [
+        {
+          "problem_id": "001230",
+          "task_score": 0.75,
+          "dimension_scores": [
+            {
+              "dimension": "Discovery-Self-Understanding",
+              "score": 0.82
+            },
+            {
+              "dimension": "Expression-Translation",
+              "score": 0.65
+            }
+          ]
+        }
+      ],
+      "letter_grades": {
+        "totals": {
+          "total_problem_grade": "B",
+          "total_ability_grade": "B",
+          "final_total_grade": "B"
+        },
+        "abilities": {
+          "Discovery-Self-Understanding": "B",
+          "Expression-Translation": "B",
+          "Exploratory-Discovery": "C",
+          "Verification-Confirmation": "B",
+          "Iterative-Optimization": "B"
+        },
+        "problems": {
+          "001230": "B"
+        },
+        "dimension_details": {
+          "001230": {
+            "Discovery-Self-Understanding": "B",
+            "Expression-Translation": "C"
+          }
+        }
+      }
+    },
+    "scorePool": {
+      "pool_id": "e5f6a7b8-c9d0-1234-ef01-567890123456",
+      "label": "2024 Spring Combined Pool",
+      "source_event_ids": [
+        "event-2024-spring-cohort-a",
+        "event-2024-spring-cohort-b"
+      ],
+      "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+      "problem_ids": [
+        "001230",
+        "001241"
+      ],
+      "dimension_problem_dependency": [
+        {
+          "problem_id": "001230",
+          "problem_version": 1,
+          "dimensions": [
+            "Discovery-Self-Understanding",
+            "Expression-Translation"
+          ]
+        },
+        {
+          "problem_id": "001241",
+          "problem_version": 2,
+          "dimensions": [
+            "Iterative-Optimization",
+            "Exploratory-Discovery"
+          ]
+        }
+      ],
+      "created_at": "2024-03-18T12:00:00Z",
+      "scores": [
+        {
+          "scores_id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+          "event_id": "event-2024-spring-cohort-a",
+          "prompt_version_hash": "7a8b9c0d1e2f3a4b",
+          "generated_at": "2024-03-15T10:30:00Z",
+          "participant_id": "participant-001",
+          "totals": {
+            "total_problem_score": 0.75,
+            "total_ability_score": 0.72,
+            "final_total_score": 0.73
+          },
+          "ability_scores": [
+            {
+              "dimension": "Discovery-Self-Understanding",
+              "score": 0.78
+            },
+            {
+              "dimension": "Expression-Translation",
+              "score": 0.72
+            },
+            {
+              "dimension": "Exploratory-Discovery",
+              "score": 0.68
+            },
+            {
+              "dimension": "Verification-Confirmation",
+              "score": 0.75
+            },
+            {
+              "dimension": "Iterative-Optimization",
+              "score": 0.7
+            }
+          ],
+          "problem_scores": [
+            {
+              "problem_id": "001230",
+              "task_score": 0.75,
+              "dimension_scores": [
+                {
+                  "dimension": "Discovery-Self-Understanding",
+                  "score": 0.82
+                },
+                {
+                  "dimension": "Expression-Translation",
+                  "score": 0.65
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
