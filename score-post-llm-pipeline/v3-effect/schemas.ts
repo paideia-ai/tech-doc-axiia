@@ -1,19 +1,17 @@
 /**
- * Score Post-LLM Pipeline — Effect Schema (FP-native) v2
- *
- * Changes from v1:
+ * Score Post-LLM Pipeline — Effect Schema (FP-native) v3
  *
  * 1. RECORD + OPTION — Per-problem dimension scores/grades use
- *    Record<Dimension, Option>. All 5 keys present; untested dims = None
- *    (null in JSON). Distinguishes "not measured" from "data missing."
+ *    Record<Dimension, Option>. All 5 keys present; untested dims = None.
  *
- * 2. DERIVED TOTALS — ability_scores and totals are NOT stored in JSONScores.
- *    They're pure numeric aggregations computed from problem_scores.
- *    Grade aggregates (ability_grades, total_grades) ARE stored in CurvedScores
- *    because they require the curve function to produce.
+ * 2. SCHEMA-LEVEL DERIVATION — ability_scores and totals are computed getters
+ *    on the JSONScores class. They're part of the decoded type but NOT stored
+ *    in JSON (Schema.Class only encodes declared fields).
  *
- * 3. COMPOSITION — CurvedScores wraps JSONScores (via source).
- *    Numeric scores live in one place.
+ * 3. EMBEDDED DimMap — ProblemDimensionMap is embedded directly (not by UUID).
+ *    JSONScores is self-contained.
+ *
+ * 4. COMPOSITION — CurvedScores wraps JSONScores (via source).
  *
  * Scope: JSONScores, CurvedScores, ProblemDimensionMap, and their dependencies.
  * Curve, ScorePool, EventConfig are not yet ported.
@@ -94,7 +92,7 @@ export const ProblemDimensionMap = Schema.Struct({
 export type ProblemDimensionMap = typeof ProblemDimensionMap.Type;
 
 // =============================================================================
-// 4. Score Components — per-problem only (aggregates are derived)
+// 4. Score Components
 // =============================================================================
 
 /**
@@ -112,23 +110,68 @@ export const ProblemScore = Schema.Struct({
 export type ProblemScore = typeof ProblemScore.Type;
 
 // =============================================================================
-// 5. JSONScores — pre-curve, minimal stored data
+// 5. JSONScores — Schema.Class with derived getters
 //
-// ONLY per-problem scores are stored. Derived values:
-//   ability_scores  = mean per dimension across problems  → computeAbilityScores()
-//   totals          = means of task_scores / ability_scores → computeScoreTotals()
+// Stored fields (JSON): scores_id, event_id, ..., problem_scores
+// Derived getters:      ability_scores, totals
+//
+// Getters are part of the decoded type but NOT serialized.
+// Schema.Class only encodes declared fields.
+//
+// Formulas:
+//   ability_scores[dim]  = arithmetic mean of that dim across mapped problems
+//   total_problem_score  = arithmetic mean of task_scores
+//   total_ability_score  = arithmetic mean of the 5 ability scores
+//   final_total_score    = geometric mean: √(problem × ability)
 // =============================================================================
 
-export const JSONScores = Schema.Struct({
+/** Arithmetic mean. Returns 0 for empty input. */
+const mean = (values: readonly number[]): number =>
+  values.length === 0 ? 0 : values.reduce((a, b) => a + b, 0) / values.length;
+
+/** Geometric mean of two non-negative numbers: √(a × b) */
+const geoMean2 = (a: number, b: number): number => Math.sqrt(a * b);
+
+const toScoreValue = Schema.decodeSync(ScoreValue);
+
+export class JSONScores extends Schema.Class<JSONScores>("JSONScores")({
   scores_id: Schema.UUID,
   event_id: EventId,
   prompt_version_hash: PromptVersionHash,
-  dimension_map_id: Schema.UUID,
+  dimension_map: ProblemDimensionMap,
   generated_at: Schema.DateTimeUtc,
   participant_id: Schema.String.pipe(Schema.minLength(1)),
   problem_scores: Schema.Array(ProblemScore),
-});
-export type JSONScores = typeof JSONScores.Type;
+}) {
+  /** Per-dimension arithmetic mean across mapped problems (skip None) */
+  get ability_scores(): { readonly [K in Dimension]: ScoreValue } {
+    const entries = DIMENSIONS.map((dim) => {
+      const values = this.problem_scores
+        .map((p) => p.dimension_scores[dim])
+        .filter(Option.isSome)
+        .map((o) => o.value);
+      return [dim, toScoreValue(mean(values))] as const;
+    });
+    return Object.fromEntries(entries) as {
+      readonly [K in Dimension]: ScoreValue;
+    };
+  }
+
+  /** Derived totals from problem_scores */
+  get totals() {
+    const abilities = this.ability_scores;
+    const totalProblem = toScoreValue(
+      mean(this.problem_scores.map((p) => p.task_score))
+    );
+    const totalAbility = toScoreValue(mean(Object.values(abilities)));
+    const finalTotal = toScoreValue(geoMean2(totalProblem, totalAbility));
+    return {
+      total_problem_score: totalProblem,
+      total_ability_score: totalAbility,
+      final_total_score: finalTotal,
+    } as const;
+  }
+}
 
 // =============================================================================
 // 6. Grades — per-problem grades use Record + Option (mirrors scores)
@@ -170,46 +213,6 @@ export const CurvedScores = Schema.Struct({
   total_grades: TotalGrades,
 });
 export type CurvedScores = typeof CurvedScores.Type;
-
-// =============================================================================
-// 8. Derived score computations (pure functions)
-// =============================================================================
-
-const mean = (values: readonly number[]): number =>
-  values.length === 0 ? 0 : values.reduce((a, b) => a + b, 0) / values.length;
-
-const toScoreValue = Schema.decodeSync(ScoreValue);
-
-/** Aggregate per-dimension scores across all problems (skip None) */
-export const computeAbilityScores = (
-  scores: JSONScores
-): { readonly [K in Dimension]: ScoreValue } => {
-  const entries = DIMENSIONS.map((dim) => {
-    const values = scores.problem_scores
-      .map((p) => p.dimension_scores[dim])
-      .filter(Option.isSome)
-      .map((o) => o.value);
-    return [dim, toScoreValue(mean(values))] as const;
-  });
-  return Object.fromEntries(entries) as {
-    readonly [K in Dimension]: ScoreValue;
-  };
-};
-
-/** Compute all three totals from problem_scores */
-export const computeScoreTotals = (scores: JSONScores) => {
-  const abilities = computeAbilityScores(scores);
-  const totalProblem = toScoreValue(
-    mean(scores.problem_scores.map((p) => p.task_score))
-  );
-  const totalAbility = toScoreValue(mean(Object.values(abilities)));
-  const finalTotal = toScoreValue(mean([totalProblem, totalAbility]));
-  return {
-    total_problem_score: totalProblem,
-    total_ability_score: totalAbility,
-    final_total_score: finalTotal,
-  };
-};
 
 // =============================================================================
 // Decode / Encode helpers

@@ -1,24 +1,29 @@
 # Effect Schema Explanation
 
-The pipeline transforms raw LLM scores into curved letter grades. This file (`schemas.ts`) defines the data shapes using [Effect Schema](https://effect.website/docs/schema/introduction) with branded types and bidirectional encode/decode.
+The pipeline transforms raw LLM scores into curved letter grades. This file (`schemas.ts`) defines the data shapes using [Effect Schema](https://effect.website/docs/schema/introduction) with branded types and `Schema.Class` for derived getters.
 
-## Design principle: store source data, compute the rest
+## Design principle: store source data, derive the rest as class getters
 
 ```
-problem_scores (stored)  ──→  ability_scores (computed)  ──→  totals (computed)
-       │
-       └──  curve function  ──→  grades (stored, because curve is lossy)
+                     Schema.Class getters
+                    ┌─────────────────────────────┐
+problem_scores ────►│ ability_scores  (get)        │
+    (stored)        │ totals          (get)        │
+                    └─────────────────────────────┘
+                     encode only includes declared fields
 ```
 
-Numeric aggregations (ability scores, totals) are **not stored** — they're derived from per-problem data via pure functions. Grade aggregations (ability grades, total grades) **are stored** because they require the curve function, which can't be replayed from scores alone.
+Derived values are **computed getters** on the `JSONScores` class. Consumers access `scores.ability_scores` and `scores.totals` like regular properties. On encode, only declared schema fields are serialized — getters are excluded automatically.
+
+Grade aggregates (ability_grades, total_grades) **are stored** in CurvedScores because they require the curve function, which can't be replayed from scores alone.
 
 ---
 
 ## Three top-level entities
 
-**ProblemDimensionMap** — which dimensions each problem tests.
-**JSONScores** — per-problem numeric scores. No grades, no totals.
-**CurvedScores** — wraps JSONScores, adds all grades (per-problem + aggregates).
+**ProblemDimensionMap** — which dimensions each problem tests. Embedded directly in JSONScores (not referenced by UUID).
+**JSONScores** — per-problem numeric scores + derived ability_scores and totals.
+**CurvedScores** — wraps JSONScores, adds all grades.
 
 ---
 
@@ -46,7 +51,7 @@ Distinct types at compile time — can't accidentally pass a ProblemId where an 
 
 ## ProblemDimensionMap
 
-Standalone lookup table. Referenced by UUID, not embedded.
+Standalone lookup table. Embedded directly in JSONScores.
 
 ```
 ProblemDimensionMap
@@ -61,39 +66,51 @@ ProblemDimensionMap
 
 ---
 
-## JSONScores (stored — minimal)
+## JSONScores — `Schema.Class` with derived getters
 
-Only per-problem data is stored. No totals, no ability_scores.
+The class has two layers:
+
+**Declared fields (stored in JSON):** metadata + problem_scores.
+**Getters (computed on access):** `ability_scores` + `totals`.
 
 ```
-JSONScores
+JSONScores (decoded type)
 ├── scores_id            : UUID
 ├── event_id             : EventId
 ├── prompt_version_hash  : PromptVersionHash
-├── dimension_map_id     : UUID             ← links to ProblemDimensionMap
+├── dimension_map        : ProblemDimensionMap  ← embedded, self-contained
 ├── generated_at         : DateTimeUtc
 ├── participant_id       : string
-└── problem_scores[]     : ProblemScore
-    ├── problem_id        : ProblemId
-    ├── task_score        : ScoreValue
-    └── dimension_scores  : Record<Dimension, Option<ScoreValue>>
-                            ├── "Discovery-Self-Understanding": 0.85
-                            ├── "Expression-Translation": null     ← not tested
-                            ├── "Exploratory-Discovery": 0.72
-                            ├── "Verification-Confirmation": null  ← not tested
-                            └── "Iterative-Optimization": 0.61
+├── problem_scores[]     : ProblemScore                          ← STORED
+│   ├── problem_id        : ProblemId
+│   ├── task_score        : ScoreValue
+│   └── dimension_scores  : Record<Dimension, Option<ScoreValue>>
+│                           ├── "Discovery-Self-Understanding": 0.85
+│                           ├── "Expression-Translation": null     ← not tested
+│                           ├── "Exploratory-Discovery": 0.72
+│                           ├── "Verification-Confirmation": null  ← not tested
+│                           └── "Iterative-Optimization": 0.61
+├── ability_scores       : Record<Dimension, ScoreValue>         ← DERIVED
+└── totals               : TotalScores                           ← DERIVED
+    ├── total_problem_score  : ScoreValue
+    ├── total_ability_score  : ScoreValue
+    └── final_total_score    : ScoreValue
 ```
 
-All 5 dimension keys are always present. `null` (decoded as `Option.None`) means the problem doesn't test that dimension. A present value (decoded as `Option.Some`) means it does.
+All 5 dimension keys are always present. `null` (decoded as `Option.None`) means the problem doesn't test that dimension.
 
-### What's derived (not stored)
+### Derivation formulas
 
-| Value | Computed by | Logic |
-|-------|-------------|-------|
-| `ability_scores` | `computeAbilityScores()` | For each dimension, mean of `Some` values across all problems |
-| `total_problem_score` | `computeScoreTotals()` | Mean of all `task_score` values |
-| `total_ability_score` | `computeScoreTotals()` | Mean of the 5 ability scores |
-| `final_total_score` | `computeScoreTotals()` | Mean of problem total and ability total |
+| Field | Formula |
+|-------|---------|
+| `ability_scores[dim]` | Arithmetic mean of `Some` values for that dimension across all problems |
+| `totals.total_problem_score` | Arithmetic mean of all `task_score` values |
+| `totals.total_ability_score` | Arithmetic mean of the 5 ability scores |
+| `totals.final_total_score` | **Geometric mean**: `√(problem_total × ability_total)` |
+
+### Encode behavior
+
+`Schema.Class` only encodes declared fields. Getters (`ability_scores`, `totals`) are excluded automatically — only `problem_scores` and metadata are serialized.
 
 ---
 
@@ -118,16 +135,16 @@ CurvedScores
     └── final_total_grade    : LetterGrade
 ```
 
-**Why are grade aggregates stored but score aggregates aren't?**
+**Why are grade aggregates stored but score aggregates derived?**
 
-Score aggregation is a pure numeric mean — lossless and trivially recomputable. Grade aggregation requires the curve function (percentile, standard deviation, etc.), which is an external dependency. Storing them avoids needing the curve at read time.
+Score aggregation is a pure numeric mean — lossless, trivially recomputable, so it lives as a class getter. Grade aggregation requires the curve function (percentile, standard deviation, etc.) — an external dependency that can't be replayed from scores alone.
 
 ---
 
 ## Decode helpers
 
 ```ts
-decodeJSONScores(input)           // unknown → JSONScores (throws on invalid)
+decodeJSONScores(input)           // unknown → JSONScores (with derived fields)
 decodeCurvedScores(input)         // unknown → CurvedScores
 decodeProblemDimensionMap(input)  // unknown → ProblemDimensionMap
 ```
