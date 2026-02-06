@@ -60,7 +60,6 @@ ProblemDimensionMap
 ├── created_at      : DateTimeUtc
 └── entries[]       : DimMapEntry
     ├── problem_id      : ProblemId
-    ├── problem_version : string
     └── dimensions[]    : Dimension      ← subset of the 5
 ```
 

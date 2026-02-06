@@ -22,7 +22,6 @@ const dimMap = {
   entries: [
     {
       problem_id: "100010",
-      problem_version: "2.1",
       dimensions: [
         "Discovery-Self-Understanding",
         "Expression-Translation",
@@ -31,7 +30,6 @@ const dimMap = {
     },
     {
       problem_id: "100020",
-      problem_version: "1.0",
       dimensions: [
         "Discovery-Self-Understanding",
         "Verification-Confirmation",
@@ -40,7 +38,6 @@ const dimMap = {
     },
     {
       problem_id: "100031",
-      problem_version: "3.0",
       dimensions: [
         "Discovery-Self-Understanding",
         "Expression-Translation",

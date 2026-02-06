@@ -78,7 +78,6 @@ export type LetterGrade = typeof LetterGrade.Type;
 
 export const DimMapEntry = Schema.Struct({
   problem_id: ProblemId,
-  problem_version: Schema.String,
   dimensions: Schema.Array(Dimension),
 });
 export type DimMapEntry = typeof DimMapEntry.Type;
