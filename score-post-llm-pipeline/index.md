@@ -11,6 +11,9 @@ Documentation and implementation for the score processing pipeline that transfor
 | `domain-context.md` | Core domain model explaining the score transformation pipeline concepts |
 | `pipeline-design.md` | Technical design document for pipeline architecture |
 | `pipeline-diagram.html` | Visual diagram of the pipeline flow |
+| `pipeline-phases.md` | Documents the 6 pipeline phases (Test Event → LLM Scoring → Score Extraction → Curve Computation → Curve Application → Merge Back) with data flow and where ProblemDimensionMap enters |
+| `data-formats.md` | Plain-English description of ProblemDimensionMap, source (JSONScores), and target (CurvedScores) data formats |
+| `data-format-fixtures.json` | Example ProblemDimensionMap + source/target JSON pair with per-problem dimension subsets |
 
 ### Subdirectories
 
@@ -43,6 +46,8 @@ graph TD
     subgraph "Documentation"
         DC[domain-context.md] --> PD[pipeline-design.md]
         PD --> DIAG[pipeline-diagram.html]
+        PP[pipeline-phases.md] --> DF[data-formats.md]
+        DF --> FIX[data-format-fixtures.json]
     end
 
     subgraph "Implementation"
@@ -57,4 +62,5 @@ graph TD
 
     DC --> SCH
     IP2 --> SCH
+    PD --> PP
 ```

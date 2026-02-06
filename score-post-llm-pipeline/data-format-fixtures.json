@@ -1,0 +1,198 @@
+{
+  "problem_dimension_map": {
+    "_schema": "ProblemDimensionMap",
+    "_description": "Standalone entity defining which dimensions each problem tests. Scoring-phase input.",
+
+    "map_id": "d4e5f6a7-4444-4000-8000-000000000004",
+    "label": "2025-spring-standard",
+    "created_at": "2025-06-01T00:00:00.000Z",
+    "entries": [
+      {
+        "problem_id": "003400",
+        "problem_version": "3.4",
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery",
+          "Verification-Confirmation"
+        ]
+      },
+      {
+        "problem_id": "005000",
+        "problem_version": "5.0",
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Exploratory-Discovery",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      },
+      {
+        "problem_id": "010000",
+        "problem_version": "10.0",
+        "dimensions": [
+          "Expression-Translation",
+          "Exploratory-Discovery",
+          "Iterative-Optimization"
+        ]
+      }
+    ]
+  },
+
+  "source": {
+    "_schema": "JSONScores",
+    "_description": "Pre-curve scores extracted from one LLM evaluation of one participant. No letter grades.",
+
+    "scores_id": "a1b2c3d4-1111-4000-8000-000000000001",
+    "event_id": "event_2025_spring",
+    "prompt_version_hash": "3fa91c7",
+    "dimension_map_id": "d4e5f6a7-4444-4000-8000-000000000004",
+    "generated_at": "2025-06-15T09:30:00.000Z",
+    "participant_id": "student_042",
+
+    "totals": {
+      "total_problem_score": 0.63,
+      "total_ability_score": 0.58,
+      "final_total_score": 0.60
+    },
+
+    "ability_scores": [
+      { "dimension": "Discovery-Self-Understanding",  "score": 0.72 },
+      { "dimension": "Expression-Translation",        "score": 0.55 },
+      { "dimension": "Exploratory-Discovery",         "score": 0.61 },
+      { "dimension": "Verification-Confirmation",     "score": 0.48 },
+      { "dimension": "Iterative-Optimization",        "score": 0.54 }
+    ],
+
+    "problem_scores": [
+      {
+        "problem_id": "003400",
+        "task_score": 0.71,
+        "dimension_scores": [
+          { "dimension": "Discovery-Self-Understanding",  "score": 0.80 },
+          { "dimension": "Expression-Translation",        "score": 0.65 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.58 },
+          { "dimension": "Verification-Confirmation",     "score": 0.42 }
+        ]
+      },
+      {
+        "problem_id": "005000",
+        "task_score": 0.55,
+        "dimension_scores": [
+          { "dimension": "Discovery-Self-Understanding",  "score": 0.64 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.70 },
+          { "dimension": "Verification-Confirmation",     "score": 0.52 },
+          { "dimension": "Iterative-Optimization",        "score": 0.60 }
+        ]
+      },
+      {
+        "problem_id": "010000",
+        "task_score": 0.62,
+        "dimension_scores": [
+          { "dimension": "Expression-Translation",        "score": 0.56 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.55 },
+          { "dimension": "Iterative-Optimization",        "score": 0.52 }
+        ]
+      }
+    ]
+  },
+
+  "target": {
+    "_schema": "CurvedScores",
+    "_description": "Post-curve output. Same numeric scores as source, plus letter grades from applying a curve.",
+
+    "curved_scores_id": "b2c3d4e5-2222-4000-8000-000000000002",
+    "source_scores_id": "a1b2c3d4-1111-4000-8000-000000000001",
+    "event_id": "event_2025_spring",
+    "prompt_version_hash": "3fa91c7",
+    "dimension_map_id": "d4e5f6a7-4444-4000-8000-000000000004",
+    "applied_curve_id": "c3d4e5f6-3333-4000-8000-000000000003",
+    "curved_at": "2025-06-16T14:00:00.000Z",
+    "participant_id": "student_042",
+
+    "totals": {
+      "total_problem_score": 0.63,
+      "total_ability_score": 0.58,
+      "final_total_score": 0.60
+    },
+
+    "ability_scores": [
+      { "dimension": "Discovery-Self-Understanding",  "score": 0.72 },
+      { "dimension": "Expression-Translation",        "score": 0.55 },
+      { "dimension": "Exploratory-Discovery",         "score": 0.61 },
+      { "dimension": "Verification-Confirmation",     "score": 0.48 },
+      { "dimension": "Iterative-Optimization",        "score": 0.54 }
+    ],
+
+    "problem_scores": [
+      {
+        "problem_id": "003400",
+        "task_score": 0.71,
+        "dimension_scores": [
+          { "dimension": "Discovery-Self-Understanding",  "score": 0.80 },
+          { "dimension": "Expression-Translation",        "score": 0.65 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.58 },
+          { "dimension": "Verification-Confirmation",     "score": 0.42 }
+        ]
+      },
+      {
+        "problem_id": "005000",
+        "task_score": 0.55,
+        "dimension_scores": [
+          { "dimension": "Discovery-Self-Understanding",  "score": 0.64 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.70 },
+          { "dimension": "Verification-Confirmation",     "score": 0.52 },
+          { "dimension": "Iterative-Optimization",        "score": 0.60 }
+        ]
+      },
+      {
+        "problem_id": "010000",
+        "task_score": 0.62,
+        "dimension_scores": [
+          { "dimension": "Expression-Translation",        "score": 0.56 },
+          { "dimension": "Exploratory-Discovery",         "score": 0.55 },
+          { "dimension": "Iterative-Optimization",        "score": 0.52 }
+        ]
+      }
+    ],
+
+    "letter_grades": {
+      "totals": {
+        "total_problem_grade": "B",
+        "total_ability_grade": "C",
+        "final_total_grade": "B"
+      },
+      "abilities": {
+        "Discovery-Self-Understanding": "A",
+        "Expression-Translation": "C",
+        "Exploratory-Discovery": "B",
+        "Verification-Confirmation": "C",
+        "Iterative-Optimization": "C"
+      },
+      "problems": {
+        "003400": "A",
+        "005000": "B",
+        "010000": "B"
+      },
+      "dimension_details": {
+        "003400": {
+          "Discovery-Self-Understanding": "A",
+          "Expression-Translation": "B",
+          "Exploratory-Discovery": "B",
+          "Verification-Confirmation": "C"
+        },
+        "005000": {
+          "Discovery-Self-Understanding": "B",
+          "Exploratory-Discovery": "A",
+          "Verification-Confirmation": "C",
+          "Iterative-Optimization": "B"
+        },
+        "010000": {
+          "Expression-Translation": "C",
+          "Exploratory-Discovery": "B",
+          "Iterative-Optimization": "C"
+        }
+      }
+    }
+  }
+}
