@@ -19,7 +19,7 @@ Documentation and implementation for the score processing pipeline that transfor
 
 | Directory | Description |
 |-----------|-------------|
-| `scripts/` | Working TypeScript implementations (schema docs generator, e2e tests) |
+| `scripts/` | Working TypeScript implementations (Zod schemas, Effect Schema FP-native schemas, docs generator, e2e tests) |
 | `ip/` | Iteration plans documenting design decisions and changes |
 | `comment/` | Review comments and feedback |
 | `archive/` | Historical documents from initial design phase |
@@ -53,6 +53,8 @@ graph TD
     subgraph "Implementation"
         SCH[scripts/schemas.ts] --> GEN[scripts/generate-schema-docs.ts]
         GEN --> HTML[scripts/schema-docs-generated.html]
+        ESCH[scripts/schemas-effect.ts]
+        SCH -. "FP-native port" .-> ESCH
     end
 
     subgraph "Planning"
