@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "generate:docs": "npx tsx generate-schema-docs.ts",
-    "test:e2e": "npx playwright test"
+    "generate:docs": "npx tsx v2-zod/generate-schema-docs.ts",
+    "test:e2e": "cd v2-zod && npx playwright test"
   },
   "dependencies": {
     "effect": "^3.19.16",

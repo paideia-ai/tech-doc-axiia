@@ -1,6 +1,6 @@
 # Generated data - do not commit
-synthetic-data/
-pipeline-output/
+v2-zod/synthetic-data/
+v2-zod/pipeline-output/
 
 # Dependencies
 node_modules/
@@ -9,7 +9,7 @@ node_modules/
 package-lock.json
 
 # Playwright
-test-results/
-playwright-report/
-.playwright/
-schema-docs-screenshot.png
+v2-zod/test-results/
+v2-zod/playwright-report/
+v2-zod/.playwright/
+v2-zod/schema-docs-screenshot.png

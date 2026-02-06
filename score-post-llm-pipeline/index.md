@@ -19,7 +19,9 @@ Documentation and implementation for the score processing pipeline that transfor
 
 | Directory | Description |
 |-----------|-------------|
-| `scripts/` | Working TypeScript implementations (Zod schemas, Effect Schema FP-native schemas, docs generator, e2e tests) |
+| `v1-vitest/` | Attempt 1: standalone vitest-based schema verification (own package.json) |
+| `v2-zod/` | Attempt 2: Zod schemas, docs generator, Playwright e2e tests, synthetic data |
+| `v3-effect/` | Attempt 3: Effect Schema FP-native port of the pipeline schemas |
 | `ip/` | Iteration plans documenting design decisions and changes |
 | `comment/` | Review comments and feedback |
 | `archive/` | Historical documents from initial design phase |
@@ -51,9 +53,9 @@ graph TD
     end
 
     subgraph "Implementation"
-        SCH[scripts/schemas.ts] --> GEN[scripts/generate-schema-docs.ts]
-        GEN --> HTML[scripts/schema-docs-generated.html]
-        ESCH[scripts/schemas-effect.ts]
+        SCH[v2-zod/schemas.ts] --> GEN[v2-zod/generate-schema-docs.ts]
+        GEN --> HTML[v2-zod/schema-docs-generated.html]
+        ESCH[v3-effect/schemas.ts]
         SCH -. "FP-native port" .-> ESCH
     end
 
