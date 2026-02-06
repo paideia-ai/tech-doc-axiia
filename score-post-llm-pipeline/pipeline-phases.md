@@ -48,7 +48,7 @@ These are independent: you can iterate the prompt without changing the dimension
 
 ### 3. Score Extraction
 
-Parse the complete LLM report to extract structured numeric scores into a **JSONScores** object. The extracted object records both `prompt_version_hash` and `dimension_map_id` as provenance metadata — these are the parameters that shaped the LLM's scoring.
+Parse the complete LLM report to extract structured numeric scores into a **JSONScores** object. The extracted object records `prompt_version_hash` and embeds the full `dimension_map` (ProblemDimensionMap) as provenance metadata — these are the parameters that shaped the LLM's scoring.
 
 | | |
 |---|---|
@@ -72,7 +72,7 @@ Both ScorePool and Curve embed a snapshot of the ProblemDimensionMap for consist
 
 Apply the Curve to a single JSONScores to produce **CurvedScores** — the same numeric scores plus letter grades (A/B/C/D) for every score category.
 
-The `dimension_map_id` is inherited from the source JSONScores. Grade keys in `dimension_details` match exactly the dimensions listed in the map for each problem.
+The `dimension_map` is inherited from the source JSONScores. Grade keys in `dimension_grades` match exactly the dimensions listed in the map for each problem.
 
 | | |
 |---|---|
@@ -100,13 +100,13 @@ The ProblemDimensionMap is a **scoring-phase input** — it tells the LLM which 
 Phase 2 (LLM Scoring)
   ↓ shapes what dimension_scores the LLM produces per problem
 Phase 3 (Score Extraction)
-  ↓ dimension_map_id recorded as provenance in JSONScores
+  ↓ dimension_map embedded as provenance in JSONScores
 Phase 4 (Curve Computation)
   ↓ snapshot embedded in ScorePool and Curve for compatibility checks
 Phase 5 (Curve Application)
-  ↓ dimension_map_id inherited by CurvedScores; dimension_details keys follow the map
+  ↓ dimension_map inherited by CurvedScores; dimension_grades keys follow the map
 ```
 
 ### Key invariant
 
-Per-problem `dimension_scores` arrays contain **only the dimensions listed in the map** for that problem — not necessarily all five. However, `ability_scores` always has all five dimensions because it aggregates across all problems.
+Per-problem `dimension_scores` use Record + Option: all 5 dimension keys are present, but untested dimensions are `None` (null in JSON). `ability_scores` always has all 5 dimensions because it aggregates across all problems (skipping `None` values).

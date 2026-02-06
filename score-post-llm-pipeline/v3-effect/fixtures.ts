@@ -21,7 +21,7 @@ const dimMap = {
   created_at: "2024-03-01T00:00:00Z",
   entries: [
     {
-      problem_id: "100010",
+      problem_id: { digit: "000340", name: "meeting-verify" },
       dimensions: [
         "Discovery-Self-Understanding",
         "Expression-Translation",
@@ -29,7 +29,7 @@ const dimMap = {
       ],
     },
     {
-      problem_id: "100020",
+      problem_id: { digit: "000500", name: "thinking-traps" },
       dimensions: [
         "Discovery-Self-Understanding",
         "Verification-Confirmation",
@@ -37,7 +37,7 @@ const dimMap = {
       ],
     },
     {
-      problem_id: "100031",
+      problem_id: { digit: "001001", name: "ling-bing" },
       dimensions: [
         "Discovery-Self-Understanding",
         "Expression-Translation",
@@ -64,8 +64,8 @@ export const jsonScoresStored = {
   participant_id: "student-0042",
   problem_scores: [
     {
-      // Problem 100010: tests Discovery, Expression, Exploratory
-      problem_id: "100010",
+      // meeting-verify: tests Discovery, Expression, Exploratory
+      problem_id: { digit: "000340", name: "meeting-verify" },
       task_score: 0.8,
       dimension_scores: {
         "Discovery-Self-Understanding": 0.85,
@@ -76,8 +76,8 @@ export const jsonScoresStored = {
       },
     },
     {
-      // Problem 100020: tests Discovery, Verification, Iterative
-      problem_id: "100020",
+      // thinking-traps: tests Discovery, Verification, Iterative
+      problem_id: { digit: "000500", name: "thinking-traps" },
       task_score: 0.75,
       dimension_scores: {
         "Discovery-Self-Understanding": 0.9,
@@ -88,8 +88,8 @@ export const jsonScoresStored = {
       },
     },
     {
-      // Problem 100031: tests all 5
-      problem_id: "100031",
+      // ling-bing: tests all 5
+      problem_id: { digit: "001001", name: "ling-bing" },
       task_score: 0.82,
       dimension_scores: {
         "Discovery-Self-Understanding": 0.88,
@@ -131,7 +131,7 @@ export const curvedScoresStored = {
   curved_at: "2024-03-15T15:00:00Z",
   problem_grades: [
     {
-      problem_id: "100010",
+      problem_id: { digit: "000340", name: "meeting-verify" },
       task_grade: "B",
       dimension_grades: {
         "Discovery-Self-Understanding": "A",
@@ -142,7 +142,7 @@ export const curvedScoresStored = {
       },
     },
     {
-      problem_id: "100020",
+      problem_id: { digit: "000500", name: "thinking-traps" },
       task_grade: "B",
       dimension_grades: {
         "Discovery-Self-Understanding": "A",
@@ -153,7 +153,7 @@ export const curvedScoresStored = {
       },
     },
     {
-      problem_id: "100031",
+      problem_id: { digit: "001001", name: "ling-bing" },
       task_grade: "A",
       dimension_grades: {
         "Discovery-Self-Understanding": "A",

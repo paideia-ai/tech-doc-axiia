@@ -29,11 +29,13 @@ Grade aggregates (ability_grades, total_grades) **are stored** in CurvedScores b
 
 ## Branded primitives
 
-Distinct types at compile time — can't accidentally pass a ProblemId where an EventId is expected.
+Distinct types at compile time — can't accidentally pass a ProblemDigitId where an EventId is expected.
+
+`ProblemId` is a struct with two fields: `digit: ProblemDigitId` (stable key) + `name: string` (mutable human label). The digit never changes; the name can be updated without breaking references.
 
 | Type | Underlying | Constraint |
 |------|-----------|------------|
-| `ProblemId` | string | 6 digits; last digit `0` (zh) or `1` (en) |
+| `ProblemDigitId` | string | 6 digits; last digit `0` (zh) or `1` (en) |
 | `PromptVersionHash` | string | 7–40 hex chars (git short/full hash) |
 | `ScoreValue` | number | `[0, 1]` inclusive |
 | `EventId` | string | non-empty |
@@ -59,7 +61,7 @@ ProblemDimensionMap
 ├── label           : string
 ├── created_at      : DateTimeUtc
 └── entries[]       : DimMapEntry
-    ├── problem_id      : ProblemId
+    ├── problem_id      : { digit: ProblemDigitId, name: string }
     └── dimensions[]    : Dimension      ← subset of the 5
 ```
 

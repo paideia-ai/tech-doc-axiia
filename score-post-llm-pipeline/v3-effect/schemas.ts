@@ -23,14 +23,21 @@ import { Schema, Option } from "effect";
 // 1. Branded Primitives
 // =============================================================================
 
-/** 6-digit string, last digit 0|1 (language) */
-export const ProblemId = Schema.String.pipe(
+/** Stable 6-digit identifier, last digit 0|1 (language: 0=zh, 1=en) */
+export const ProblemDigitId = Schema.String.pipe(
   Schema.pattern(/^\d{6}$/),
   Schema.filter((s) => s[5] === "0" || s[5] === "1", {
     message: () => "Last digit must be 0 (zh) or 1 (en)",
   }),
-  Schema.brand("ProblemId")
+  Schema.brand("ProblemDigitId")
 );
+export type ProblemDigitId = typeof ProblemDigitId.Type;
+
+/** Two-part problem identifier: stable digit key + mutable human name */
+export const ProblemId = Schema.Struct({
+  digit: ProblemDigitId,
+  name: Schema.String,
+});
 export type ProblemId = typeof ProblemId.Type;
 
 /** Git commit hash, 7–40 hex chars */

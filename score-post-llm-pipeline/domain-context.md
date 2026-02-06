@@ -39,39 +39,49 @@
 
 ## 1. Test Structure
 
-### 1.1 Problems and Dimensions
+### 1.1 Problems
 
-- **Problems**: Selected from a large pool for each test event
-  - Each problem has a unique `problem_id`
-  - Problems are the actual tasks/challenges participants complete
+Each problem has a two-part identifier:
+- **`digit`** — stable 6-digit ID (last digit: `0`=zh, `1`=en). Never changes.
+- **`name`** — human-readable slug (e.g., `meeting-verify`). Can be renamed.
 
-- **Dimensions**: Fixed set of 5 ability dimensions
-  - `discovery` - 发现与自我理解
-  - `representation` - 表达与转译
-  - `iterative-refinement` - 迭代与反馈
-  - `exploratory` - 探索式发现
-  - `self-verification` - 验证
+Example: `{ digit: "000340", name: "meeting-verify" }`
 
-- **Problem-Dimension Relationship**:
-  - **Customizable** many-to-many mapping
-  - Not all dimensions apply to all problems
-  - A problem may relate to multiple dimensions
-  - A dimension may be measured across multiple problems
-  - This can be an injection or surjection (flexible relationship)
+Problems are selected from a large pool for each test event.
+
+### 1.2 Dimensions
+
+Fixed set of 5 ability dimensions:
+
+| ID | Description |
+|----|-------------|
+| `Discovery-Self-Understanding` | 发现与自我理解 |
+| `Expression-Translation` | 表达与转译 |
+| `Exploratory-Discovery` | 探索式发现 |
+| `Verification-Confirmation` | 验证与确认 |
+| `Iterative-Optimization` | 迭代优化 |
+
+### 1.3 Problem-Dimension Relationship
+
+- **Customizable** many-to-many mapping (ProblemDimensionMap)
+- Not all dimensions apply to all problems
+- A problem may relate to multiple dimensions
+- A dimension may be measured across multiple problems
+- This can be an injection or surjection (flexible relationship)
 
 ```
-Problems          Dimensions
-┌─────────┐       ┌─────────────────────────┐
-│ Prob 1  │──────►│ discovery               │
-│         │──────►│ representation          │
-├─────────┤       ├─────────────────────────┤
-│ Prob 2  │──────►│ iterative-refinement    │
-│         │──────►│ exploratory             │
-├─────────┤       ├─────────────────────────┤
-│ Prob 3  │──────►│ exploratory             │
-│         │──────►│ self-verification       │
-│         │──────►│ representation          │
-└─────────┘       └─────────────────────────┘
+Problems                    Dimensions
+┌────────────────────┐      ┌──────────────────────────────┐
+│ 000340             │─────►│ Discovery-Self-Understanding │
+│ meeting-verify     │─────►│ Expression-Translation       │
+├────────────────────┤      ├──────────────────────────────┤
+│ 000500             │─────►│ Discovery-Self-Understanding │
+│ thinking-traps     │─────►│ Verification-Confirmation    │
+│                    │─────►│ Iterative-Optimization       │
+├────────────────────┤      ├──────────────────────────────┤
+│ 001001             │─────►│ (all 5 dimensions)           │
+│ ling-bing          │      │                              │
+└────────────────────┘      └──────────────────────────────┘
 ```
 
 ## 2. Scoring Structure
@@ -83,18 +93,17 @@ For each participant, we compute:
 #### Problem-Level Scores
 ```
 For each Problem:
-  ├── Problem Score (objective): Score for final submission
-  └── Ability Scores (per related dimension only):
-        ├── Dimension A score (if Problem relates to Dim A)
-        ├── Dimension B score (if Problem relates to Dim B)
-        └── ... (only related dimensions)
+  ├── task_score (objective): Score for final submission [0, 1]
+  └── dimension_scores: Record<Dimension, Option<ScoreValue>>
+        All 5 keys present; untested dims = None (null in JSON)
 ```
 
-#### Aggregated Scores
+#### Aggregated Scores (derived, not stored)
 ```
-Total Problem Score = Average of all Problem Scores
-Total Ability Score = Average of all Dimension Scores (across all problems)
-Final Total Score   = Geometric Mean(Total Problem Score, Total Ability Score)
+ability_scores[dim]  = arithmetic mean of that dim across mapped problems
+total_problem_score  = arithmetic mean of all task_scores
+total_ability_score  = arithmetic mean of the 5 ability scores
+final_total_score    = geometric mean: √(problem × ability)
 ```
 
 ### 2.2 Score Hierarchy
@@ -102,33 +111,42 @@ Final Total Score   = Geometric Mean(Total Problem Score, Total Ability Score)
 ```
 Participant
 ├── Per-Problem
-│   ├── Problem 1
-│   │   ├── problem_score: 0.75 (objective score)
+│   ├── 000340 meeting-verify
+│   │   ├── task_score: 0.80
 │   │   └── dimension_scores:
-│   │       ├── verification: 0.80
-│   │       └── critical_thinking: 0.70
-│   ├── Problem 2
-│   │   ├── problem_score: 0.65
+│   │       ├── Discovery-Self-Understanding: 0.85
+│   │       ├── Expression-Translation: 0.78
+│   │       ├── Exploratory-Discovery: 0.72
+│   │       ├── Verification-Confirmation: null  ← not tested
+│   │       └── Iterative-Optimization: null     ← not tested
+│   ├── 000500 thinking-traps
+│   │   ├── task_score: 0.75
 │   │   └── dimension_scores:
-│   │       ├── verification: 0.60
-│   │       └── communication: 0.70
-│   └── Problem 3
-│       ├── problem_score: 0.85
+│   │       ├── Discovery-Self-Understanding: 0.90
+│   │       ├── Expression-Translation: null
+│   │       ├── Exploratory-Discovery: null
+│   │       ├── Verification-Confirmation: 0.65
+│   │       └── Iterative-Optimization: 0.70
+│   └── 001001 ling-bing
+│       ├── task_score: 0.82
 │       └── dimension_scores:
-│           ├── critical_thinking: 0.90
-│           ├── communication: 0.80
-│           └── collaboration: 0.85
+│           ├── Discovery-Self-Understanding: 0.88
+│           ├── Expression-Translation: 0.82
+│           ├── Exploratory-Discovery: 0.79
+│           ├── Verification-Confirmation: 0.71
+│           └── Iterative-Optimization: 0.68
 │
-├── Per-Dimension (aggregated across problems)
-│   ├── verification: avg(0.80, 0.60) = 0.70
-│   ├── critical_thinking: avg(0.70, 0.90) = 0.80
-│   ├── communication: avg(0.70, 0.80) = 0.75
-│   └── collaboration: 0.85 (only one problem)
+├── Ability Scores (derived: mean per dim across problems)
+│   ├── Discovery-Self-Understanding: mean(0.85, 0.90, 0.88) = 0.877
+│   ├── Expression-Translation: mean(0.78, 0.82) = 0.800
+│   ├── Exploratory-Discovery: mean(0.72, 0.79) = 0.755
+│   ├── Verification-Confirmation: mean(0.65, 0.71) = 0.680
+│   └── Iterative-Optimization: mean(0.70, 0.68) = 0.690
 │
-├── Totals
-│   ├── total_problem_score: avg(0.75, 0.65, 0.85) = 0.75
-│   ├── total_ability_score: avg(0.70, 0.80, 0.75, 0.85) = 0.775
-│   └── final_total_score: √(0.75 × 0.775) = 0.762 (geometric mean)
+├── Totals (derived)
+│   ├── total_problem_score: mean(0.80, 0.75, 0.82) = 0.790
+│   ├── total_ability_score: mean(0.877, 0.800, 0.755, 0.680, 0.690) = 0.760
+│   └── final_total_score: √(0.790 × 0.760) = 0.775 (geometric mean)
 ```
 
 ## 3. Curve Computation
@@ -230,11 +248,9 @@ Group A Curve ──────► Group B
 2. ASSESSMENT (LLM Scoring)
    ┌─────────────────────────────────────────────────────────────┐
    │ For each participant:                                       │
-   │   → Score each problem (objective score)                    │
+   │   → Score each problem (task_score)                         │
    │   → Score each related dimension per problem                │
-   │   → Aggregate to dimension totals                           │
-   │   → Compute total_problem_score, total_ability_score        │
-   │   → Compute final_total_score (geometric mean)              │
+   │   → Ability scores + totals are derived (not stored)        │
    │                                                             │
    │ Output: JSONScores (no letter_grades field)                 │
    └─────────────────────────────────────────────────────────────┘
@@ -264,27 +280,26 @@ Group A Curve ──────► Group B
 
 ## Schema Alignment Check
 
-Based on this domain context, verify the schemas capture:
+Based on this domain context, verify the v3-effect schemas capture:
 
-| Domain Concept | Schema Location | Status |
-|----------------|-----------------|--------|
-| Problem-Dimension mapping | `DimensionDependencyConfig` | ✅ |
-| Problem score (objective) | `ProblemScoreSchema.objective_score` | ✅ |
-| Dimension scores per problem | `ProblemScoreSchema.dimension_scores` | ✅ |
-| Aggregated dimension scores | `JSONScoresSchema.ability_scores` | ✅ |
-| Total problem score | `TotalScoresSchema.total_problem_score` | ✅ |
-| Total ability score | `TotalScoresSchema.total_ability_score` | ✅ |
-| Final total (geometric mean) | `TotalScoresSchema.final_total_score` | ✅ |
-| Curve method (std dev) | `CurveMethod.standard_deviation` | ✅ |
-| Compatibility check | `CompatibilityResult` | ✅ |
-| Prompt version tracking | `prompt_version_hash` | ✅ |
-| Pre-curve output (no grades) | `JSONScoresSchema` | ✅ |
-| Post-curve output (A/B/C/D) | `CurvedScoresSchema` | ✅ |
-
-All schemas are now aligned with the domain model (ip-02.md, ip-03.md).
+| Domain Concept | Schema Location (v3-effect) | Status |
+|----------------|----------------------------|--------|
+| Problem identifier (digit + name) | `ProblemId` struct | ✅ |
+| Problem-Dimension mapping | `ProblemDimensionMap` (embedded in JSONScores) | ✅ |
+| Problem score (objective) | `ProblemScore.task_score` | ✅ |
+| Dimension scores per problem | `ProblemScore.dimension_scores` (Record + Option) | ✅ |
+| Aggregated dimension scores | `JSONScores.ability_scores` (derived getter) | ✅ |
+| Total problem score | `JSONScores.totals.total_problem_score` (derived getter) | ✅ |
+| Total ability score | `JSONScores.totals.total_ability_score` (derived getter) | ✅ |
+| Final total (geometric mean) | `JSONScores.totals.final_total_score` (derived getter) | ✅ |
+| Prompt version tracking | `JSONScores.prompt_version_hash` | ✅ |
+| Pre-curve output (no grades) | `JSONScores` (Schema.Class) | ✅ |
+| Post-curve output (A/B/C/D) | `CurvedScores` | ✅ |
+| Curve method (std dev) | Not yet ported | ⬜ |
+| Compatibility check | Not yet ported | ⬜ |
 
 ## Schema Source of Truth
 
-**Single location:** `scripts/schemas.ts`
+**v3-effect (current):** `v3-effect/schemas.ts` — Effect Schema with Schema.Class, branded types, derived getters.
 
-All Zod schemas are defined in this one file. Other implementation files import from here.
+Previous versions: `v2-zod/schemas.ts` (Zod), `v1-vitest/` (Vitest-based).
