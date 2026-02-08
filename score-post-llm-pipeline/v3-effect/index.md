@@ -18,7 +18,10 @@ Effect Schema implementation of the score post-LLM pipeline data types.
 | `curve-application-analysis.md` | Analysis of how axiia-website currently applies curves: which scores get thresholds, execution order, what's not curved |
 | `prompt-locations.md` | Reference doc: where scoring prompts live in axiia-website, key naming convention for PromptSnapshot entries |
 | `open-questions.md` | Design questions: ScorePool assembly validation (Q1) and Curve–Score compatibility requirements (Q2), with proposed validation tiers |
+| `score-pool-builder.ts` | ScorePool construction functions (initPool, addScore, addEvent) with prompt snapshot and dimension map compatibility checks using Either for error handling |
+| `score-pool-builder-test.ts` | Runnable tests for score-pool-builder: happy path (init + addEvent + addScore), prompt mismatch rejection, dimmap mismatch rejection, duplicate score rejection |
 | `partial-application-scenarios.md` | Catalog of all curve–score mismatch scenarios (S1–S8): which crash, which are meaningful for partial application, and what changes are needed |
+| `data-construction.md` | Step-by-step guide to constructing valid JSONScores (including PromptSnapshot set_hash computation) and assembling a ScorePool |
 
 ```mermaid
 graph LR
@@ -34,4 +37,10 @@ graph LR
     ACT -. "writes" .-> CSJ[test-data/curved-scores.json]
     ACT --> AC
     PL[prompt-locations.md] -. "documents key convention for" .-> S
+    DC[data-construction.md] -. "construction guide for" .-> S
+    DC -. "references" .-> SPB
+    SPB[score-pool-builder.ts] --> S
+    SPB -. "reuses strategy from" .-> AC
+    F --> SPBT[score-pool-builder-test.ts]
+    SPBT --> SPB
 ```
