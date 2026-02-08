@@ -1,0 +1,150 @@
+{
+  "curved_scores_id": "7dff85cf-1b38-4d0b-8f04-dd69e8fb368a",
+  "source": {
+    "scores_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "event_id": "spring-2024-final",
+    "prompt_version_hash": "a3f8b2c",
+    "dimension_map": {
+      "map_id": "d4e5f6a7-b8c9-4d0e-af12-345678901234",
+      "label": "2024 Spring Assessment v2",
+      "created_at": "2024-06-10T00:00:00.000Z",
+      "entries": [
+        {
+          "problem_id": {
+            "digit": "000340",
+            "name": "meeting-verify"
+          },
+          "dimensions": [
+            "Discovery-Self-Understanding",
+            "Expression-Translation",
+            "Exploratory-Discovery"
+          ]
+        },
+        {
+          "problem_id": {
+            "digit": "000500",
+            "name": "thinking-traps"
+          },
+          "dimensions": [
+            "Discovery-Self-Understanding",
+            "Verification-Confirmation",
+            "Iterative-Optimization"
+          ]
+        },
+        {
+          "problem_id": {
+            "digit": "001001",
+            "name": "ling-bing"
+          },
+          "dimensions": [
+            "Discovery-Self-Understanding",
+            "Expression-Translation",
+            "Exploratory-Discovery",
+            "Verification-Confirmation",
+            "Iterative-Optimization"
+          ]
+        }
+      ]
+    },
+    "generated_at": "2024-06-10T00:00:00.000Z",
+    "participant_id": "student-0042",
+    "problem_scores": [
+      {
+        "problem_id": {
+          "digit": "000340",
+          "name": "meeting-verify"
+        },
+        "task_score": 0.8,
+        "dimension_scores": {
+          "Discovery-Self-Understanding": 0.85,
+          "Expression-Translation": 0.78,
+          "Exploratory-Discovery": 0.72,
+          "Verification-Confirmation": null,
+          "Iterative-Optimization": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000500",
+          "name": "thinking-traps"
+        },
+        "task_score": 0.75,
+        "dimension_scores": {
+          "Discovery-Self-Understanding": 0.9,
+          "Expression-Translation": null,
+          "Exploratory-Discovery": null,
+          "Verification-Confirmation": 0.65,
+          "Iterative-Optimization": 0.7
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_score": 0.82,
+        "dimension_scores": {
+          "Discovery-Self-Understanding": 0.88,
+          "Expression-Translation": 0.82,
+          "Exploratory-Discovery": 0.79,
+          "Verification-Confirmation": 0.71,
+          "Iterative-Optimization": 0.68
+        }
+      }
+    ]
+  },
+  "applied_curve_id": "11111111-2222-3333-4444-555555555555",
+  "curved_at": "2026-02-06T17:14:41.172Z",
+  "problem_grades": [
+    {
+      "problem_id": {
+        "digit": "000340",
+        "name": "meeting-verify"
+      },
+      "task_grade": "B",
+      "dimension_grades": {
+        "Discovery-Self-Understanding": "A",
+        "Expression-Translation": "B",
+        "Exploratory-Discovery": "B",
+        "Verification-Confirmation": null,
+        "Iterative-Optimization": null
+      }
+    },
+    {
+      "problem_id": {
+        "digit": "000500",
+        "name": "thinking-traps"
+      },
+      "task_grade": "B",
+      "dimension_grades": {
+        "Discovery-Self-Understanding": "A",
+        "Expression-Translation": null,
+        "Exploratory-Discovery": null,
+        "Verification-Confirmation": "C",
+        "Iterative-Optimization": "C"
+      }
+    },
+    {
+      "problem_id": {
+        "digit": "001001",
+        "name": "ling-bing"
+      },
+      "task_grade": "B",
+      "dimension_grades": {
+        "Discovery-Self-Understanding": "A",
+        "Expression-Translation": "B",
+        "Exploratory-Discovery": "B",
+        "Verification-Confirmation": "C",
+        "Iterative-Optimization": "C"
+      }
+    }
+  ],
+  "ability_grades": {
+    "Discovery-Self-Understanding": "A",
+    "Expression-Translation": "B",
+    "Exploratory-Discovery": "B",
+    "Verification-Confirmation": "C",
+    "Iterative-Optimization": "C"
+  },
+  "overall_grade": "B"
+}

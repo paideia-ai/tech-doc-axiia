@@ -1,0 +1,109 @@
+{
+  "curve_id": "11111111-2222-3333-4444-555555555555",
+  "label": "Spring 2024 Standard Deviation Curve",
+  "source_event_ids": [
+    "spring-2024-final"
+  ],
+  "prompt_version_hash": "a3f8b2c",
+  "dimension_map": {
+    "map_id": "d4e5f6a7-b8c9-4d0e-af12-345678901234",
+    "label": "2024 Spring Assessment v2",
+    "created_at": "2024-06-01T00:00:00.000Z",
+    "entries": [
+      {
+        "problem_id": {
+          "digit": "000340",
+          "name": "meeting-verify"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "000500",
+          "name": "thinking-traps"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      }
+    ]
+  },
+  "method": {
+    "type": "standard_deviation",
+    "sigma_boundaries": [
+      1,
+      0,
+      -1
+    ]
+  },
+  "sample_size": 120,
+  "computed_at": "2024-06-15T00:00:00.000Z",
+  "overall_mean": {
+    "A": 0.85,
+    "B": 0.72,
+    "C": 0.55
+  },
+  "ability_curves": {
+    "Discovery-Self-Understanding": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "Expression-Translation": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "Exploratory-Discovery": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "Verification-Confirmation": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "Iterative-Optimization": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    }
+  },
+  "problem_curves": {
+    "000340": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "000500": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    },
+    "001001": {
+      "A": 0.85,
+      "B": 0.72,
+      "C": 0.55
+    }
+  }
+}

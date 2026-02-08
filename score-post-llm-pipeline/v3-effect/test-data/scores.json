@@ -1,0 +1,93 @@
+{
+  "scores_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+  "event_id": "spring-2024-final",
+  "prompt_version_hash": "a3f8b2c",
+  "dimension_map": {
+    "map_id": "d4e5f6a7-b8c9-4d0e-af12-345678901234",
+    "label": "2024 Spring Assessment v2",
+    "created_at": "2024-06-10T00:00:00.000Z",
+    "entries": [
+      {
+        "problem_id": {
+          "digit": "000340",
+          "name": "meeting-verify"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "000500",
+          "name": "thinking-traps"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      }
+    ]
+  },
+  "generated_at": "2024-06-10T00:00:00.000Z",
+  "participant_id": "student-0042",
+  "problem_scores": [
+    {
+      "problem_id": {
+        "digit": "000340",
+        "name": "meeting-verify"
+      },
+      "task_score": 0.8,
+      "dimension_scores": {
+        "Discovery-Self-Understanding": 0.85,
+        "Expression-Translation": 0.78,
+        "Exploratory-Discovery": 0.72,
+        "Verification-Confirmation": null,
+        "Iterative-Optimization": null
+      }
+    },
+    {
+      "problem_id": {
+        "digit": "000500",
+        "name": "thinking-traps"
+      },
+      "task_score": 0.75,
+      "dimension_scores": {
+        "Discovery-Self-Understanding": 0.9,
+        "Expression-Translation": null,
+        "Exploratory-Discovery": null,
+        "Verification-Confirmation": 0.65,
+        "Iterative-Optimization": 0.7
+      }
+    },
+    {
+      "problem_id": {
+        "digit": "001001",
+        "name": "ling-bing"
+      },
+      "task_score": 0.82,
+      "dimension_scores": {
+        "Discovery-Self-Understanding": 0.88,
+        "Expression-Translation": 0.82,
+        "Exploratory-Discovery": 0.79,
+        "Verification-Confirmation": 0.71,
+        "Iterative-Optimization": 0.68
+      }
+    }
+  ]
+}

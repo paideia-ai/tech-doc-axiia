@@ -13,8 +13,8 @@
  *
  * 4. COMPOSITION — CurvedScores wraps JSONScores (via source).
  *
- * Scope: JSONScores, CurvedScores, ProblemDimensionMap, and their dependencies.
- * Curve, ScorePool, EventConfig are not yet ported.
+ * Scope: JSONScores, CurvedScores, Curve, ProblemDimensionMap, and their
+ * dependencies. ScorePool, EventConfig are not yet ported.
  */
 
 import { Schema, Option } from "effect";
@@ -182,7 +182,7 @@ export class JSONScores extends Schema.Class<JSONScores>("JSONScores")({
 // =============================================================================
 // 6. Grades — per-problem grades use Record + Option (mirrors scores)
 //
-// Aggregates (ability_grades, total_grades) ARE stored because
+// Aggregates (ability_grades, overall_grade) ARE stored because
 // computing them requires the curve function, not simple averaging.
 // =============================================================================
 
@@ -197,13 +197,6 @@ export const ProblemGrade = Schema.Struct({
 });
 export type ProblemGrade = typeof ProblemGrade.Type;
 
-export const TotalGrades = Schema.Struct({
-  total_problem_grade: LetterGrade,
-  total_ability_grade: LetterGrade,
-  final_total_grade: LetterGrade,
-});
-export type TotalGrades = typeof TotalGrades.Type;
-
 // =============================================================================
 // 7. CurvedScores — composes JSONScores, adds grades
 // =============================================================================
@@ -216,9 +209,144 @@ export const CurvedScores = Schema.Struct({
   problem_grades: Schema.Array(ProblemGrade),
   /** Stored because computing these requires the curve function */
   ability_grades: Schema.Record({ key: Dimension, value: LetterGrade }),
-  total_grades: TotalGrades,
+  /** Single overall grade from final_total_score — production only grades this one */
+  overall_grade: LetterGrade,
 });
 export type CurvedScores = typeof CurvedScores.Type;
+
+// =============================================================================
+// 8. Curve — grade boundary thresholds computed from a ScorePool
+//
+// GradeThresholds: minimum scores for A, B, C. D is implied (below C).
+// CurveMethod: discriminated union — currently only standard_deviation.
+// Curve embeds ProblemDimensionMap (same pattern as JSONScores).
+// problem_curves keyed by ProblemDigitId (the stable string part of ProblemId).
+// overall_mean: single GradeThresholds for the final_total_score (production only grades this).
+// =============================================================================
+
+/** Minimum score thresholds for A/B/C. D = score < C threshold. */
+export const GradeThresholds = Schema.Struct({
+  A: ScoreValue,
+  B: ScoreValue,
+  C: ScoreValue,
+});
+export type GradeThresholds = typeof GradeThresholds.Type;
+
+/**
+ * Curve computation method (tagged union).
+ *
+ * standard_deviation: sigma_boundaries e.g. [1, 0, -1]
+ *   → A ≥ μ+1σ, B ≥ μ, C ≥ μ-1σ, D < μ-1σ
+ * percentile: percentiles e.g. [0.75, 0.50, 0.25]
+ * absolute: fixed score thresholds
+ */
+export const CurveMethod = Schema.Union(
+  Schema.Struct({
+    type: Schema.Literal("standard_deviation"),
+    sigma_boundaries: Schema.Array(Schema.Number),
+  }),
+  Schema.Struct({
+    type: Schema.Literal("percentile"),
+    percentiles: Schema.Array(
+      Schema.Number.pipe(
+        Schema.greaterThanOrEqualTo(0),
+        Schema.lessThanOrEqualTo(1)
+      )
+    ),
+  }),
+  Schema.Struct({
+    type: Schema.Literal("absolute"),
+    thresholds: Schema.Array(ScoreValue),
+  })
+);
+export type CurveMethod = typeof CurveMethod.Type;
+
+/**
+ * Curve: computed from a ScorePool, used to assign letter grades.
+ *
+ * - source_event_ids: which events contributed scores (NonEmptyArray)
+ * - dimension_map: embedded for compatibility checking when applying
+ * - problem_curves keyed by ProblemDigitId (O(1) lookup)
+ * - ability_curves keyed by Dimension (O(1) lookup)
+ * - overall_mean: thresholds for the single graded total (final_total_score)
+ */
+export const Curve = Schema.Struct({
+  curve_id: Schema.UUID,
+  label: Schema.String.pipe(Schema.minLength(1)),
+  source_event_ids: Schema.NonEmptyArray(EventId),
+  prompt_version_hash: PromptVersionHash,
+  dimension_map: ProblemDimensionMap,
+  method: CurveMethod,
+  sample_size: Schema.Number.pipe(
+    Schema.int(),
+    Schema.greaterThan(0)
+  ),
+  computed_at: Schema.DateTimeUtc,
+  overall_mean: GradeThresholds,
+  ability_curves: Schema.Record({ key: Dimension, value: GradeThresholds }),
+  problem_curves: Schema.Record({
+    key: ProblemDigitId,
+    value: GradeThresholds,
+  }),
+});
+export type Curve = typeof Curve.Type;
+
+// =============================================================================
+// 9. CompatibilityResult — check result before applying a Curve to JSONScores
+//
+// Three severity tiers:
+//   structural:  must all pass for application to be physically possible
+//   provenance:  should match for results to be meaningful
+//   advisory:    informational, never block application
+//
+// Status derivation:
+//   Any structural fail       → "incompatible"
+//   All structural pass,
+//     any provenance fail     → "requires_override"
+//   All pass                  → "compatible"
+// =============================================================================
+
+export const CheckPass = Schema.Struct({ status: Schema.Literal("pass") });
+export type CheckPass = typeof CheckPass.Type;
+
+export const CheckFail = Schema.Struct({
+  status: Schema.Literal("fail"),
+  message: Schema.String,
+  items: Schema.optionalWith(Schema.Array(Schema.String), {
+    default: () => [],
+  }),
+});
+export type CheckFail = typeof CheckFail.Type;
+
+export const CheckOutcome = Schema.Union(CheckPass, CheckFail);
+export type CheckOutcome = typeof CheckOutcome.Type;
+
+export const CompatibilityResult = Schema.Struct({
+  status: Schema.Literal("compatible", "incompatible", "requires_override"),
+
+  structural: Schema.Struct({
+    problem_coverage: CheckOutcome,
+    dimmap_structural: CheckOutcome,
+    threshold_ordering: CheckOutcome,
+  }),
+
+  provenance: Schema.Struct({
+    prompt_version: CheckOutcome,
+    event_membership: CheckOutcome,
+    dimmap_identity: CheckOutcome,
+  }),
+
+  advisory: Schema.Struct({
+    extra_curve_problems: CheckOutcome,
+    sample_size: CheckOutcome,
+    staleness: CheckOutcome,
+    score_range: CheckOutcome,
+  }),
+});
+export type CompatibilityResult = typeof CompatibilityResult.Type;
+
+export const decodeCompatibilityResult =
+  Schema.decodeUnknownSync(CompatibilityResult);
 
 // =============================================================================
 // Decode / Encode helpers
@@ -226,5 +354,6 @@ export type CurvedScores = typeof CurvedScores.Type;
 
 export const decodeJSONScores = Schema.decodeUnknownSync(JSONScores);
 export const decodeCurvedScores = Schema.decodeUnknownSync(CurvedScores);
+export const decodeCurve = Schema.decodeUnknownSync(Curve);
 export const decodeProblemDimensionMap =
   Schema.decodeUnknownSync(ProblemDimensionMap);
