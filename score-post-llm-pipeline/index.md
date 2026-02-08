@@ -11,6 +11,7 @@ Documentation and implementation for the score processing pipeline that transfor
 | `domain-context.md` | Core domain model explaining the score transformation pipeline concepts |
 | `pipeline-phases.md` | Documents the 6 pipeline phases (Test Event → LLM Scoring → Score Extraction → Curve Computation → Curve Application → Merge Back) with data flow and where ProblemDimensionMap enters |
 | `pipeline-diagram.html` | Visual diagram of the pipeline flow |
+| `pipeline-visualization.html` | Interactive DAG visualization of the full pipeline with node/edge detail cards, success/failure examples from fixture data, and the 10 compatibility checks |
 | `data-format-fixtures.json` | Example ProblemDimensionMap + source/target JSON pair with per-problem dimension subsets |
 
 ### Historical Documentation
@@ -57,6 +58,7 @@ graph TD
     subgraph "Active Documentation"
         DC[domain-context.md] --> PP[pipeline-phases.md]
         PP --> DIAG[pipeline-diagram.html]
+        PP --> VIZ[pipeline-visualization.html]
     end
 
     subgraph "Current Implementation"
