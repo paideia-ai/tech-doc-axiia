@@ -13,6 +13,7 @@ import { Option } from "effect";
 import { DIMENSIONS, decodeJSONScores, type JSONScores } from "./schemas.js";
 import type { Report } from "./report-fixture.js";
 import { sampleReport } from "./report-fixture.js";
+import { samplePromptSnapshotStored } from "./fixtures.js";
 
 // ---------------------------------------------------------------------------
 // 1. Transform: Report → JSONScores stored form
@@ -21,7 +22,11 @@ import { sampleReport } from "./report-fixture.js";
 interface TransformContext {
   scores_id: string;
   event_id: string;
-  prompt_version_hash: string;
+  prompt_snapshot: {
+    git_hash: string;
+    set_hash: string;
+    entries: { key: string; sha256: string }[];
+  };
   participant_id: string;
   dimension_map_id: string;
   dimension_map_label: string;
@@ -67,7 +72,7 @@ function reportToScoresStored(report: Report, ctx: TransformContext) {
   return {
     scores_id: ctx.scores_id,
     event_id: ctx.event_id,
-    prompt_version_hash: ctx.prompt_version_hash,
+    prompt_snapshot: ctx.prompt_snapshot,
     dimension_map: {
       map_id: ctx.dimension_map_id,
       label: ctx.dimension_map_label,
@@ -87,7 +92,7 @@ function reportToScoresStored(report: Report, ctx: TransformContext) {
 const stored = reportToScoresStored(sampleReport, {
   scores_id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
   event_id: "spring-2024-final",
-  prompt_version_hash: "a3f8b2c",
+  prompt_snapshot: samplePromptSnapshotStored,
   participant_id: "student-0042",
   dimension_map_id: "d4e5f6a7-b8c9-4d0e-af12-345678901234",
   dimension_map_label: "2024 Spring Assessment v2",

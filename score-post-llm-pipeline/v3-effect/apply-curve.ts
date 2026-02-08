@@ -14,20 +14,24 @@
 import { Option, Schema } from "effect";
 import {
   type CheckOutcome,
-  type CompatibilityResult,
-  type Curve,
-  type CurvedScores,
   type Dimension,
   type GradeThresholds,
   type LetterGrade,
   type ProblemDigitId,
+  type PromptSnapshot,
   type ScoreValue,
+  CheckPass,
+  CheckFail,
+  CompatibilityResult,
+  Curve,
+  CurvedScores,
   DIMENSIONS,
   JSONScores,
   decodeCurvedScores,
   decodeJSONScores,
 } from "./schemas.js";
 import { sampleReport } from "./report-fixture.js";
+import { samplePromptSnapshotStored } from "./fixtures.js";
 import {
   buildCompatibleCurve,
   buildIncompatibleCurve,
@@ -37,13 +41,10 @@ import {
 // Helpers
 // =============================================================================
 
-const pass = (): CheckOutcome => ({ status: "pass" });
+const pass = (): CheckOutcome => new CheckPass({ status: "pass" });
 
-const fail = (message: string, items: string[] = []): CheckOutcome => ({
-  status: "fail",
-  message,
-  items,
-});
+const fail = (message: string, items: string[] = []): CheckOutcome =>
+  new CheckFail({ status: "fail", message, items });
 
 const isPass = (c: CheckOutcome): boolean => c.status === "pass";
 
@@ -52,12 +53,118 @@ const assignGrade = (score: number, t: GradeThresholds): LetterGrade =>
   score >= t.A ? "A" : score >= t.B ? "B" : score >= t.C ? "C" : "D";
 
 // =============================================================================
+// Prompt comparison strategies
+//
+// Swappable functions for the provenance prompt_version check.
+// =============================================================================
+
+/**
+ * A function that compares two PromptSnapshots and returns pass/fail.
+ * scoreProblemDigits: which problems the scores cover (for per-problem strategy).
+ */
+export type PromptComparisonStrategy = (
+  curveSnapshot: PromptSnapshot,
+  scoresSnapshot: PromptSnapshot,
+  scoreProblemDigits: readonly ProblemDigitId[],
+) => CheckOutcome;
+
+/**
+ * v1 (default): strict set_hash equality.
+ * Fast path: set_hash === set_hash → pass.
+ * Slow path: enumerate differing entries for diagnostics.
+ */
+export const strictSetHash: PromptComparisonStrategy = (
+  curveSnap,
+  scoresSnap,
+) => {
+  if (curveSnap.set_hash === scoresSnap.set_hash) return pass();
+
+  // Slow path: find which entries differ
+  const curveMap = new Map(curveSnap.entries.map((e) => [e.key, e.sha256]));
+  const scoresMap = new Map(scoresSnap.entries.map((e) => [e.key, e.sha256]));
+  const diffs: string[] = [];
+
+  for (const [key, sha] of curveMap) {
+    const scoreSha = scoresMap.get(key);
+    if (scoreSha === undefined) {
+      diffs.push(`${key}: only in curve`);
+    } else if (scoreSha !== sha) {
+      diffs.push(`${key}: sha256 differs`);
+    }
+  }
+  for (const key of scoresMap.keys()) {
+    if (!curveMap.has(key)) {
+      diffs.push(`${key}: only in scores`);
+    }
+  }
+
+  return fail(
+    `Prompt snapshot mismatch (${diffs.length} difference${diffs.length === 1 ? "" : "s"})`,
+    diffs,
+  );
+};
+
+/**
+ * v2: per-problem comparison.
+ * Framework entries (key starts with "framework:") must all match.
+ * Problem entries: only check entries relevant to the scored problems.
+ * This allows changing problem A's rubric without invalidating problem B's scores.
+ */
+export const perProblemComparison: PromptComparisonStrategy = (
+  curveSnap,
+  scoresSnap,
+  scoreProblemDigits,
+) => {
+  const curveMap = new Map(curveSnap.entries.map((e) => [e.key, e.sha256]));
+  const scoresMap = new Map(scoresSnap.entries.map((e) => [e.key, e.sha256]));
+  const diffs: string[] = [];
+
+  // All framework entries must match
+  const allKeys = new Set([...curveMap.keys(), ...scoresMap.keys()]);
+  for (const key of allKeys) {
+    if (!key.startsWith("framework:")) continue;
+    const cSha = curveMap.get(key);
+    const sSha = scoresMap.get(key);
+    if (cSha === undefined) {
+      diffs.push(`${key}: only in scores`);
+    } else if (sSha === undefined) {
+      diffs.push(`${key}: only in curve`);
+    } else if (cSha !== sSha) {
+      diffs.push(`${key}: sha256 differs`);
+    }
+  }
+
+  // Problem entries: only check those relevant to scored problems
+  const relevantPrefixes = scoreProblemDigits.map((d) => `problem:${d}:`);
+  for (const key of allKeys) {
+    if (!key.startsWith("problem:")) continue;
+    if (!relevantPrefixes.some((p) => key.startsWith(p))) continue;
+    const cSha = curveMap.get(key);
+    const sSha = scoresMap.get(key);
+    if (cSha === undefined) {
+      diffs.push(`${key}: only in scores`);
+    } else if (sSha === undefined) {
+      diffs.push(`${key}: only in curve`);
+    } else if (cSha !== sSha) {
+      diffs.push(`${key}: sha256 differs`);
+    }
+  }
+
+  if (diffs.length === 0) return pass();
+  return fail(
+    `Prompt snapshot mismatch (${diffs.length} difference${diffs.length === 1 ? "" : "s"})`,
+    diffs,
+  );
+};
+
+// =============================================================================
 // checkCompatibility
 // =============================================================================
 
 export function checkCompatibility(
   curve: Curve,
   scores: JSONScores,
+  options?: { promptComparison?: PromptComparisonStrategy },
 ): CompatibilityResult {
   // ── Structural checks ──────────────────────────────────────────────
 
@@ -119,12 +226,12 @@ export function checkCompatibility(
 
   // ── Provenance checks ─────────────────────────────────────────────
 
-  const prompt_version =
-    curve.prompt_version_hash === scores.prompt_version_hash
-      ? pass()
-      : fail(
-          `Prompt version mismatch: curve=${curve.prompt_version_hash} scores=${scores.prompt_version_hash}`,
-        );
+  const comparePrompts = options?.promptComparison ?? strictSetHash;
+  const prompt_version = comparePrompts(
+    curve.prompt_snapshot,
+    scores.prompt_snapshot,
+    scoreDigits,
+  );
 
   const event_membership = curve.source_event_ids.includes(
     scores.event_id as any,
@@ -205,12 +312,12 @@ export function checkCompatibility(
       ? "requires_override"
       : "compatible";
 
-  return {
+  return new CompatibilityResult({
     status,
     structural: { problem_coverage, dimmap_structural, threshold_ordering },
     provenance: { prompt_version, event_membership, dimmap_identity },
     advisory: { extra_curve_problems, sample_size, staleness, score_range },
-  };
+  });
 }
 
 // =============================================================================
@@ -220,9 +327,14 @@ export function checkCompatibility(
 export function applyCurve(
   curve: Curve,
   scores: JSONScores,
-  options?: { allowOverride?: boolean },
+  options?: {
+    allowOverride?: boolean;
+    promptComparison?: PromptComparisonStrategy;
+  },
 ): CurvedScores {
-  const compat = checkCompatibility(curve, scores);
+  const compat = checkCompatibility(curve, scores, {
+    promptComparison: options?.promptComparison,
+  });
 
   if (compat.status === "incompatible") {
     throw new Error(
@@ -310,7 +422,7 @@ function buildScoresFromReport(): JSONScores {
   return decodeJSONScores({
     scores_id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     event_id: "spring-2024-final",
-    prompt_version_hash: "a3f8b2c",
+    prompt_snapshot: samplePromptSnapshotStored,
     participant_id: "student-0042",
     dimension_map: {
       map_id: "d4e5f6a7-b8c9-4d0e-af12-345678901234",

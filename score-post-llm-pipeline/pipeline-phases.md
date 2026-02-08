@@ -2,7 +2,7 @@
 
 The score post-LLM pipeline transforms raw LLM evaluations into curved letter grades through six sequential phases. This document describes what happens at each phase, what data flows in and out, and where key parameters like **ProblemDimensionMap** and **prompt_version** enter the process.
 
-For data format details, see [`data-formats.md`](data-formats.md).
+For data format details, see [`v3-effect/schema-explanation.md`](v3-effect/schema-explanation.md) (current) or [`archive/data-formats.md`](archive/data-formats.md) (historical).
 
 ---
 
@@ -48,7 +48,7 @@ These are independent: you can iterate the prompt without changing the dimension
 
 ### 3. Score Extraction
 
-Parse the complete LLM report to extract structured numeric scores into a **JSONScores** object. The extracted object records `prompt_version_hash` and embeds the full `dimension_map` (ProblemDimensionMap) as provenance metadata — these are the parameters that shaped the LLM's scoring.
+Parse the complete LLM report to extract structured numeric scores into a **JSONScores** object. The extracted object records a `prompt_snapshot` (per-file SHA-256 manifest of all prompts used) and embeds the full `dimension_map` (ProblemDimensionMap) as provenance metadata — these are the parameters that shaped the LLM's scoring.
 
 | | |
 |---|---|

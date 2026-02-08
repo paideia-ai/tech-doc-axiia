@@ -1,3 +1,5 @@
+> **Historical document.** Field names (`prompt_version_hash`, `dimension_map_id`, `problem_version`) and the CurvedScores structure described here reflect an earlier schema version. See `v3-effect/schemas.ts` for the current source of truth.
+
 # Data Formats: Source and Target
 
 This document describes the input and output of the score post-LLM pipeline, plus the standalone **ProblemDimensionMap** entity that governs which dimensions apply to which problems. Intermediate structures (ScorePool, Curve) are omitted.

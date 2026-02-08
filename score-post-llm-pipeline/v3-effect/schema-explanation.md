@@ -36,7 +36,8 @@ Distinct types at compile time — can't accidentally pass a ProblemDigitId wher
 | Type | Underlying | Constraint |
 |------|-----------|------------|
 | `ProblemDigitId` | string | 6 digits; last digit `0` (zh) or `1` (en) |
-| `PromptVersionHash` | string | 7–40 hex chars (git short/full hash) |
+| `Sha256Hex` | string | Exactly 64 lowercase hex chars |
+| `GitHash` | string | 7–40 lowercase hex chars (git short/full hash) |
 | `ScoreValue` | number | `[0, 1]` inclusive |
 | `EventId` | string | non-empty |
 
@@ -67,6 +68,31 @@ ProblemDimensionMap
 
 ---
 
+## PromptSnapshot — multi-prompt provenance tracking
+
+A single git hash can't express which of 20+ prompt files changed. `PromptSnapshot` replaces the old `PromptVersionHash` with per-file tracking.
+
+```
+PromptSnapshot
+├── git_hash    : GitHash     ← repo commit for traceability
+├── set_hash    : Sha256Hex   ← SHA-256 of sorted entries JSON (O(1) equality)
+└── entries[]   : PromptSnapshotEntry   (sorted by key, no duplicates)
+    ├── key      : string     ← e.g. "framework:zh:task-eval" or "problem:001001:scoring"
+    └── sha256   : Sha256Hex  ← SHA-256 of the file's content
+```
+
+**Key naming convention** (not enforced in schema, just a convention):
+- Framework prompts: `framework:{lang}:{name}` — e.g. `framework:zh:task-eval`
+- Problem-specific: `problem:{digitId}:{name}` — e.g. `problem:001001:scoring`
+
+**Why both git_hash and sha256?** Git hash gives traceability (which commit). SHA-256 per-file gives content equality (did this specific file change?). The `set_hash` is a quick O(1) check: if set_hashes match, all entries match — no need to iterate.
+
+**Comparison strategies** in `apply-curve.ts`:
+- `strictSetHash` (default): set_hash must match. On mismatch, enumerates per-entry diffs for diagnostics.
+- `perProblemComparison`: framework entries must all match; problem entries only checked for scored problems. Enables: "changing problem A's rubric doesn't invalidate problem B's scores."
+
+---
+
 ## JSONScores — `Schema.Class` with derived getters
 
 The class has two layers:
@@ -78,8 +104,13 @@ The class has two layers:
 JSONScores (decoded type)
 ├── scores_id            : UUID
 ├── event_id             : EventId
-├── prompt_version_hash  : PromptVersionHash
-├── dimension_map        : ProblemDimensionMap  ← embedded, self-contained
+├── prompt_snapshot      : PromptSnapshot       ← per-file prompt tracking
+│   ├── git_hash          : GitHash
+│   ├── set_hash          : Sha256Hex           ← O(1) equality check
+│   └── entries[]         : PromptSnapshotEntry  (sorted by key, no duplicates)
+│       ├── key            : string              ← e.g. "framework:zh:task-eval"
+│       └── sha256         : Sha256Hex
+├── dimension_map        : ProblemDimensionMap   ← embedded, self-contained
 ├── generated_at         : DateTimeUtc
 ├── participant_id       : string
 ├── problem_scores[]     : ProblemScore                          ← STORED
@@ -130,10 +161,7 @@ CurvedScores
 │   ├── task_grade        : LetterGrade
 │   └── dimension_grades  : Record<Dimension, Option<LetterGrade>>
 ├── ability_grades    : Record<Dimension, LetterGrade>   ← all 5, no Option
-└── total_grades      : TotalGrades
-    ├── total_problem_grade  : LetterGrade
-    ├── total_ability_grade  : LetterGrade
-    └── final_total_grade    : LetterGrade
+└── overall_grade     : LetterGrade         ← from final_total_score
 ```
 
 **Why are grade aggregates stored but score aggregates derived?**
@@ -152,4 +180,4 @@ decodeProblemDimensionMap(input)  // unknown → ProblemDimensionMap
 
 ## Not yet ported
 
-`Curve`, `ScorePool`, and `EventConfig` remain in the Zod version (`v2-zod/schemas.ts`).
+`EventConfig` fields remain a stub (only `event_id`).

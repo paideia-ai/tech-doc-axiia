@@ -13,8 +13,8 @@
  *
  * 4. COMPOSITION — CurvedScores wraps JSONScores (via source).
  *
- * Scope: JSONScores, CurvedScores, Curve, ProblemDimensionMap, and their
- * dependencies. ScorePool, EventConfig are not yet ported.
+ * Scope: JSONScores, CurvedScores, Curve, ProblemDimensionMap, ScorePool,
+ * EventConfig (stub), and their dependencies.
  */
 
 import { Schema, Option } from "effect";
@@ -34,18 +34,54 @@ export const ProblemDigitId = Schema.String.pipe(
 export type ProblemDigitId = typeof ProblemDigitId.Type;
 
 /** Two-part problem identifier: stable digit key + mutable human name */
-export const ProblemId = Schema.Struct({
+export class ProblemId extends Schema.Class<ProblemId>("ProblemId")({
   digit: ProblemDigitId,
   name: Schema.String,
-});
-export type ProblemId = typeof ProblemId.Type;
+}) {}
 
-/** Git commit hash, 7–40 hex chars */
-export const PromptVersionHash = Schema.String.pipe(
-  Schema.pattern(/^[a-f0-9]{7,40}$/),
-  Schema.brand("PromptVersionHash")
+/** SHA-256 content hash, exactly 64 hex chars */
+export const Sha256Hex = Schema.String.pipe(
+  Schema.pattern(/^[a-f0-9]{64}$/),
+  Schema.brand("Sha256Hex")
 );
-export type PromptVersionHash = typeof PromptVersionHash.Type;
+export type Sha256Hex = typeof Sha256Hex.Type;
+
+/** Git commit hash, 7–40 hex chars (for traceability) */
+export const GitHash = Schema.String.pipe(
+  Schema.pattern(/^[a-f0-9]{7,40}$/),
+  Schema.brand("GitHash")
+);
+export type GitHash = typeof GitHash.Type;
+
+/** One prompt file's identity: key + content hash */
+export class PromptSnapshotEntry extends Schema.Class<PromptSnapshotEntry>("PromptSnapshotEntry")({
+  key: Schema.String.pipe(Schema.minLength(1)),
+  sha256: Sha256Hex,
+}) {}
+
+/**
+ * Full prompt manifest: git hash + per-file SHA-256s + set hash for O(1) equality.
+ *
+ * Key naming convention (not enforced in schema):
+ *   Framework: "framework:{lang}:{name}"  e.g. "framework:zh:task-eval"
+ *   Problem:   "problem:{digitId}:{name}"  e.g. "problem:001001:scoring"
+ *
+ * entries must be sorted by key with no duplicates.
+ * set_hash is the SHA-256 of the sorted entries JSON — enables fast equality check.
+ */
+export class PromptSnapshot extends Schema.Class<PromptSnapshot>("PromptSnapshot")({
+  git_hash: GitHash,
+  set_hash: Sha256Hex,
+  entries: Schema.Array(PromptSnapshotEntry).pipe(
+    Schema.filter((entries) => {
+      const keys = entries.map((e) => e.key);
+      for (let i = 1; i < keys.length; i++) {
+        if (keys[i] <= keys[i - 1]) return false;
+      }
+      return true;
+    }, { message: () => "Entries must be sorted by key with no duplicates" })
+  ),
+}) {}
 
 /** Score value clamped to [0, 1] */
 export const ScoreValue = Schema.Number.pipe(
@@ -83,19 +119,17 @@ export type LetterGrade = typeof LetterGrade.Type;
 // 3. ProblemDimensionMap — standalone entity
 // =============================================================================
 
-export const DimMapEntry = Schema.Struct({
+export class DimMapEntry extends Schema.Class<DimMapEntry>("DimMapEntry")({
   problem_id: ProblemId,
   dimensions: Schema.Array(Dimension),
-});
-export type DimMapEntry = typeof DimMapEntry.Type;
+}) {}
 
-export const ProblemDimensionMap = Schema.Struct({
+export class ProblemDimensionMap extends Schema.Class<ProblemDimensionMap>("ProblemDimensionMap")({
   map_id: Schema.UUID,
   label: Schema.String,
   created_at: Schema.DateTimeUtc,
   entries: Schema.Array(DimMapEntry),
-});
-export type ProblemDimensionMap = typeof ProblemDimensionMap.Type;
+}) {}
 
 // =============================================================================
 // 4. Score Components
@@ -105,15 +139,14 @@ export type ProblemDimensionMap = typeof ProblemDimensionMap.Type;
  * Per-problem scores. All 5 dimension keys present;
  * untested dimensions are None (null in JSON).
  */
-export const ProblemScore = Schema.Struct({
+export class ProblemScore extends Schema.Class<ProblemScore>("ProblemScore")({
   problem_id: ProblemId,
   task_score: ScoreValue,
   dimension_scores: Schema.Record({
     key: Dimension,
     value: Schema.OptionFromNullOr(ScoreValue),
   }),
-});
-export type ProblemScore = typeof ProblemScore.Type;
+}) {}
 
 // =============================================================================
 // 5. JSONScores — Schema.Class with derived getters
@@ -143,7 +176,7 @@ const toScoreValue = Schema.decodeSync(ScoreValue);
 export class JSONScores extends Schema.Class<JSONScores>("JSONScores")({
   scores_id: Schema.UUID,
   event_id: EventId,
-  prompt_version_hash: PromptVersionHash,
+  prompt_snapshot: PromptSnapshot,
   dimension_map: ProblemDimensionMap,
   generated_at: Schema.DateTimeUtc,
   participant_id: Schema.String.pipe(Schema.minLength(1)),
@@ -187,21 +220,20 @@ export class JSONScores extends Schema.Class<JSONScores>("JSONScores")({
 // =============================================================================
 
 /** Per-problem grades. Mirrors ProblemScore structure. */
-export const ProblemGrade = Schema.Struct({
+export class ProblemGrade extends Schema.Class<ProblemGrade>("ProblemGrade")({
   problem_id: ProblemId,
   task_grade: LetterGrade,
   dimension_grades: Schema.Record({
     key: Dimension,
     value: Schema.OptionFromNullOr(LetterGrade),
   }),
-});
-export type ProblemGrade = typeof ProblemGrade.Type;
+}) {}
 
 // =============================================================================
 // 7. CurvedScores — composes JSONScores, adds grades
 // =============================================================================
 
-export const CurvedScores = Schema.Struct({
+export class CurvedScores extends Schema.Class<CurvedScores>("CurvedScores")({
   curved_scores_id: Schema.UUID,
   source: JSONScores,
   applied_curve_id: Schema.UUID,
@@ -211,8 +243,7 @@ export const CurvedScores = Schema.Struct({
   ability_grades: Schema.Record({ key: Dimension, value: LetterGrade }),
   /** Single overall grade from final_total_score — production only grades this one */
   overall_grade: LetterGrade,
-});
-export type CurvedScores = typeof CurvedScores.Type;
+}) {}
 
 // =============================================================================
 // 8. Curve — grade boundary thresholds computed from a ScorePool
@@ -225,12 +256,11 @@ export type CurvedScores = typeof CurvedScores.Type;
 // =============================================================================
 
 /** Minimum score thresholds for A/B/C. D = score < C threshold. */
-export const GradeThresholds = Schema.Struct({
+export class GradeThresholds extends Schema.Class<GradeThresholds>("GradeThresholds")({
   A: ScoreValue,
   B: ScoreValue,
   C: ScoreValue,
-});
-export type GradeThresholds = typeof GradeThresholds.Type;
+}) {}
 
 /**
  * Curve computation method (tagged union).
@@ -240,25 +270,27 @@ export type GradeThresholds = typeof GradeThresholds.Type;
  * percentile: percentiles e.g. [0.75, 0.50, 0.25]
  * absolute: fixed score thresholds
  */
-export const CurveMethod = Schema.Union(
-  Schema.Struct({
-    type: Schema.Literal("standard_deviation"),
-    sigma_boundaries: Schema.Array(Schema.Number),
-  }),
-  Schema.Struct({
-    type: Schema.Literal("percentile"),
-    percentiles: Schema.Array(
-      Schema.Number.pipe(
-        Schema.greaterThanOrEqualTo(0),
-        Schema.lessThanOrEqualTo(1)
-      )
-    ),
-  }),
-  Schema.Struct({
-    type: Schema.Literal("absolute"),
-    thresholds: Schema.Array(ScoreValue),
-  })
-);
+export class CurveMethodStdDev extends Schema.Class<CurveMethodStdDev>("CurveMethodStdDev")({
+  type: Schema.Literal("standard_deviation"),
+  sigma_boundaries: Schema.Array(Schema.Number),
+}) {}
+
+export class CurveMethodPercentile extends Schema.Class<CurveMethodPercentile>("CurveMethodPercentile")({
+  type: Schema.Literal("percentile"),
+  percentiles: Schema.Array(
+    Schema.Number.pipe(
+      Schema.greaterThanOrEqualTo(0),
+      Schema.lessThanOrEqualTo(1)
+    )
+  ),
+}) {}
+
+export class CurveMethodAbsolute extends Schema.Class<CurveMethodAbsolute>("CurveMethodAbsolute")({
+  type: Schema.Literal("absolute"),
+  thresholds: Schema.Array(ScoreValue),
+}) {}
+
+export const CurveMethod = Schema.Union(CurveMethodStdDev, CurveMethodPercentile, CurveMethodAbsolute);
 export type CurveMethod = typeof CurveMethod.Type;
 
 /**
@@ -270,11 +302,11 @@ export type CurveMethod = typeof CurveMethod.Type;
  * - ability_curves keyed by Dimension (O(1) lookup)
  * - overall_mean: thresholds for the single graded total (final_total_score)
  */
-export const Curve = Schema.Struct({
+export class Curve extends Schema.Class<Curve>("Curve")({
   curve_id: Schema.UUID,
   label: Schema.String.pipe(Schema.minLength(1)),
   source_event_ids: Schema.NonEmptyArray(EventId),
-  prompt_version_hash: PromptVersionHash,
+  prompt_snapshot: PromptSnapshot,
   dimension_map: ProblemDimensionMap,
   method: CurveMethod,
   sample_size: Schema.Number.pipe(
@@ -288,8 +320,7 @@ export const Curve = Schema.Struct({
     key: ProblemDigitId,
     value: GradeThresholds,
   }),
-});
-export type Curve = typeof Curve.Type;
+}) {}
 
 // =============================================================================
 // 9. CompatibilityResult — check result before applying a Curve to JSONScores
@@ -306,22 +337,22 @@ export type Curve = typeof Curve.Type;
 //   All pass                  → "compatible"
 // =============================================================================
 
-export const CheckPass = Schema.Struct({ status: Schema.Literal("pass") });
-export type CheckPass = typeof CheckPass.Type;
+export class CheckPass extends Schema.Class<CheckPass>("CheckPass")({
+  status: Schema.Literal("pass"),
+}) {}
 
-export const CheckFail = Schema.Struct({
+export class CheckFail extends Schema.Class<CheckFail>("CheckFail")({
   status: Schema.Literal("fail"),
   message: Schema.String,
   items: Schema.optionalWith(Schema.Array(Schema.String), {
     default: () => [],
   }),
-});
-export type CheckFail = typeof CheckFail.Type;
+}) {}
 
 export const CheckOutcome = Schema.Union(CheckPass, CheckFail);
 export type CheckOutcome = typeof CheckOutcome.Type;
 
-export const CompatibilityResult = Schema.Struct({
+export class CompatibilityResult extends Schema.Class<CompatibilityResult>("CompatibilityResult")({
   status: Schema.Literal("compatible", "incompatible", "requires_override"),
 
   structural: Schema.Struct({
@@ -342,16 +373,43 @@ export const CompatibilityResult = Schema.Struct({
     staleness: CheckOutcome,
     score_range: CheckOutcome,
   }),
-});
-export type CompatibilityResult = typeof CompatibilityResult.Type;
+}) {}
 
 export const decodeCompatibilityResult =
   Schema.decodeUnknownSync(CompatibilityResult);
 
 // =============================================================================
+// 10. ScorePool — aggregated scores for curve computation
+//
+// Collects JSONScores from a cohort so a Curve can be computed from them.
+// Shares provenance fields with Curve: source_event_ids, prompt_snapshot,
+// dimension_map. Embeds full JSONScores (self-contained snapshot, no lookups).
+// =============================================================================
+
+export class ScorePool extends Schema.Class<ScorePool>("ScorePool")({
+  pool_id: Schema.UUID,
+  label: Schema.String.pipe(Schema.minLength(1)),
+  source_event_ids: Schema.NonEmptyArray(EventId),
+  prompt_snapshot: PromptSnapshot,
+  dimension_map: ProblemDimensionMap,
+  created_at: Schema.DateTimeUtc,
+  scores: Schema.Array(JSONScores),
+}) {}
+
+// =============================================================================
+// 11. EventConfig — assessment event configuration (stub)
+// =============================================================================
+
+/** TODO: define fields — assessment event setup and scoring parameters. */
+export class EventConfig extends Schema.Class<EventConfig>("EventConfig")({
+  event_id: EventId,
+}) {}
+
+// =============================================================================
 // Decode / Encode helpers
 // =============================================================================
 
+export const decodePromptSnapshot = Schema.decodeUnknownSync(PromptSnapshot);
 export const decodeJSONScores = Schema.decodeUnknownSync(JSONScores);
 export const decodeCurvedScores = Schema.decodeUnknownSync(CurvedScores);
 export const decodeCurve = Schema.decodeUnknownSync(Curve);

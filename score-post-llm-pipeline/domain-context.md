@@ -292,11 +292,11 @@ Based on this domain context, verify the v3-effect schemas capture:
 | Total problem score | `JSONScores.totals.total_problem_score` (derived getter) | ✅ |
 | Total ability score | `JSONScores.totals.total_ability_score` (derived getter) | ✅ |
 | Final total (geometric mean) | `JSONScores.totals.final_total_score` (derived getter) | ✅ |
-| Prompt version tracking | `JSONScores.prompt_version_hash` | ✅ |
+| Prompt version tracking | `JSONScores.prompt_snapshot` (multi-file PromptSnapshot) | ✅ |
 | Pre-curve output (no grades) | `JSONScores` (Schema.Class) | ✅ |
 | Post-curve output (A/B/C/D) | `CurvedScores` | ✅ |
-| Curve method (std dev) | Not yet ported | ⬜ |
-| Compatibility check | Not yet ported | ⬜ |
+| Curve method (std dev) | `Curve.method` + `Curve.thresholds` | ✅ |
+| Compatibility check | `apply-curve.ts` `checkCompatibility()` (3-tier: structural, provenance, advisory) | ✅ |
 
 ## Schema Source of Truth
 

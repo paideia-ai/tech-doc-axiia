@@ -12,6 +12,32 @@ import {
 } from "./schemas.js";
 
 // =============================================================================
+// 0. PromptSnapshot — reusable stored form
+//
+// Realistic snapshot: 6 framework templates (zh) + 3 problem-specific files.
+// All SHA-256 values are distinct 64-char hex strings.
+// =============================================================================
+
+export const samplePromptSnapshotStored = {
+  git_hash: "a3f8b2c",
+  set_hash: "aabbccddee00112233445566778899aabbccddee00112233445566778899aabb",
+  entries: [
+    { key: "framework:zh:ability-summary",  sha256: "1000000000000000000000000000000000000000000000000000000000000001" },
+    { key: "framework:zh:expert-review",    sha256: "1000000000000000000000000000000000000000000000000000000000000002" },
+    { key: "framework:zh:final-summary",    sha256: "1000000000000000000000000000000000000000000000000000000000000003" },
+    { key: "framework:zh:problem-ability",  sha256: "1000000000000000000000000000000000000000000000000000000000000004" },
+    { key: "framework:zh:problem-summary",  sha256: "1000000000000000000000000000000000000000000000000000000000000005" },
+    { key: "framework:zh:task-eval",        sha256: "1000000000000000000000000000000000000000000000000000000000000006" },
+    { key: "problem:000340:scoring",        sha256: "2000000000000000000000000000000000000000000000000000000000000001" },
+    { key: "problem:000340:task-eval",      sha256: "2000000000000000000000000000000000000000000000000000000000000002" },
+    { key: "problem:000500:scoring",        sha256: "3000000000000000000000000000000000000000000000000000000000000001" },
+    { key: "problem:000500:task-eval",      sha256: "3000000000000000000000000000000000000000000000000000000000000002" },
+    { key: "problem:001001:scoring",        sha256: "4000000000000000000000000000000000000000000000000000000000000001" },
+    { key: "problem:001001:task-eval",      sha256: "4000000000000000000000000000000000000000000000000000000000000002" },
+  ],
+};
+
+// =============================================================================
 // 1. ProblemDimensionMap (embedded in JSONScores)
 // =============================================================================
 
@@ -58,7 +84,7 @@ const dimMap = {
 export const jsonScoresStored = {
   scores_id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   event_id: "spring-2024-final",
-  prompt_version_hash: "a3f8b2c",
+  prompt_snapshot: samplePromptSnapshotStored,
   dimension_map: dimMap,
   generated_at: "2024-03-15T14:30:00Z",
   participant_id: "student-0042",
@@ -171,11 +197,7 @@ export const curvedScoresStored = {
     "Verification-Confirmation": "C",
     "Iterative-Optimization": "B",
   },
-  total_grades: {
-    total_problem_grade: "B",
-    total_ability_grade: "B",
-    final_total_grade: "B",
-  },
+  overall_grade: "B",
 };
 
 const curved = decodeCurvedScores(curvedScoresStored);
@@ -208,7 +230,7 @@ console.log(
 );
 console.log("source.totals:", curved.source.totals);
 console.log("ability_grades:", dimRecordToJson(curved.ability_grades));
-console.log("total_grades:", curved.total_grades);
+console.log("overall_grade:", curved.overall_grade);
 
 // =============================================================================
 // 6. Round-trip: encode strips derived getters

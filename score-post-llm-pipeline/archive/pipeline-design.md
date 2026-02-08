@@ -1,3 +1,5 @@
+> **Historical document.** This was the initial pipeline design (ip-02 era). Field names, dimension IDs, and schema structures have since changed. See `v3-effect/schemas.ts` for the current source of truth and `v3-effect/schema-explanation.md` for a walkthrough.
+
 # Score Post-LLM Pipeline Design
 
 ## Key Design Decisions (from ip-02.md)

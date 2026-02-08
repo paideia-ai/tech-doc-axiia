@@ -23,6 +23,7 @@ import {
   decodeJSONScores,
 } from "./schemas.js";
 import { sampleReport } from "./report-fixture.js";
+import { samplePromptSnapshotStored } from "./fixtures.js";
 
 // =============================================================================
 // Shared threshold: A ≥ 0.85, B ≥ 0.72, C ≥ 0.55
@@ -36,7 +37,7 @@ const T = { A: 0.85, B: 0.72, C: 0.55 } as const;
 
 /**
  * Build a compatible Curve from scores.
- * Copies prompt_version_hash, event_id, and dimension_map so all
+ * Copies prompt_snapshot, event_id, and dimension_map so all
  * provenance checks pass. Covers every problem in scores.
  */
 export function buildCompatibleCurve(scores: JSONScores): Curve {
@@ -57,11 +58,21 @@ export function buildCompatibleCurve(scores: JSONScores): Curve {
     dimensions: [...e.dimensions],
   }));
 
+  // Re-encode the prompt_snapshot from decoded scores
+  const promptSnap = {
+    git_hash: scores.prompt_snapshot.git_hash,
+    set_hash: scores.prompt_snapshot.set_hash,
+    entries: scores.prompt_snapshot.entries.map((e) => ({
+      key: e.key,
+      sha256: e.sha256,
+    })),
+  };
+
   return decodeCurve({
     curve_id: "11111111-2222-3333-4444-555555555555",
     label: "Spring 2024 Standard Deviation Curve",
     source_event_ids: [scores.event_id],
-    prompt_version_hash: scores.prompt_version_hash,
+    prompt_snapshot: promptSnap,
     dimension_map: {
       map_id: scores.dimension_map.map_id,
       label: scores.dimension_map.label,
@@ -81,7 +92,8 @@ export function buildCompatibleCurve(scores: JSONScores): Curve {
  * Build an incompatible Curve from scores.
  * Deliberately broken in multiple ways:
  *   structural:  omits the last problem, dimmap only has first two entries
- *   provenance:  wrong prompt hash, wrong event, different map_id
+ *   provenance:  different prompt snapshot (changed framework:zh:task-eval + different set_hash),
+ *                wrong event, different map_id
  *   advisory:    sample_size = 15 (< 30 for std_dev)
  */
 export function buildIncompatibleCurve(scores: JSONScores): Curve {
@@ -101,11 +113,33 @@ export function buildIncompatibleCurve(scores: JSONScores): Curve {
     dimensions: [...e.dimensions],
   }));
 
+  // Snapshot with different git_hash, different set_hash, and one changed entry
+  // (framework:zh:task-eval sha256 differs) — for per-entry diagnostic testing.
+  const incompatibleSnapshot = {
+    git_hash: "fffffff",
+    set_hash: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    entries: [
+      { key: "framework:zh:ability-summary",  sha256: "1000000000000000000000000000000000000000000000000000000000000001" },
+      { key: "framework:zh:expert-review",    sha256: "1000000000000000000000000000000000000000000000000000000000000002" },
+      { key: "framework:zh:final-summary",    sha256: "1000000000000000000000000000000000000000000000000000000000000003" },
+      { key: "framework:zh:problem-ability",  sha256: "1000000000000000000000000000000000000000000000000000000000000004" },
+      { key: "framework:zh:problem-summary",  sha256: "1000000000000000000000000000000000000000000000000000000000000005" },
+      // Changed: framework:zh:task-eval has a different sha256
+      { key: "framework:zh:task-eval",        sha256: "ffff000000000000000000000000000000000000000000000000000000000006" },
+      { key: "problem:000340:scoring",        sha256: "2000000000000000000000000000000000000000000000000000000000000001" },
+      { key: "problem:000340:task-eval",      sha256: "2000000000000000000000000000000000000000000000000000000000000002" },
+      { key: "problem:000500:scoring",        sha256: "3000000000000000000000000000000000000000000000000000000000000001" },
+      { key: "problem:000500:task-eval",      sha256: "3000000000000000000000000000000000000000000000000000000000000002" },
+      { key: "problem:001001:scoring",        sha256: "4000000000000000000000000000000000000000000000000000000000000001" },
+      { key: "problem:001001:task-eval",      sha256: "4000000000000000000000000000000000000000000000000000000000000002" },
+    ],
+  };
+
   return decodeCurve({
     curve_id: "66666666-7777-8888-9999-aaaaaaaaaaaa",
     label: "Deliberately Incompatible Curve",
     source_event_ids: ["different-event"],
-    prompt_version_hash: "fffffff",
+    prompt_snapshot: incompatibleSnapshot,
     dimension_map: {
       map_id: "00000000-0000-0000-0000-000000000000",
       label: "Wrong map",
@@ -150,7 +184,7 @@ function buildScoresFromReport(): JSONScores {
   return decodeJSONScores({
     scores_id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     event_id: "spring-2024-final",
-    prompt_version_hash: "a3f8b2c",
+    prompt_snapshot: samplePromptSnapshotStored,
     participant_id: "student-0042",
     dimension_map: {
       map_id: "d4e5f6a7-b8c9-4d0e-af12-345678901234",
