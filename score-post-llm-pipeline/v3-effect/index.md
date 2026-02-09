@@ -24,6 +24,7 @@ Effect Schema implementation of the score post-LLM pipeline data types.
 | `compute-curve-test.ts` | Runnable tests for compute-curve: all three CurveMethod variants, threshold ordering/variation checks, round-trip through applyCurve, writes computed-curve.json |
 | `partial-application-scenarios.md` | Catalog of all curve–score mismatch scenarios (S1–S8): which crash, which are meaningful for partial application, and what changes are needed |
 | `data-construction.md` | Step-by-step guide to constructing valid JSONScores (including PromptSnapshot set_hash computation) and assembling a ScorePool |
+| `data-preparation.md` | Quick reference for raw JSON formats (JSONScores, PromptSnapshot, ProblemDimensionMap, EventConfig), the 3-step load pattern, and decode/encode behavior |
 | `test-data/computed-curve.json` | Generated output: Curve computed from a 6-student pool using standard_deviation method, with varying thresholds across problems and dimensions |
 | `pipeline-walkthrough.ts` | Annotated end-to-end tutorial script walking through all 4 pipeline edges (COLLECT → COMPUTE → CHECK → APPLY) with heavy comments explaining each Effect Schema pattern |
 | `test-data/walkthrough-output.json` | Generated output: CurvedScores produced by the walkthrough script's round-trip demonstration |
@@ -44,6 +45,7 @@ graph LR
     PL[prompt-locations.md] -. "documents key convention for" .-> S
     DC[data-construction.md] -. "construction guide for" .-> S
     DC -. "references" .-> SPB
+    DP[data-preparation.md] -. "format reference for" .-> S
     SPB[score-pool-builder.ts] --> S
     SPB -. "reuses strategy from" .-> AC
     F --> SPBT[score-pool-builder-test.ts]
