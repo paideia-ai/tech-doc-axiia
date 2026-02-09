@@ -74,9 +74,11 @@ Problem curves use `task_score` only (dimension-independent). The +/-0.003 diffs
 
 ---
 
-## Part 2: Grade Comparison — Fully-Curved Reports vs Computed
+## Part 2: Grade Comparison — Report Grades vs Pipeline Grades
 
-The fully-curved report grades (`ISS-with-full-curved/`) are verified to match the manual CSV thresholds exactly: 252/252 problem task grades and 63/63 overall grades.
+Compares the grades stored in `ISS-with-full-curved/` report JSONs (graded using `ISS-curve-manual.csv`, 7-dim) against the grades computed by the pipeline in `output/step5-curved-scores.json` (graded using `output/step4-curve.json`, 5-dim). This comparison is automated as Step 7 in `extract-and-compute.ts` and output to `output/step7-grade-comparison.json`.
+
+The report grades use the manual CSV thresholds (7-dim). The pipeline grades use computed thresholds (5-dim).
 
 ### Overall Grade
 

@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "overall": 4,
+    "ability": 0,
+    "problem_task": 1,
+    "dim_in_problem": 0,
+    "total": 5
+  },
+  "diffs": [
+    {
+      "participant": "chenshuo4@lenovo.com",
+      "category": "problem.000341.task",
+      "report": "C",
+      "computed": "D",
+      "score": 0.01666666666666667
+    },
+    {
+      "participant": "rongdi1@lenovo.com",
+      "category": "overall",
+      "report": "A",
+      "computed": "B",
+      "score": 0.4847235532516685
+    },
+    {
+      "participant": "wangrp1@lenovo.com",
+      "category": "overall",
+      "report": "C",
+      "computed": "D",
+      "score": 0.2806104913634696
+    },
+    {
+      "participant": "gpalanisamy@lenovo.com",
+      "category": "overall",
+      "report": "A",
+      "computed": "B",
+      "score": 0.46547761864727555
+    },
+    {
+      "participant": "sg2@lenovo.com",
+      "category": "overall",
+      "report": "D",
+      "computed": "C",
+      "score": 0.2897482937274156
+    }
+  ]
+}

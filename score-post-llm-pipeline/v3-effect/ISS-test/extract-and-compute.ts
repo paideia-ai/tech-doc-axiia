@@ -11,6 +11,7 @@
  *   4. Compute Curve thresholds via μ ± σ, decode through Schema → Curve
  *   5. Apply curve → CurvedScores[] (each decoded through Schema)
  *   6. Compare problem curves with known values
+ *   7. Compare report grades (ISS-with-full-curved) vs computed grades (step 5)
  *
  * Run: cd score-post-llm-pipeline && npx tsx v3-effect/ISS-test/extract-and-compute.ts
  */
@@ -62,15 +63,17 @@ const PROBLEM_DIM_MAP: Record<string, Dimension[]> = {
 
 interface RawReport {
   metadata: { lang: string };
+  grade: string;
   abilityMean: number;
   overallMean: number;
   taskEvalMean: number;
   problemReports: {
     score: number;
+    grade: string;
     problemId: string;
-    dimensionDetails: { score: number; dimension: string }[];
+    dimensionDetails: { score: number; grade: string; dimension: string }[];
   }[];
-  dimensionReports: { score: number; dimension: string }[];
+  dimensionReports: { score: number; grade: string; dimension: string }[];
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────
@@ -601,6 +604,82 @@ async function main() {
 
   const knownOverall = { A: 0.497, B: 0.394, C: 0.292 };
   console.log(`\noverallMean: known(7dim)=[${knownOverall.A}, ${knownOverall.B}, ${knownOverall.C}]  computed(5dim)=[${overallThresholds.A}, ${overallThresholds.B}, ${overallThresholds.C}]  (expected to differ)`);
+
+  // ── Step 7: Compare report grades (ISS-with-full-curved) vs computed grades (step 5) ──
+  console.log("\n=== Step 7: Grade Comparison — Report vs Computed ===\n");
+
+  interface GradeDiff {
+    participant: string;
+    category: string;
+    report: string;
+    computed: string;
+    score: number;
+  }
+  const diffs: GradeDiff[] = [];
+
+  for (let i = 0; i < allScores.length; i++) {
+    const report = allReports[i].report;
+    const cs = curvedScoresResults[i];
+    const pid = cs.source.participant_id;
+
+    // Overall grade
+    if (report.grade !== cs.overall_grade) {
+      diffs.push({ participant: pid, category: "overall", report: report.grade, computed: cs.overall_grade, score: cs.source.totals.final_total_score });
+    }
+
+    // Ability grades (skip choosing, world-modeling from report)
+    for (const dr of report.dimensionReports) {
+      if (DROP_DIMENSIONS.has(dr.dimension)) continue;
+      const dim = dr.dimension as Dimension;
+      if (dr.grade !== cs.ability_grades[dim]) {
+        diffs.push({ participant: pid, category: `ability.${dim}`, report: dr.grade, computed: cs.ability_grades[dim], score: cs.source.ability_scores[dim] });
+      }
+    }
+
+    // Problem task grades + dimension-in-problem grades
+    for (const pr of report.problemReports) {
+      const lang = report.metadata.lang;
+      const digit = extractProblemDigit(pr.problemId, lang);
+      const pg = cs.problem_grades.find((p) => p.problem_id.digit === digit);
+      if (!pg) continue;
+
+      if (pr.grade !== pg.task_grade) {
+        diffs.push({ participant: pid, category: `problem.${digit}.task`, report: pr.grade, computed: pg.task_grade, score: pr.score });
+      }
+
+      for (const dd of pr.dimensionDetails) {
+        if (DROP_DIMENSIONS.has(dd.dimension)) continue;
+        const dim = dd.dimension as Dimension;
+        const opt = pg.dimension_grades[dim];
+        const computedGrade = opt._tag === "Some" ? opt.value : null;
+        if (computedGrade && dd.grade !== computedGrade) {
+          diffs.push({ participant: pid, category: `problem.${digit}.dim.${dim}`, report: dd.grade, computed: computedGrade, score: dd.score });
+        }
+      }
+    }
+  }
+
+  // Summarize
+  const overallDiffs = diffs.filter((d) => d.category === "overall");
+  const abilityDiffs = diffs.filter((d) => d.category.startsWith("ability."));
+  const taskDiffs = diffs.filter((d) => d.category.endsWith(".task"));
+  const dimInProbDiffs = diffs.filter((d) => d.category.includes(".dim."));
+
+  console.log(`Overall grade:         ${overallDiffs.length} diffs / ${allScores.length}`);
+  console.log(`Ability grades:        ${abilityDiffs.length} diffs / ${allScores.length * 5}`);
+  console.log(`Problem task grades:   ${taskDiffs.length} diffs / ${allScores.length * problemDigits.length}`);
+  console.log(`Dim-in-problem grades: ${dimInProbDiffs.length} diffs`);
+  console.log(`Total:                 ${diffs.length} diffs\n`);
+
+  if (diffs.length > 0) {
+    console.log("All differences:");
+    for (const d of diffs) {
+      console.log(`  ${d.participant.padEnd(30)} ${d.category.padEnd(40)} report=${d.report} computed=${d.computed} score=${round3(d.score)}`);
+    }
+  }
+
+  fs.writeFileSync(path.join(outDir, "step7-grade-comparison.json"), JSON.stringify({ summary: { overall: overallDiffs.length, ability: abilityDiffs.length, problem_task: taskDiffs.length, dim_in_problem: dimInProbDiffs.length, total: diffs.length }, diffs }, null, 2));
+  console.log(`\nWrote step7-grade-comparison.json`);
 
   console.log("\nDone. All outputs written to output/");
 }
