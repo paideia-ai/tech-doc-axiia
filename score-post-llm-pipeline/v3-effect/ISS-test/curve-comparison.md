@@ -1,12 +1,20 @@
-# ISS Curve Comparison: Manual CSV vs Computed (5-dim)
-
-**Sources:**
-- Manual CSV: `ISS-curve-manual.csv` — 7 dimensions (includes choosing + world-modeling)
-- Computed: `score-from-reports/output/step4-curve.json` — 5 dimensions (choosing + world-modeling dropped per schema)
+# ISS Curve Comparison
 
 **Population:** 63 participants (41 CN + 22 EN), 4 problems
 
-## Overall Mean
+Three curve sources are compared:
+
+| Source | Label | Method | Dims |
+|--------|-------|--------|------|
+| `ISS-curve-manual.csv` | Manual CSV | standard_deviation (μ ± σ) | 7 |
+| `output/step4-curve.json` | Computed | standard_deviation (μ ± σ) | 5 |
+| `ISS-with-full-curved/` | Report grades | manual CSV curve applied | 7 |
+
+Note: `ISS-without-task-curve/` contains the historical reports where problem task grades were **not** curved (used a different quartile-like method). `ISS-with-full-curved/` has been fully curved using the manual CSV thresholds and is the correct comparison baseline.
+
+## Part 1: Threshold Comparison — Manual CSV vs Computed
+
+### Overall Mean
 
 | Grade | Manual (7-dim) | Computed (5-dim) | Diff |
 |-------|---------------|-----------------|------|
@@ -16,7 +24,7 @@
 
 Differs because `final_total_score = sqrt(total_problem * total_ability)` and `total_ability` changes when computed from 5 vs 7 dimensions.
 
-## Ability Curves
+### Ability Curves
 
 | Dimension | Grade | Manual (7-dim) | Computed (5-dim) | Diff |
 |-----------|-------|---------------|-----------------|------|
@@ -36,9 +44,9 @@ Differs because `final_total_score = sqrt(total_problem * total_ability)` and `t
 | | B | 0.414 | 0.414 | 0 |
 | | C | 0.263 | 0.264 | +0.001 |
 
-Per-dimension ability scores are dimension-independent (each dim is averaged across its mapped problems only), so these should match regardless of 5 vs 7 dim. The +/-0.001 diffs are rounding artifacts (round to 3 decimal places applied at different steps).
+Per-dimension ability scores are dimension-independent (each dim is averaged across its mapped problems only), so these should match regardless of 5 vs 7 dim. The +/-0.001 diffs are rounding artifacts.
 
-## Problem Curves
+### Problem Curves
 
 | Problem | Grade | Manual (7-dim) | Computed (5-dim) | Diff |
 |---------|-------|---------------|-----------------|------|
@@ -55,13 +63,65 @@ Per-dimension ability scores are dimension-independent (each dim is averaged acr
 | | B | 0.304 | 0.304 | 0 |
 | | C | 0.056 | 0.058 | +0.002 |
 
-Problem curves use `task_score` only (dimension-independent), so they should match regardless of 5 vs 7 dim. The +/-0.003 diffs are rounding artifacts.
+Problem curves use `task_score` only (dimension-independent). The +/-0.003 diffs are rounding artifacts.
 
-## Summary
+### Part 1 Summary
 
-- **B thresholds (= mu):** All match exactly across all categories.
-- **A/C thresholds (= mu +/- sigma):** All within +/-0.003 — rounding artifacts only.
-- **Overall mean:** Differs by ~0.006 — expected due to 5-dim vs 7-dim `total_ability_score` feeding into `final_total_score`.
-- **Max diff:** 0.007 (overall mean C threshold), 0.003 (problem curves).
+- **B thresholds (= μ):** All match exactly.
+- **A/C thresholds (= μ ± σ):** All within +/-0.003 — rounding artifacts only.
+- **Overall mean:** Differs by ~0.006 — expected due to 5-dim vs 7-dim.
+- Manual CSV and Computed are numerically equivalent.
 
-All differences are accounted for by rounding precision and the intentional dimension reduction.
+---
+
+## Part 2: Grade Comparison — Fully-Curved Reports vs Computed
+
+The fully-curved report grades (`ISS-with-full-curved/`) are verified to match the manual CSV thresholds exactly: 252/252 problem task grades and 63/63 overall grades.
+
+### Overall Grade
+
+| | A | B | C | D |
+|---|---|---|---|---|
+| Report (7-dim curve) | 10 | 22 | 18 | 13 |
+| Computed (5-dim curve) | 8 | 24 | 18 | 13 |
+
+4 differences — all caused by the 5-dim vs 7-dim score difference:
+
+| Participant | Report | Computed | Report score (7-dim) | Computed score (5-dim) | Cause |
+|-------------|--------|----------|---------------------|----------------------|-------|
+| gpalanisamy@lenovo.com | A | B | 0.5098 | 0.465 | 7-dim score A (≥0.498), 5-dim score B (<0.492) |
+| rongdi1@lenovo.com | A | B | 0.5079 | 0.485 | 7-dim score A (≥0.498), 5-dim score B (<0.492) |
+| sg2@lenovo.com | D | C | 0.2841 | 0.290 | 7-dim score D (<0.291), 5-dim score C (≥0.284) |
+| wangrp1@lenovo.com | C | D | 0.2928 | 0.281 | 7-dim score C (≥0.291), 5-dim score D (<0.284) |
+
+Both A→B cases: the 7-dim `overallMean` scores (0.510, 0.508) clear the 7-dim A threshold (0.498), but the 5-dim `final_total_score` (0.465, 0.485) falls below the 5-dim A threshold (0.492). The scores themselves differ because `total_ability` changes with fewer dimensions.
+
+The C↔D cases are boundary scores where the 7-dim and 5-dim C thresholds (0.291 vs 0.284) straddle the score.
+
+### Ability Grades
+
+**0 differences.** All 315 ability grades (63 participants x 5 dimensions) match exactly.
+
+### Dimension-in-Problem Grades
+
+**0 differences.** All dimension grades within problems match exactly.
+
+### Problem Task Grades
+
+**1 difference:**
+
+| Participant | Problem | Report | Computed | Score | Cause |
+|-------------|---------|--------|----------|-------|-------|
+| chenshuo4@lenovo.com | 000341 meeting-verify | C | D | 0.0167 | Score between manual C≥0.015 and computed C≥0.018 |
+
+This single diff is a rounding artifact: the manual CSV C threshold for 000341 is 0.015 and the computed threshold is 0.018 (diff +0.003). Score 0.0167 falls in the gap.
+
+### Part 2 Summary
+
+- **Ability grades:** Identical (0/315 diffs).
+- **Dimension-in-problem grades:** Identical (0 diffs).
+- **Problem task grades:** 1 diff out of 252 — rounding artifact at a threshold boundary.
+- **Overall grade:** 4 diffs out of 63 — all from the 5-dim vs 7-dim `final_total_score` difference.
+- **Total: 5 grade differences out of 630 grade assignments (0.8%).**
+
+All differences are fully explained by the intentional 5→7 dimension reduction and rounding precision.

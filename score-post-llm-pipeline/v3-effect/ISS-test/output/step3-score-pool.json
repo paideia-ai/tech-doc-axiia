@@ -1,5 +1,5 @@
 {
-  "pool_id": "06eb8d81-0f5f-4292-919e-6061ebb5b0f3",
+  "pool_id": "828624ae-5bc9-40b8-9cd6-89be15d22dab",
   "label": "ISS Test Pool (from reports, 5-dim)",
   "source_event_ids": [
     "ISS-2024"
@@ -67,7 +67,7 @@
     ]
   },
   "dimension_map": {
-    "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+    "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
     "label": "ISS 2024 Assessment (5-dim)",
     "created_at": "2024-06-10T00:00:00.000Z",
     "entries": [
@@ -118,7 +118,7 @@
   "created_at": "2024-06-10T00:00:00.000Z",
   "scores": [
     {
-      "scores_id": "43c2d40f-ef0b-4816-99b4-1903785bbbef",
+      "scores_id": "fd11d86f-51c0-4403-8f79-2ccaf2af09a2",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -183,7 +183,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -293,7 +293,7 @@
       ]
     },
     {
-      "scores_id": "e9738e0c-8210-4ee4-a8f6-4f2793623ac2",
+      "scores_id": "ea7da8de-2aaf-4440-b5d4-e0903414579b",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -358,7 +358,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -468,7 +468,7 @@
       ]
     },
     {
-      "scores_id": "be3e03ba-a8ea-4c01-8b7a-6fcd9fdeca62",
+      "scores_id": "d704d70a-c9a9-4552-9905-80df4b11c0d2",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -533,7 +533,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -643,7 +643,7 @@
       ]
     },
     {
-      "scores_id": "07b40c18-b3b8-4fbf-bd88-0f5724fc288a",
+      "scores_id": "eef96c73-fe76-4ced-a1d6-9f7fd069bc7a",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -708,7 +708,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -818,7 +818,7 @@
       ]
     },
     {
-      "scores_id": "43ea7319-a838-4e58-949c-cbf6334c8fd2",
+      "scores_id": "4fa86e0a-6079-47eb-bd15-cfa3b99ccc42",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -883,7 +883,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -993,7 +993,7 @@
       ]
     },
     {
-      "scores_id": "8f8ab602-be58-4551-b5b6-a5ea79330dad",
+      "scores_id": "8ea7c3ac-ff1d-4a19-a764-5f163bfb0e5f",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1058,7 +1058,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -1168,7 +1168,7 @@
       ]
     },
     {
-      "scores_id": "803db354-9a4e-4922-8724-1496a8dcdabf",
+      "scores_id": "77579049-6ce9-4cb4-8134-443a2520cff8",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1233,7 +1233,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -1343,7 +1343,7 @@
       ]
     },
     {
-      "scores_id": "dce02a64-8284-41aa-90ea-9285cb60ed49",
+      "scores_id": "5f48a628-39d6-471f-a46f-446cc6990688",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1408,7 +1408,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -1518,7 +1518,7 @@
       ]
     },
     {
-      "scores_id": "d84973bf-64e6-4673-96ce-cf0029546514",
+      "scores_id": "11e10a18-019f-4082-8192-f6253d6ca865",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1583,7 +1583,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -1693,7 +1693,7 @@
       ]
     },
     {
-      "scores_id": "603b85c0-f7a2-4c5f-bcfe-cfad6bec2f60",
+      "scores_id": "d207d17e-54b5-4f8b-98b1-35e800bb3458",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1758,7 +1758,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -1868,7 +1868,7 @@
       ]
     },
     {
-      "scores_id": "8944b3b4-8d52-4600-9596-f1710996f121",
+      "scores_id": "a8ad3460-445b-4b8d-a611-1a25ae520429",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -1933,7 +1933,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2043,7 +2043,7 @@
       ]
     },
     {
-      "scores_id": "bc2815f6-d648-4724-9d0e-bd5b41cdcb41",
+      "scores_id": "ca8791b7-2cb2-4770-9274-fa4fabda7a8c",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2108,7 +2108,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2218,7 +2218,7 @@
       ]
     },
     {
-      "scores_id": "7328d3dd-3b46-4f5a-b005-795629419797",
+      "scores_id": "b855ae3e-ed22-40cf-b98f-fd2cf2ee71c5",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2283,7 +2283,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2393,7 +2393,7 @@
       ]
     },
     {
-      "scores_id": "8837f6de-3451-4558-9f4e-2a7a84378eeb",
+      "scores_id": "19512e84-214d-42ee-97e7-2686d8e63ad1",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2458,7 +2458,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2568,7 +2568,7 @@
       ]
     },
     {
-      "scores_id": "25b431d0-39ad-409d-aea0-17ca04dc688f",
+      "scores_id": "f917b079-145d-484a-9a2a-db9df76fc333",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2633,7 +2633,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2743,7 +2743,7 @@
       ]
     },
     {
-      "scores_id": "6342da09-b479-41f7-a0f2-3c24b4fe3278",
+      "scores_id": "7b862771-06d6-476a-a68d-f18b77d9b020",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2808,7 +2808,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -2918,7 +2918,7 @@
       ]
     },
     {
-      "scores_id": "9f6a7308-1001-42bb-8d3c-299f8e468cb3",
+      "scores_id": "53a204fd-aaaf-4a8e-8a70-de5bce488de8",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -2983,7 +2983,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3093,7 +3093,7 @@
       ]
     },
     {
-      "scores_id": "4f773b68-1bad-4222-a256-7178ee06ed19",
+      "scores_id": "622d5e2f-2caa-486b-8085-cad48d0ffefe",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -3158,7 +3158,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3268,7 +3268,7 @@
       ]
     },
     {
-      "scores_id": "b19470c1-2536-46b2-bc5c-5086f422970f",
+      "scores_id": "5228d77f-3d0d-442a-afdc-07d0025f1737",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -3333,7 +3333,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3443,7 +3443,7 @@
       ]
     },
     {
-      "scores_id": "12387f76-7366-41df-9c72-ae9e4e316f59",
+      "scores_id": "7705a9df-a91f-47ca-b15c-9d230ef52af9",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -3508,7 +3508,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3618,7 +3618,7 @@
       ]
     },
     {
-      "scores_id": "43f9eb3d-6059-45d1-896f-872821c37d94",
+      "scores_id": "e7fb0626-c926-4cc0-a299-c72656506d1c",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -3683,7 +3683,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3793,7 +3793,7 @@
       ]
     },
     {
-      "scores_id": "54a33bbc-8bdc-43fa-a3da-8618fc09c85e",
+      "scores_id": "fc2011cb-6392-4cc3-8ebd-24dc8928c6eb",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -3858,7 +3858,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -3968,7 +3968,7 @@
       ]
     },
     {
-      "scores_id": "7381b854-1c48-4dca-aa86-e045754138e9",
+      "scores_id": "d3345a15-139a-46e2-8cb6-6872c7ccac3b",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4033,7 +4033,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -4143,7 +4143,7 @@
       ]
     },
     {
-      "scores_id": "389f6719-eba2-4f32-ac60-340f87a355f0",
+      "scores_id": "504059f1-9ecc-4835-9211-d8dc645414e1",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4208,7 +4208,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -4318,7 +4318,7 @@
       ]
     },
     {
-      "scores_id": "71358905-ede6-4ef4-b958-40b49ac55164",
+      "scores_id": "6f826da4-7a70-45af-97ed-8b9025bcd5ea",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4383,7 +4383,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -4493,7 +4493,7 @@
       ]
     },
     {
-      "scores_id": "d38d021f-c5f0-481a-9107-01e0072c83a3",
+      "scores_id": "d80f0f04-cbff-4b68-bb73-83f5f571031a",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4558,7 +4558,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -4668,7 +4668,7 @@
       ]
     },
     {
-      "scores_id": "a8074e5e-ff2a-4370-88ea-e068bb9c8fd6",
+      "scores_id": "e427b6fa-e58d-4ca7-bea9-4aa001c1931c",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4733,7 +4733,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -4843,7 +4843,7 @@
       ]
     },
     {
-      "scores_id": "cfa61f2e-b738-4cc1-81f9-c0dbf0036556",
+      "scores_id": "07552f53-7a6f-4e62-a5e5-3a5fdb9a44d9",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -4908,7 +4908,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5018,7 +5018,7 @@
       ]
     },
     {
-      "scores_id": "e5416011-20a8-4217-a488-b8b611ed43a5",
+      "scores_id": "4288ee9b-68cf-4d27-9826-50370a128611",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5083,7 +5083,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5193,7 +5193,7 @@
       ]
     },
     {
-      "scores_id": "59ac4e6a-8ab7-41bd-9d67-0979424a002b",
+      "scores_id": "e9854370-2d35-41aa-b55e-ee4806216952",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5258,7 +5258,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5368,7 +5368,7 @@
       ]
     },
     {
-      "scores_id": "45ed594e-1422-48de-99b4-8bc93d916113",
+      "scores_id": "655d6c77-d7f7-4727-837e-06951e69aa92",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5433,7 +5433,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5543,7 +5543,7 @@
       ]
     },
     {
-      "scores_id": "7abd1469-63f4-473d-babc-fcf9ddcbf5a0",
+      "scores_id": "27579f10-b6a5-45b8-bb9c-b53f42dd3712",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5608,7 +5608,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5718,7 +5718,7 @@
       ]
     },
     {
-      "scores_id": "94147e1d-d0c2-432f-a112-41b35c2d4822",
+      "scores_id": "ed57813f-20d1-401a-bdd6-67dc64d4c957",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5783,7 +5783,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -5893,7 +5893,7 @@
       ]
     },
     {
-      "scores_id": "7788ee1c-117a-498f-9590-765d5a4fd7b2",
+      "scores_id": "457f88d4-dc5a-4bf3-8b90-87dccfa045f5",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -5958,7 +5958,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6068,7 +6068,7 @@
       ]
     },
     {
-      "scores_id": "4fc604fa-ccea-477d-ad49-e2e234f856ce",
+      "scores_id": "9aeac9c9-7055-4b73-a83b-09c18595db2b",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -6133,7 +6133,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6243,7 +6243,7 @@
       ]
     },
     {
-      "scores_id": "83fe88be-00ad-4f6b-9ba0-b3d1e7cf4e87",
+      "scores_id": "ac9a61c7-aa24-4d97-845f-f788acf52b3b",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -6308,7 +6308,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6418,7 +6418,7 @@
       ]
     },
     {
-      "scores_id": "6d52c141-37e7-4dab-b160-341999a8b31e",
+      "scores_id": "019e442b-a7e5-4a33-b7f2-9d9dcbb7b876",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -6483,7 +6483,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6593,7 +6593,7 @@
       ]
     },
     {
-      "scores_id": "ac842175-a2ec-4a57-9c1f-773d3f42835a",
+      "scores_id": "a9fae109-1a81-4efa-8c31-bc7d99d26397",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -6658,7 +6658,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6768,7 +6768,7 @@
       ]
     },
     {
-      "scores_id": "7b646b26-5003-48c7-9db0-566f5f57941e",
+      "scores_id": "dec4ce30-f379-422a-8fb2-440ef653deed",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -6833,7 +6833,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -6943,7 +6943,7 @@
       ]
     },
     {
-      "scores_id": "a5a18b9f-8fc6-45b4-ba9a-a3f2b0eefd4a",
+      "scores_id": "3772d51f-0d71-4d47-9950-76925cdde391",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7008,7 +7008,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7118,7 +7118,7 @@
       ]
     },
     {
-      "scores_id": "663f7040-467b-4a83-a81e-b91da2aee299",
+      "scores_id": "137e2cca-dc05-4ed8-adb5-bafc317de8dd",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7183,7 +7183,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7293,7 +7293,7 @@
       ]
     },
     {
-      "scores_id": "3a2d7da5-ba73-4f2d-9812-a8158432e5d4",
+      "scores_id": "b7682d37-45f0-466a-adf3-aa0d1868f730",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7358,7 +7358,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7468,7 +7468,7 @@
       ]
     },
     {
-      "scores_id": "289890d7-6904-45e6-bee7-b6058fdda0c0",
+      "scores_id": "ae45c10f-43e0-4fe3-aaa1-fedfc9f27591",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7533,7 +7533,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7643,7 +7643,7 @@
       ]
     },
     {
-      "scores_id": "73e5bd37-59f0-40e2-8719-2d5ab98c7e61",
+      "scores_id": "58aab6e8-5de6-4cda-8092-0cd2e17bd2f0",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7708,7 +7708,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7818,7 +7818,7 @@
       ]
     },
     {
-      "scores_id": "21d02243-5166-4ced-830e-8354042da39a",
+      "scores_id": "f779c6f9-abfd-4602-a5c6-89d434836f37",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -7883,7 +7883,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -7993,7 +7993,7 @@
       ]
     },
     {
-      "scores_id": "fcc72aca-0ef5-47a1-845b-bb19dc0c665e",
+      "scores_id": "bba78cfd-b3b3-4e97-8d81-bc9099c22191",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8058,7 +8058,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -8168,7 +8168,7 @@
       ]
     },
     {
-      "scores_id": "ffbb928c-b7cc-481d-a13d-55f6d24d6f1b",
+      "scores_id": "a1dd4ba2-a7f6-433a-8152-303d14db5f88",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8233,7 +8233,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -8343,7 +8343,7 @@
       ]
     },
     {
-      "scores_id": "d3370479-a767-4b08-89a2-47e3c5da602e",
+      "scores_id": "2e8ca691-0e35-4523-80ef-894fcda33b6f",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8408,7 +8408,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -8518,7 +8518,7 @@
       ]
     },
     {
-      "scores_id": "00f699c7-6db1-41e1-afed-86c443af5a2b",
+      "scores_id": "32e81f6b-3aa9-4eca-9ff3-c7b041339075",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8583,7 +8583,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -8693,7 +8693,7 @@
       ]
     },
     {
-      "scores_id": "cab42316-4345-4c67-a427-19052022eff3",
+      "scores_id": "f0897ed8-a6b4-41d3-82bb-2d55bb1c7bdf",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8758,7 +8758,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -8868,7 +8868,7 @@
       ]
     },
     {
-      "scores_id": "98696c02-5018-44bd-9580-6aca20734a79",
+      "scores_id": "9d9b30aa-87c2-4f9b-b41e-2eb5572cc47c",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -8933,7 +8933,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9043,7 +9043,7 @@
       ]
     },
     {
-      "scores_id": "af9fd708-bde1-4154-b24a-312686e06299",
+      "scores_id": "8864c9e5-b059-4fca-a88f-218e25336fdd",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9108,7 +9108,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9218,7 +9218,7 @@
       ]
     },
     {
-      "scores_id": "9355610f-2431-4c58-b42b-127eebd1cb3b",
+      "scores_id": "5dd03122-6482-4292-b190-789ad3292af6",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9283,7 +9283,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9393,7 +9393,7 @@
       ]
     },
     {
-      "scores_id": "8bdcc9b5-460c-4a2d-ad8c-272d4d2a4259",
+      "scores_id": "b8bbb773-6dbc-466d-9dc2-cd0509f39cb7",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9458,7 +9458,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9568,7 +9568,7 @@
       ]
     },
     {
-      "scores_id": "f2c83398-5c6a-4b0d-8e15-32e4900efbe0",
+      "scores_id": "607b757f-5907-4179-811e-6ad3335f2cbe",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9633,7 +9633,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9743,7 +9743,7 @@
       ]
     },
     {
-      "scores_id": "a5e993aa-3ee3-4d5a-a29e-809c1adb9b56",
+      "scores_id": "45c01f1f-d35a-4be7-9659-3c8d172e6ff9",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9808,7 +9808,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -9918,7 +9918,7 @@
       ]
     },
     {
-      "scores_id": "474a21ec-4ca0-45c5-b8aa-a51d4a6aad6a",
+      "scores_id": "3f123f5b-659b-4fa3-8e87-0aab74218bb5",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -9983,7 +9983,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10093,7 +10093,7 @@
       ]
     },
     {
-      "scores_id": "c74a1692-211c-41c2-b91e-cdaa959515a2",
+      "scores_id": "03ea60f9-a612-46ca-987a-afffbae2c68b",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -10158,7 +10158,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10268,7 +10268,7 @@
       ]
     },
     {
-      "scores_id": "796be51e-12ce-4970-bccf-8f4aaed81b4f",
+      "scores_id": "36b2490e-cd1f-4c6d-9a65-6f9b444fc8a5",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -10333,7 +10333,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10443,7 +10443,7 @@
       ]
     },
     {
-      "scores_id": "1b63770e-1b89-47be-a884-472237d8b984",
+      "scores_id": "91e9206c-4a52-4513-92af-d2676a57f1ff",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -10508,7 +10508,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10618,7 +10618,7 @@
       ]
     },
     {
-      "scores_id": "78417f5a-6d6c-4f1b-8152-fb2181e794c6",
+      "scores_id": "12c535ce-2d51-45f2-ac84-497ee1a0b9c2",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -10683,7 +10683,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10793,7 +10793,7 @@
       ]
     },
     {
-      "scores_id": "bbaa367e-cee4-41dc-bef9-dc9cc409cb0e",
+      "scores_id": "4e3de01a-709f-4adc-9362-288eab249144",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -10858,7 +10858,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [
@@ -10968,7 +10968,7 @@
       ]
     },
     {
-      "scores_id": "ee681526-f9b6-46d6-afa4-b85706b76cae",
+      "scores_id": "8b6e298e-ac6f-403a-a670-437cb14115ef",
       "event_id": "ISS-2024",
       "prompt_snapshot": {
         "git_hash": "a0b1c2d",
@@ -11033,7 +11033,7 @@
         ]
       },
       "dimension_map": {
-        "map_id": "a4c983bb-a355-4649-8c45-96f1b93e90e5",
+        "map_id": "e951919f-777e-4a4a-bfb1-ed4f30e21a3a",
         "label": "ISS 2024 Assessment (5-dim)",
         "created_at": "2024-06-10T00:00:00.000Z",
         "entries": [

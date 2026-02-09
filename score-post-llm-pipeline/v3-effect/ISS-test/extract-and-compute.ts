@@ -263,8 +263,8 @@ async function main() {
   const outDir = path.join(__dirname, "output");
   fs.mkdirSync(outDir, { recursive: true });
 
-  const cnDir = path.join(__dirname, "ISS", "CN");
-  const enDir = path.join(__dirname, "ISS", "EN");
+  const cnDir = path.join(__dirname, "ISS-with-full-curved", "CN");
+  const enDir = path.join(__dirname, "ISS-with-full-curved", "EN");
 
   // ── Step 1: Read reports → decode as JSONScores ──
   console.log("=== Step 1: Read Reports → Decode as JSONScores ===\n");
