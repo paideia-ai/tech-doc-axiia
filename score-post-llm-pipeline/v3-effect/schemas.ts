@@ -53,18 +53,80 @@ export const GitHash = Schema.String.pipe(
 );
 export type GitHash = typeof GitHash.Type;
 
+// -- Prompt key validation (mirrors v1 PromptKeySchema) ----------------------
+
+export const Lang = Schema.Literal("en", "zh");
+export type Lang = typeof Lang.Type;
+
+export const FrameworkPromptName = Schema.Literal(
+  "ability-summary",
+  "expert-review",
+  "final-summary",
+  "problem-ability",
+  "problem-summary",
+  "task-eval"
+);
+export type FrameworkPromptName = typeof FrameworkPromptName.Type;
+
+export const ProblemPromptName = Schema.Literal("scoring", "task-eval");
+export type ProblemPromptName = typeof ProblemPromptName.Type;
+
+/** Folder-style problem identifier: "{6digits}-{name}" e.g. "000340-meeting-verify" */
+const ProblemFolderId = Schema.String.pipe(
+  Schema.pattern(/^\d{6}-.+$/),
+  Schema.filter((s) => {
+    const d = s[5];
+    return d === "0" || d === "1" ? true : "Last digit must be 0 (zh) or 1 (en)";
+  })
+);
+
+/**
+ * Prompt key: path segments joined by `:`, mirroring the file hierarchy.
+ *   Framework: "framework:{lang}:{name}"    e.g. "framework:zh:task-eval"
+ *   Problems:  "problems:{folderId}:{name}" e.g. "problems:000340-meeting-verify:scoring"
+ */
+export const PromptKey = Schema.String.pipe(
+  Schema.filter((value) => {
+    const parts = value.split(":");
+    if (parts.length !== 3) {
+      return "Prompt key must have exactly 3 colon-separated segments: <type>:<scope>:<name>";
+    }
+    const [type, scope, name] = parts;
+    if (type === "framework") {
+      if (!Schema.is(Lang)(scope)) {
+        return `Invalid framework lang "${scope}", expected "en" or "zh"`;
+      }
+      if (!Schema.is(FrameworkPromptName)(name)) {
+        return `Invalid framework prompt name "${name}"`;
+      }
+      return true;
+    }
+    if (type === "problems") {
+      if (!Schema.is(ProblemFolderId)(scope)) {
+        return `Invalid problem folder id "${scope}", expected "{6digits}-{name}"`;
+      }
+      if (!Schema.is(ProblemPromptName)(name)) {
+        return `Invalid problem prompt name "${name}"`;
+      }
+      return true;
+    }
+    return `Invalid prompt key type "${type}", expected "framework" or "problems"`;
+  })
+);
+export type PromptKey = typeof PromptKey.Type;
+
 /** One prompt file's identity: key + content hash */
 export class PromptSnapshotEntry extends Schema.Class<PromptSnapshotEntry>("PromptSnapshotEntry")({
-  key: Schema.String.pipe(Schema.minLength(1)),
+  key: PromptKey,
   sha256: Sha256Hex,
 }) {}
 
 /**
  * Full prompt manifest: git hash + per-file SHA-256s + set hash for O(1) equality.
  *
- * Key naming convention (not enforced in schema):
- *   Framework: "framework:{lang}:{name}"  e.g. "framework:zh:task-eval"
- *   Problem:   "problem:{digitId}:{name}"  e.g. "problem:001001:scoring"
+ * Key naming convention (enforced by PromptKey schema):
+ *   Framework: "framework:{lang}:{name}"    e.g. "framework:zh:task-eval"
+ *   Problems:  "problems:{folderId}:{name}" e.g. "problems:000340-meeting-verify:scoring"
  *
  * entries must be sorted by key with no duplicates.
  * set_hash is the SHA-256 of the sorted entries JSON — enables fast equality check.
