@@ -1,0 +1,284 @@
+{
+  "curve_id": "af11f42b-5455-4c7a-82cd-30d34f01c8da",
+  "label": "ISS 2024 Curve (5-dim, from reports)",
+  "source_event_ids": [
+    "ISS-2024"
+  ],
+  "prompt_snapshot": {
+    "git_hash": "a0b1c2d",
+    "set_hash": "99dad3291116c807420f1788b1f2c23f3648b32655bfccce5ee62b9c69743613",
+    "entries": [
+      {
+        "key": "framework:en:ability-summary",
+        "sha256": "2135a45aa0f7072662ba0584db110a9415116e1793bfbc6b79edaf8510ab89d8"
+      },
+      {
+        "key": "framework:en:expert-review",
+        "sha256": "3a87c460d20ba34528eac79843378deade038f84c6081e3e7275a7a879807ef7"
+      },
+      {
+        "key": "framework:en:task-eval",
+        "sha256": "65aeae82a7e257716b46e1583cf5b13948e9ccaed7573a09105600a3b43df472"
+      },
+      {
+        "key": "framework:zh:ability-summary",
+        "sha256": "03b37201b7d5c93e7a8a0c989be7fca45621e86ab8c34532e0fd74274d00fb78"
+      },
+      {
+        "key": "framework:zh:expert-review",
+        "sha256": "44219b2f14ca2acffb71ec5ec01b679553e374d1f62ca441c896c542fd5b2916"
+      },
+      {
+        "key": "framework:zh:task-eval",
+        "sha256": "dfdfbcc291743cc262a2854a71517f310f91fb557c90bd314854ad766cc918e7"
+      },
+      {
+        "key": "problem:000341:scoring",
+        "sha256": "4c834d647c58be8874b98d0a0caae5bfa11eb5fc27accf286b863bb123e78426"
+      },
+      {
+        "key": "problem:000341:task-eval",
+        "sha256": "07a50390e3afc0c225bbf0b5600f41ab5d9cafb2ef821715817b6feee0fb21f3"
+      },
+      {
+        "key": "problem:000501:scoring",
+        "sha256": "51825357ff62e42e182e06665de584953b26a9c1010131054367e87b3e49e73d"
+      },
+      {
+        "key": "problem:000501:task-eval",
+        "sha256": "fee56c31a537e0841199dc9046a97adeb4968514a2e285ed703ab53ba799ba5b"
+      },
+      {
+        "key": "problem:001001:scoring",
+        "sha256": "f21f49128a729010429ec63824d892f3abb65d913c95c02821a6970bf3bc0e88"
+      },
+      {
+        "key": "problem:001001:task-eval",
+        "sha256": "88e206390a0f01ff3717aa1843f7d2612163d3401bbefc2eb70f2a2e71472df7"
+      },
+      {
+        "key": "problem:001111:scoring",
+        "sha256": "41db1edef64c7d4e3da35cda7c8c98f7d60e14c4a2a3d5fdef9be23dd7d42722"
+      },
+      {
+        "key": "problem:001111:task-eval",
+        "sha256": "6d2a8287ea872db6d8d753db5051ad5821bf6d20afd71a96556f559421b6b172"
+      }
+    ]
+  },
+  "dimension_map": {
+    "map_id": "1506fcfe-7a65-4cb9-8e6d-3438862f3003",
+    "label": "ISS 2024 Assessment (5-dim)",
+    "created_at": "2024-06-10T00:00:00.000Z",
+    "entries": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "dimensions": [
+          "iterative-refinement",
+          "representation",
+          "self-verification"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "dimensions": [
+          "discovery",
+          "iterative-refinement"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "dimensions": [
+          "exploratory",
+          "self-verification"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "dimensions": [
+          "discovery",
+          "iterative-refinement",
+          "representation"
+        ]
+      }
+    ]
+  },
+  "method": {
+    "type": "standard_deviation",
+    "sigma_boundaries": [
+      1,
+      0,
+      -1
+    ]
+  },
+  "sample_size": 63,
+  "computed_at": "2024-06-10T00:00:00.000Z",
+  "overall_mean": {
+    "A": 0.492,
+    "B": 0.388,
+    "C": 0.284
+  },
+  "ability_curves": {
+    "discovery": {
+      "A": 0.446,
+      "B": 0.3,
+      "C": 0.154
+    },
+    "representation": {
+      "A": 0.601,
+      "B": 0.43,
+      "C": 0.258
+    },
+    "iterative-refinement": {
+      "A": 0.461,
+      "B": 0.308,
+      "C": 0.155
+    },
+    "exploratory": {
+      "A": 0.514,
+      "B": 0.345,
+      "C": 0.176
+    },
+    "self-verification": {
+      "A": 0.563,
+      "B": 0.414,
+      "C": 0.264
+    }
+  },
+  "problem_curves": {
+    "000341": {
+      "A": 0.646,
+      "B": 0.332,
+      "C": 0.018
+    },
+    "000501": {
+      "A": 0.854,
+      "B": 0.587,
+      "C": 0.32
+    },
+    "001001": {
+      "A": 0.735,
+      "B": 0.556,
+      "C": 0.377
+    },
+    "001111": {
+      "A": 0.55,
+      "B": 0.304,
+      "C": 0.058
+    }
+  },
+  "population_stats": {
+    "overall (final_total_score)": {
+      "μ": 0.388,
+      "σ": 0.104,
+      "n": 63,
+      "thresholds": {
+        "A": 0.492,
+        "B": 0.388,
+        "C": 0.284
+      }
+    },
+    "ability.discovery": {
+      "μ": 0.3,
+      "σ": 0.146,
+      "n": 63,
+      "thresholds": {
+        "A": 0.446,
+        "B": 0.3,
+        "C": 0.154
+      }
+    },
+    "ability.representation": {
+      "μ": 0.43,
+      "σ": 0.171,
+      "n": 63,
+      "thresholds": {
+        "A": 0.601,
+        "B": 0.43,
+        "C": 0.258
+      }
+    },
+    "ability.iterative-refinement": {
+      "μ": 0.308,
+      "σ": 0.153,
+      "n": 63,
+      "thresholds": {
+        "A": 0.461,
+        "B": 0.308,
+        "C": 0.155
+      }
+    },
+    "ability.exploratory": {
+      "μ": 0.345,
+      "σ": 0.169,
+      "n": 63,
+      "thresholds": {
+        "A": 0.514,
+        "B": 0.345,
+        "C": 0.176
+      }
+    },
+    "ability.self-verification": {
+      "μ": 0.414,
+      "σ": 0.149,
+      "n": 63,
+      "thresholds": {
+        "A": 0.563,
+        "B": 0.414,
+        "C": 0.264
+      }
+    },
+    "problem.000341-meeting-verify": {
+      "μ": 0.332,
+      "σ": 0.314,
+      "n": 63,
+      "thresholds": {
+        "A": 0.646,
+        "B": 0.332,
+        "C": 0.018
+      }
+    },
+    "problem.000501-thinking-traps": {
+      "μ": 0.587,
+      "σ": 0.267,
+      "n": 63,
+      "thresholds": {
+        "A": 0.854,
+        "B": 0.587,
+        "C": 0.32
+      }
+    },
+    "problem.001001-ling-bing": {
+      "μ": 0.556,
+      "σ": 0.179,
+      "n": 63,
+      "thresholds": {
+        "A": 0.735,
+        "B": 0.556,
+        "C": 0.377
+      }
+    },
+    "problem.001111-operationalize": {
+      "μ": 0.304,
+      "σ": 0.246,
+      "n": 63,
+      "thresholds": {
+        "A": 0.55,
+        "B": 0.304,
+        "C": 0.058
+      }
+    }
+  }
+}

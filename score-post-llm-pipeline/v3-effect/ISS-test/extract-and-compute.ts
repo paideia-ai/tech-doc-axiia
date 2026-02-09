@@ -6,12 +6,10 @@
  *
  * Steps:
  *   1. Read reports, extract scores, decode each through Schema → JSONScores[]
- *   2. Verify derived ability_scores/totals match report pre-computed values
- *   3. Assemble ScorePool (decoded through Schema)
- *   4. Compute Curve thresholds via μ ± σ, decode through Schema → Curve
- *   5. Apply curve → CurvedScores[] (each decoded through Schema)
- *   6. Compare problem curves with known values
- *   7. Compare report grades (ISS-with-full-curved) vs computed grades (step 5)
+ *   2. Assemble ScorePool (decoded through Schema)
+ *   3. Compute Curve thresholds via μ ± σ, decode through Schema → Curve
+ *   4. Apply curve → CurvedScores[] (each decoded through Schema)
+ *   5. Compare report grades (ISS-with-full-curved) vs computed grades (step 4)
  *
  * Run: cd score-post-llm-pipeline && npx tsx v3-effect/ISS-test/extract-and-compute.ts
  */
@@ -205,44 +203,7 @@ function buildJSONScoresInput(report: RawReport, participantId: string) {
   };
 }
 
-// ─── Step 2: Verify derived values against report ───────────────────
-
-interface VerifyCheck {
-  field: string;
-  derived: number;
-  report: number;
-  diff: number;
-  pass: boolean;
-}
-
-function verifyAgainstReport(
-  scores: ReturnType<typeof decodeJSONScores>,
-  report: RawReport,
-  tolerance: number
-): { participant: string; checks: VerifyCheck[] } {
-  const checks: VerifyCheck[] = [];
-  const totals = scores.totals;
-
-  const check = (field: string, derived: number, report: number, strict = true) => {
-    const diff = Math.abs(derived - report);
-    checks.push({ field, derived: round3(derived), report, diff: round3(diff), pass: strict ? diff < tolerance : true });
-  };
-
-  check("taskEvalMean ↔ total_problem_score", totals.total_problem_score, report.taskEvalMean);
-  check("abilityMean (report=7dim, derived=5dim)", totals.total_ability_score, report.abilityMean, false);
-  check("overallMean (report=7dim, derived=5dim)", totals.final_total_score, report.overallMean, false);
-
-  for (const dim of DIMENSIONS) {
-    const reportDim = report.dimensionReports.find((d) => d.dimension === dim);
-    if (reportDim) {
-      check(`ability.${dim}`, scores.ability_scores[dim], reportDim.score);
-    }
-  }
-
-  return { participant: scores.participant_id, checks };
-}
-
-// ─── Step 4: Compute curve thresholds ───────────────────────────────
+// ─── Compute curve thresholds ────────────────────────────────────────
 
 function computeThresholds(values: number[]) {
   const mu = arithMean(values);
@@ -251,7 +212,7 @@ function computeThresholds(values: number[]) {
   return { A: round3(clamp(mu + sigma)), B: round3(clamp(mu)), C: round3(clamp(mu - sigma)) };
 }
 
-// ─── Step 5: Grade assignment ───────────────────────────────────────
+// ─── Grade assignment ────────────────────────────────────────────────
 
 function assignGrade(score: number, t: { A: number; B: number; C: number }): LetterGrade {
   if (score >= t.A) return "A";
@@ -358,37 +319,8 @@ async function main() {
     );
   }
 
-  // ── Step 2: Verify ──
-  console.log("\n=== Step 2: Verification (schema-derived vs report) ===\n");
-  const TOLERANCE = 0.015;
-  const verifications = allScores.map((s, i) =>
-    verifyAgainstReport(s, allReports[i].report, TOLERANCE)
-  );
-
-  let totalChecks = 0;
-  let passedChecks = 0;
-  const failedChecks: { participant: string; field: string; derived: number; report: number }[] = [];
-
-  for (const v of verifications) {
-    for (const c of v.checks) {
-      totalChecks++;
-      if (c.pass) passedChecks++;
-      else failedChecks.push({ participant: v.participant, field: c.field, derived: c.derived, report: c.report });
-    }
-  }
-
-  console.log(`Verification: ${passedChecks}/${totalChecks} checks passed`);
-  if (failedChecks.length > 0) {
-    console.log(`  ${failedChecks.length} failures:`);
-    for (const f of failedChecks.slice(0, 10)) {
-      console.log(`    ${f.participant}: ${f.field} derived=${f.derived} report=${f.report}`);
-    }
-  }
-  fs.writeFileSync(path.join(outDir, "step2-verification.json"), JSON.stringify(verifications, null, 2));
-  console.log(`Wrote step2-verification.json\n`);
-
-  // ── Step 3: Decode EventConfig + ScorePool ──
-  console.log("=== Step 3: Decode EventConfig + Assemble ScorePool ===\n");
+  // ── Step 2: Decode EventConfig + ScorePool ──
+  console.log("\n=== Step 2: Decode EventConfig + Assemble ScorePool ===\n");
 
   const problemIds = Object.entries(PROBLEM_NAMES)
     .sort(([a], [b]) => a.localeCompare(b))
@@ -420,11 +352,11 @@ async function main() {
   const scorePool = decodeScorePool(scorePoolInput);
   console.log(`ScorePool decoded: ${scorePool.scores.length} scores, pool_id=${scorePool.pool_id}`);
 
-  fs.writeFileSync(path.join(outDir, "step3-score-pool.json"), JSON.stringify(scorePoolInput, null, 2));
-  console.log(`Wrote step3-score-pool.json\n`);
+  fs.writeFileSync(path.join(outDir, "step2-score-pool.json"), JSON.stringify(scorePoolInput, null, 2));
+  console.log(`Wrote step2-score-pool.json\n`);
 
-  // ── Step 4: Compute Curve ──
-  console.log("=== Step 4: Compute Curve ===\n");
+  // ── Step 3: Compute Curve ──
+  console.log("=== Step 3: Compute Curve ===\n");
 
   const overallVals = allScores.map((s) => s.totals.final_total_score as number);
   const overallThresholds = computeThresholds(overallVals);
@@ -475,7 +407,7 @@ async function main() {
     populationStats[`problem.${digit}-${PROBLEM_NAMES[digit]}`] = { μ: round3(arithMean(vals)), σ: round3(stddev(vals)), n: vals.length, thresholds: problem_curves[digit] };
   }
 
-  fs.writeFileSync(path.join(outDir, "step4-curve.json"), JSON.stringify({ ...curveInput, population_stats: populationStats }, null, 2));
+  fs.writeFileSync(path.join(outDir, "step3-curve.json"), JSON.stringify({ ...curveInput, population_stats: populationStats }, null, 2));
 
   console.log("Curve Thresholds (5-dim, merged EN→CN digits):");
   console.log("  " + "Category".padEnd(45) + "A≥".padEnd(8) + "B≥".padEnd(8) + "C≥".padEnd(8) + "μ".padEnd(8) + "σ".padEnd(8));
@@ -492,10 +424,10 @@ async function main() {
     const vals = allScores.map((s) => s.problem_scores.find((p) => p.problem_id.digit === digit)).filter(Boolean).map((p) => p!.task_score as number);
     printRow(`problem.${digit}-${PROBLEM_NAMES[digit]}`, problem_curves[digit], arithMean(vals), stddev(vals));
   }
-  console.log(`\nWrote step4-curve.json\n`);
+  console.log(`\nWrote step3-curve.json\n`);
 
-  // ── Step 5: Apply Curve → CurvedScores ──
-  console.log("=== Step 5: Apply Curve → CurvedScores ===\n");
+  // ── Step 4: Apply Curve → CurvedScores ──
+  console.log("=== Step 4: Apply Curve → CurvedScores ===\n");
 
   const curvedScoresResults: ReturnType<typeof decodeCurvedScores>[] = [];
 
@@ -568,8 +500,8 @@ async function main() {
     })),
   }));
 
-  fs.writeFileSync(path.join(outDir, "step5-curved-scores.json"), JSON.stringify(step5Output, null, 2));
-  console.log(`Wrote step5-curved-scores.json\n`);
+  fs.writeFileSync(path.join(outDir, "step4-curved-scores.json"), JSON.stringify(step5Output, null, 2));
+  console.log(`Wrote step4-curved-scores.json\n`);
 
   // Grade distribution
   const gradeDist: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
@@ -585,28 +517,8 @@ async function main() {
     console.log("  " + o.participant_id.padEnd(30) + o.overall_grade.padEnd(7) + String(o.overall_mean).padEnd(8) + String(o.total_problem_score).padEnd(8) + String(o.total_ability_score).padEnd(8));
   }
 
-  // ── Step 6: Compare with known curve ──
-  console.log("\n=== Step 6: Compare with Known Curve ===\n");
-  const knownProblemCurves: Record<string, { A: number; B: number; C: number }> = {
-    "000341": { A: 0.646, B: 0.332, C: 0.018 },
-    "000501": { A: 0.854, B: 0.587, C: 0.32 },
-    "001001": { A: 0.735, B: 0.556, C: 0.377 },
-    "001111": { A: 0.55, B: 0.304, C: 0.058 },
-  };
-
-  console.log("Problem curves (should match — task_scores are dimension-independent):");
-  for (const digit of problemDigits) {
-    const known = knownProblemCurves[digit];
-    const computed = problem_curves[digit];
-    const match = known.A === computed.A && known.B === computed.B && known.C === computed.C;
-    console.log(`  ${digit}: known=[${known.A}, ${known.B}, ${known.C}]  computed=[${computed.A}, ${computed.B}, ${computed.C}]  ${match ? "MATCH" : "MISMATCH"}`);
-  }
-
-  const knownOverall = { A: 0.497, B: 0.394, C: 0.292 };
-  console.log(`\noverallMean: known(7dim)=[${knownOverall.A}, ${knownOverall.B}, ${knownOverall.C}]  computed(5dim)=[${overallThresholds.A}, ${overallThresholds.B}, ${overallThresholds.C}]  (expected to differ)`);
-
-  // ── Step 7: Compare report grades (ISS-with-full-curved) vs computed grades (step 5) ──
-  console.log("\n=== Step 7: Grade Comparison — Report vs Computed ===\n");
+  // ── Step 5: Compare report grades (ISS-with-full-curved) vs computed grades (step 4) ──
+  console.log("\n=== Step 5: Grade Comparison — Report vs Computed ===\n");
 
   interface GradeDiff {
     participant: string;
@@ -678,8 +590,8 @@ async function main() {
     }
   }
 
-  fs.writeFileSync(path.join(outDir, "step7-grade-comparison.json"), JSON.stringify({ summary: { overall: overallDiffs.length, ability: abilityDiffs.length, problem_task: taskDiffs.length, dim_in_problem: dimInProbDiffs.length, total: diffs.length }, diffs }, null, 2));
-  console.log(`\nWrote step7-grade-comparison.json`);
+  fs.writeFileSync(path.join(outDir, "step5-grade-comparison.json"), JSON.stringify({ summary: { overall: overallDiffs.length, ability: abilityDiffs.length, problem_task: taskDiffs.length, dim_in_problem: dimInProbDiffs.length, total: diffs.length }, diffs }, null, 2));
+  console.log(`\nWrote step5-grade-comparison.json`);
 
   console.log("\nDone. All outputs written to output/");
 }

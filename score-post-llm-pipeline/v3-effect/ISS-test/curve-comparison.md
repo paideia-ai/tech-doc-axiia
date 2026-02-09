@@ -7,7 +7,7 @@ Three curve sources are compared:
 | Source | Label | Method | Dims |
 |--------|-------|--------|------|
 | `ISS-curve-manual.csv` | Manual CSV | standard_deviation (μ ± σ) | 7 |
-| `output/step4-curve.json` | Computed | standard_deviation (μ ± σ) | 5 |
+| `output/step3-curve.json` | Computed | standard_deviation (μ ± σ) | 5 |
 | `ISS-with-full-curved/` | Report grades | manual CSV curve applied | 7 |
 
 Note: `ISS-without-task-curve/` contains the historical reports where problem task grades were **not** curved (used a different quartile-like method). `ISS-with-full-curved/` has been fully curved using the manual CSV thresholds and is the correct comparison baseline.
@@ -76,7 +76,7 @@ Problem curves use `task_score` only (dimension-independent). The +/-0.003 diffs
 
 ## Part 2: Grade Comparison — Report Grades vs Pipeline Grades
 
-Compares the grades stored in `ISS-with-full-curved/` report JSONs (graded using `ISS-curve-manual.csv`, 7-dim) against the grades computed by the pipeline in `output/step5-curved-scores.json` (graded using `output/step4-curve.json`, 5-dim). This comparison is automated as Step 7 in `extract-and-compute.ts` and output to `output/step7-grade-comparison.json`.
+Compares the grades stored in `ISS-with-full-curved/` report JSONs (graded using `ISS-curve-manual.csv`, 7-dim) against the grades computed by the pipeline in `output/step4-curved-scores.json` (graded using `output/step3-curve.json`, 5-dim). This comparison is automated as Step 5 in `extract-and-compute.ts` and output to `output/step5-grade-comparison.json`.
 
 The report grades use the manual CSV thresholds (7-dim). The pipeline grades use computed thresholds (5-dim).
 
