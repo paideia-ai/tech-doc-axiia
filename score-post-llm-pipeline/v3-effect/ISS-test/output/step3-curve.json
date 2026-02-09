@@ -1,12 +1,12 @@
 {
-  "curve_id": "af11f42b-5455-4c7a-82cd-30d34f01c8da",
+  "curve_id": "056f96c9-b1d8-4962-ad86-9570059ed51b",
   "label": "ISS 2024 Curve (5-dim, from reports)",
   "source_event_ids": [
     "ISS-2024"
   ],
   "prompt_snapshot": {
     "git_hash": "a0b1c2d",
-    "set_hash": "99dad3291116c807420f1788b1f2c23f3648b32655bfccce5ee62b9c69743613",
+    "set_hash": "e034ec66525a9d23b27a11d102285495bc5c58a3e72a9717be523efe978ac8f2",
     "entries": [
       {
         "key": "framework:en:ability-summary",
@@ -33,41 +33,41 @@
         "sha256": "dfdfbcc291743cc262a2854a71517f310f91fb557c90bd314854ad766cc918e7"
       },
       {
-        "key": "problem:000341:scoring",
-        "sha256": "4c834d647c58be8874b98d0a0caae5bfa11eb5fc27accf286b863bb123e78426"
+        "key": "problems:000341-meeting-verify:scoring",
+        "sha256": "8d8742a94dc64ac042c3d55e9796aadc1c55a11554d78487d5dd75f74cc7acad"
       },
       {
-        "key": "problem:000341:task-eval",
-        "sha256": "07a50390e3afc0c225bbf0b5600f41ab5d9cafb2ef821715817b6feee0fb21f3"
+        "key": "problems:000341-meeting-verify:task-eval",
+        "sha256": "3d0e3eb5f2cef0ff8ce3722467bd569a7b2492faeb266ffec887bfc067f743a8"
       },
       {
-        "key": "problem:000501:scoring",
-        "sha256": "51825357ff62e42e182e06665de584953b26a9c1010131054367e87b3e49e73d"
+        "key": "problems:000501-thinking-traps:scoring",
+        "sha256": "0fcba6dd2075fc20cd1cf4057bbef46a7cdf311192a5fbd83e88317193aba7fa"
       },
       {
-        "key": "problem:000501:task-eval",
-        "sha256": "fee56c31a537e0841199dc9046a97adeb4968514a2e285ed703ab53ba799ba5b"
+        "key": "problems:000501-thinking-traps:task-eval",
+        "sha256": "1b35213ff865ab7f7fb5106ba91d73f5b6dcd9e06587c427b19b7b8e3c249aa8"
       },
       {
-        "key": "problem:001001:scoring",
-        "sha256": "f21f49128a729010429ec63824d892f3abb65d913c95c02821a6970bf3bc0e88"
+        "key": "problems:001001-ling-bing:scoring",
+        "sha256": "b11e1de68269257ac7b3104e90c0793672ce3debea40a7efae0ee53b30f0e835"
       },
       {
-        "key": "problem:001001:task-eval",
-        "sha256": "88e206390a0f01ff3717aa1843f7d2612163d3401bbefc2eb70f2a2e71472df7"
+        "key": "problems:001001-ling-bing:task-eval",
+        "sha256": "9b604d71351605dbb2b0ccf2de869ce465fea61f862a616f89189c6a287040ce"
       },
       {
-        "key": "problem:001111:scoring",
-        "sha256": "41db1edef64c7d4e3da35cda7c8c98f7d60e14c4a2a3d5fdef9be23dd7d42722"
+        "key": "problems:001111-operationalize:scoring",
+        "sha256": "d404e27b81d52a9fab787c4cc8565ab317ce2d2031c377f888f8b1cbfd8f1279"
       },
       {
-        "key": "problem:001111:task-eval",
-        "sha256": "6d2a8287ea872db6d8d753db5051ad5821bf6d20afd71a96556f559421b6b172"
+        "key": "problems:001111-operationalize:task-eval",
+        "sha256": "6dd0b1e216122a8b7d0caa389b1087422ea6c7bce3ef9cea412e7c516fe2786c"
       }
     ]
   },
   "dimension_map": {
-    "map_id": "1506fcfe-7a65-4cb9-8e6d-3438862f3003",
+    "map_id": "6f730acf-098c-4fd9-b63a-792aab9b6b7d",
     "label": "ISS 2024 Assessment (5-dim)",
     "created_at": "2024-06-10T00:00:00.000Z",
     "entries": [
