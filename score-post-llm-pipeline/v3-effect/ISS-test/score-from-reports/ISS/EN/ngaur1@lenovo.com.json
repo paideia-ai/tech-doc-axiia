@@ -1,0 +1,605 @@
+{
+  "grade": "B",
+  "overall": {
+    "bad": [
+      {
+        "title": "Limited Use of Iterative Exploration and Testing",
+        "description": "Your approach tends toward single-pass completion rather than progressive refinement through experimentation. You often move directly from initial attempt to final output without intermediate testing cycles, dialogue-based exploration, or systematic variation testing. This compressed workflow limits opportunities to uncover deeper insights or catch errors that might surface through iterative investigation."
+      },
+      {
+        "title": "Underutilization of AI as a Collaborative Discovery Tool",
+        "description": "While you work effectively with AI for verification tasks, you tend to complete analytical work independently rather than leveraging dialogue to test hypotheses, explore alternatives, or deepen understanding. More active engagement with AI during the discovery phase—asking probing questions and conducting collaborative hypothesis testing—would enrich your analysis and help you tackle ambiguous requirements more effectively."
+      },
+      {
+        "title": "Incomplete Systematic Coverage in Verification",
+        "description": "Although you catch high-priority errors effectively, your verification approach sometimes focuses on a limited range of error types rather than systematically evaluating the full spectrum of potential issues. This can result in overlooked categories of problems or failure to identify subtle but critical flaws, such as systemic defects that affect entire classes of cases."
+      }
+    ],
+    "good": [
+      {
+        "title": "Strong Evidence-Based Verification and Error Detection",
+        "description": "You consistently cross-reference AI outputs against source materials and require concrete proof before accepting claims. This disciplined approach helped you catch significant factual errors like speaker misattributions and fabricated decisions, and enabled you to identify invented vocabulary that could mislead readers. Your verification practices create a reliable foundation for quality assurance."
+      },
+      {
+        "title": "Clear Analytical Thinking and Prioritization",
+        "description": "You demonstrate the ability to distinguish between high-impact issues and trivial details, focusing your attention on problems that truly matter. Your analysis of defects is logical and well-structured, translating observations into precise, actionable language that others can understand and act upon. This shows strong judgment about where to invest your analytical effort."
+      },
+      {
+        "title": "Willingness to Challenge Conventional Assumptions",
+        "description": "You show intellectual flexibility in recognizing counter-intuitive patterns, such as identifying the gender-neutral structure in Language X that contradicted initial expectations. This ability to question your own assumptions and revise your understanding based on evidence is essential for tackling complex, ambiguous problems."
+      }
+    ],
+    "overview": "Throughout this assessment, you demonstrated **strong analytical foundations and evidence-based verification skills** that serve you well in quality-focused tasks. Your ability to identify meaningful errors, challenge assumptions, and provide clear, actionable recommendations shows you understand how to work critically with AI outputs. The primary opportunity for growth lies in **developing more iterative, exploratory collaboration patterns**—moving from single-pass problem-solving to dynamic dialogue that leverages AI as a thinking partner throughout the discovery and refinement process.",
+    "improvements": [
+      {
+        "title": "Develop Iterative Testing and Refinement Habits",
+        "description": "Build systematic habits of experimentation into your workflow. Before settling on final outputs, create multiple variations, test them against diverse scenarios, and analyze the patterns in results. Use each iteration to refine your understanding and approach. This cycle of testing, learning, and adjusting will help you uncover deeper insights and achieve more robust solutions than single-pass approaches allow."
+      },
+      {
+        "title": "Engage AI as an Active Thinking Partner Throughout Tasks",
+        "description": "Transform your AI interaction from primarily verification-focused to exploration-focused. During discovery phases, use dialogue to test competing hypotheses, ask \"what if\" questions, and systematically explore alternative interpretations. Treat ambiguity as an invitation for collaborative investigation rather than something to resolve independently. This will help you translate complex requirements into concrete actions more effectively."
+      },
+      {
+        "title": "Create Comprehensive Verification Frameworks",
+        "description": "Before beginning verification, develop explicit checklists or frameworks that cover the full range of potential error types relevant to each task. Systematically work through each category rather than relying on pattern recognition alone. This proactive audit strategy will help you catch not just obvious errors, but also subtle systematic flaws and overlooked issue categories that matter for task success."
+      }
+    ]
+  },
+  "metadata": {
+    "lang": "en"
+  },
+  "abilityMean": 0.2621428571428571,
+  "overallMean": 0.4237713305165483,
+  "problemCards": [
+    {
+      "grade": "B",
+      "problemId": "000340-meeting-verify"
+    },
+    {
+      "grade": "A",
+      "problemId": "000500-thinking-traps"
+    },
+    {
+      "grade": "A",
+      "problemId": "001000-ling-bing"
+    },
+    {
+      "grade": "D",
+      "problemId": "001110-operationalize"
+    }
+  ],
+  "taskEvalMean": 0.6850544871794872,
+  "dimensionCards": [
+    {
+      "grade": "C",
+      "phrases": "Functional task completion with limited use of AI for exploratory self-discovery",
+      "dimension": "discovery"
+    },
+    {
+      "grade": "C",
+      "phrases": "Capable of quality outcomes; would benefit from developing systematic testing and incremental adjustment practices",
+      "dimension": "iterative-refinement"
+    },
+    {
+      "grade": "C",
+      "phrases": "Strong at precision once engaged; would benefit from clarifying ambiguity upfront",
+      "dimension": "representation"
+    },
+    {
+      "grade": "C",
+      "phrases": "Strong focus on high-impact issues; would benefit from more comprehensive systematic coverage",
+      "dimension": "choosing"
+    },
+    {
+      "grade": "C",
+      "phrases": "Strong pattern recognition with room to leverage AI collaboration for deeper exploration",
+      "dimension": "exploratory"
+    },
+    {
+      "grade": "C",
+      "phrases": "Solid structural foundation; needs development in concept translation and iterative refinement",
+      "dimension": "world-modeling"
+    },
+    {
+      "grade": "C",
+      "phrases": "Strong evidence-based verification with systematic cross-checking; opportunity to develop more proactive audit strategies",
+      "dimension": "self-verification"
+    }
+  ],
+  "problemReports": [
+    {
+      "bad": [
+        "Your multiple incomplete submissions with unfilled placeholders suggest you rushed to execute before fully understanding the task requirements, resulting in wasted effort",
+        "Your verification coverage remained limited to similar error categories, missing several planted flaws and showing no systematic exploration of other potential issue types like numerical accuracy or temporal sequences",
+        "You showed no evidence of strategic verification planning or proactive completeness checking, appearing to stop once you found enough errors rather than conducting comprehensive multi-dimensional analysis"
+      ],
+      "good": [
+        "You provided strong evidence-based verification with multiple transcript citations per error, demonstrating that you understand the importance of comprehensive proof rather than single supporting quotes",
+        "You effectively distinguished between exploratory discussion and finalized decisions, correctly identifying when the summary overstated the conclusiveness of conversations",
+        "You showed good judgment in prioritizing substantive factual issues like speaker misattributions over minor stylistic differences, focusing on errors that would significantly mislead readers"
+      ],
+      "grade": "B",
+      "score": 0.6,
+      "overview": "You demonstrated **solid capability in identifying major factual errors** in the meeting summary, successfully catching speaker misattributions and fabricated decisions with proper evidence and citations. However, your path to success involved multiple false starts with incomplete template submissions, and your verification **missed some critical flaws and focused on a limited range of error types**, suggesting room for more systematic and comprehensive review approaches.",
+      "problemId": "000340-meeting-verify",
+      "dimensionDetails": [
+        {
+          "grade": "C",
+          "score": 0.23,
+          "proofs": [
+            {
+              "comment": "You did demonstrate the capacity for significant improvement between attempts, ultimately producing quality work. This shows you can learn and adapt when you understand task requirements, which is a foundational strength for iterative work.",
+              "isStrength": true,
+              "observation": "Your submission history shows three distinct attempts: two early submissions with unfilled templates containing placeholders, followed by a third submission that suddenly demonstrated full understanding with four properly formatted errors including verbatim excerpts, speaker/timestamp citations, and explanations."
+            },
+            {
+              "comment": "True iterative refinement involves gradual, feedback-driven adjustments where you test small changes and observe results. Your pattern of sudden transformation suggests you weren't actively using feedback loops to progressively improve your approach, limiting your ability to efficiently optimize through iteration.",
+              "isStrength": false,
+              "observation": "Rather than making incremental adjustments based on systematic analysis of what was missing, you appeared to experience a moment of realization that led to substantial restructuring of your entire approach."
+            },
+            {
+              "comment": "Effective iteration requires testing hypotheses and learning from responses. By submitting empty templates instead of attempting even one or two complete error identifications to validate your understanding, you missed opportunities to receive targeted feedback that could have accelerated your learning and reduced wasted effort.",
+              "isStrength": false,
+              "observation": "Your initial approaches lacked exploratory testing - you submitted incomplete templates rather than attempting partial verification work that could have provided useful feedback about your methodology."
+            }
+          ],
+          "summary": "You demonstrated the ability to eventually achieve success after initial struggles, showing that you can adapt when you grasp what's needed. However, your refinement process was compressed rather than truly iterative - you moved from incomplete placeholder submissions directly to fully formed work, rather than progressively testing and adjusting your approach based on feedback. Developing more systematic, incremental refinement habits would significantly enhance your efficiency in collaborative AI tasks.",
+          "dimension": "iterative-refinement"
+        },
+        {
+          "grade": "C",
+          "score": 0.34,
+          "proofs": [
+            {
+              "comment": "This demonstrates clear judgment about what constitutes meaningful errors versus acceptable summarization choices. You understood that speaker misattributions and fabricated decisions represent critical accuracy problems that could mislead readers about the meeting's actual content and outcomes.",
+              "isStrength": true,
+              "observation": "Your four identified errors focused on substantive factual issues: speaker misattribution (Errors 1 and 2), fabricated decisions (Error 3), and misrepresented stances (Error 4). You avoided flagging minor wording differences or acceptable paraphrasing."
+            },
+            {
+              "comment": "Your ability to distinguish between significant factual contradictions and minor paraphrasing variations shows effective prioritization. You focused on errors that would change readers' understanding of participants' actual positions rather than getting distracted by less consequential wording choices.",
+              "isStrength": true,
+              "observation": "You correctly identified that Andy expressed simple opposition was wrong because Andy actually said I think this is a great approach (26:14), focusing on the factual contradiction rather than stylistic issues."
+            },
+            {
+              "comment": "This suggests you may have stopped verification once you met the apparent minimum requirement rather than conducting exhaustive analysis across multiple error dimensions. A more systematic approach would involve exploring different error categories (temporal sequences, numerical accuracy, action item specificity) to ensure comprehensive coverage rather than focusing primarily on speaker attribution and decision-making accuracy.",
+              "isStrength": false,
+              "observation": "You only identified four errors when the summary likely contained additional issues (such as Yihan's specific action item about completing Demo Day materials within this week, which isn't clearly supported by the transcript)."
+            }
+          ],
+          "summary": "You demonstrated sound judgment in prioritizing substantive factual errors over minor stylistic differences, focusing on speaker misattributions and fabricated decisions that would significantly mislead readers. However, your verification coverage remained limited to similar error categories, suggesting you may have stopped once meeting apparent minimum requirements rather than systematically exploring the full range of possible error types.",
+          "dimension": "choosing"
+        },
+        {
+          "grade": "C",
+          "score": 0.3,
+          "proofs": [
+            {
+              "comment": "This multi-point evidence structure demonstrates that you understand verification requires comprehensive proof rather than accepting AI outputs at face value. You traced specific quotes that proved the summary's claims were contradicted by the transcript, showing good discipline in grounding your judgments in verifiable evidence.",
+              "isStrength": true,
+              "observation": "In your final submission, you provided multiple transcript citations for each error. For Error 1, you cited both Andy's statements (Great, let's use it then at 06:55) and Biber's contrasting views (06:59-07:44) to establish the misattribution. For Error 3, you cited Yihan's characterization as preliminary structural idea and Biber's uncertainty to prove no decision was finalized."
+            },
+            {
+              "comment": "This reveals a gap in your verification approach. Effective human oversight of AI requires not just validating what's presented, but actively considering what might be missing or incorrectly flagged. Without this proactive questioning stance, you may miss systematic blind spots in AI-assisted work.",
+              "isStrength": false,
+              "observation": "Your earlier attempts suggest you may have initially approached this as a template-filling exercise rather than a verification investigation. You didn't show evidence of proactively questioning whether AI might have missed certain error types or generated false positives - your verification appears to have focused on completing the required format rather than systematically auditing AI's coverage."
+            },
+            {
+              "comment": "This pattern indicates a \"good enough\" approach rather than thorough quality control. Establishing reliable trust in AI outputs requires systematically exploring different error categories and actively seeking completeness, not stopping at the first set of findings that seem adequate.",
+              "isStrength": false,
+              "observation": "You only identified four errors when the summary likely contained additional issues (such as Yihan's specific action item about completing Demo Day materials within this week, which isn't clearly supported by the transcript). This suggests you may have stopped once you met the apparent minimum requirement rather than conducting exhaustive verification."
+            }
+          ],
+          "summary": "You demonstrated solid verification discipline in your final submission by requiring concrete evidence for each claim and providing multiple transcript citations to validate errors. However, your verification approach focused primarily on completing the required format rather than systematically auditing the AI's work for completeness, potential false positives, or missed error types, indicating an opportunity to develop more proactive and comprehensive verification strategies.",
+          "dimension": "self-verification"
+        },
+        {
+          "grade": "C",
+          "score": 0.29,
+          "proofs": [
+            {
+              "comment": "This reveals difficulty in translating the task instructions into concrete action. Rather than recognizing that you needed to analyze content and extract errors, you treated it as a template-filling exercise, suggesting confusion about what the task was actually asking you to do.",
+              "isStrength": false,
+              "observation": "Your first two submissions contained unfilled placeholders like [PASTE TRANSCRIPT HERE] and [PASTE SUMMARY HERE], with instructions still visible such as Now I will paste the Meeting Transcript and the AI-Generated Meeting Summary below"
+            },
+            {
+              "comment": "Once you understood the task structure, you effectively translated complex verification requirements into clear, executable format with verbatim quotes, timestamps, and concise explanations. This shows you have the underlying capability to bridge task requirements and concrete outputs when you grasp what's needed.",
+              "isStrength": true,
+              "observation": "By your final attempt, you successfully structured Error 2 as: The transcript shows Biber taking a balanced stance, not pushing an immediate company-wide switch; the decision to switch is expressed by Andy, not Biber, with supporting timestamp citations"
+            },
+            {
+              "comment": "When facing ambiguous instructions, you didn't proactively seek to translate vague requirements into clearer specifications through dialogue. This represents a missed opportunity to leverage AI collaboration for clarifying what successful task completion would look like, resulting in wasted effort on incomplete submissions.",
+              "isStrength": false,
+              "observation": "Your interaction log shows no evidence of requesting clarification about task requirements or testing your understanding before submitting complete templates"
+            }
+          ],
+          "summary": "You eventually demonstrated solid ability to structure verification findings into clear, evidence-based formats, but your initial approaches revealed significant challenges in translating task requirements into executable work. Your multiple submissions of unfilled templates suggest you would benefit from pausing to clarify ambiguous instructions before beginning execution, rather than learning through trial and error.",
+          "dimension": "representation"
+        }
+      ]
+    },
+    {
+      "bad": [
+        "After initial setup, you did not execute any core task activities such as drafting prompt templates, defining thinking trap categories, or testing solutions, leaving the work fundamentally incomplete",
+        "You did not engage with the 25 public test cases or feedback mechanisms that could have guided your development and provided concrete learning opportunities",
+        "No conceptual modeling work was attempted—you did not explore, define, or structure the psychological concepts needed to teach the AI how to classify thinking traps effectively"
+      ],
+      "good": [
+        "You demonstrated appropriate domain framing by creating a custom data analyst chat, showing recognition that the task required systematic pattern recognition and analytical capabilities",
+        "You took initiative in configuring a specialized tool environment rather than using defaults, which reflects thoughtful preparation for complex work",
+        "You showed awareness of task complexity by choosing to establish an appropriate working environment before attempting solutions"
+      ],
+      "grade": "A",
+      "score": 0.8165,
+      "overview": "You showed initial awareness by setting up a specialized data analyst chat environment, recognizing that this task involved **analytical classification work**. However, you did not progress beyond this setup phase—**no prompt development, testing, or conceptual modeling was attempted**, which prevented meaningful task completion. This suggests you may have encountered difficulty translating the complex requirements into concrete actions, and developing a more systematic approach to breaking down and executing AI collaboration tasks will be essential for future success.",
+      "problemId": "000500-thinking-traps",
+      "dimensionDetails": [
+        {
+          "grade": "D",
+          "score": 0.1,
+          "proofs": [
+            {
+              "comment": "This initial setup shows you recognized the analytical nature of the task and attempted to frame the collaboration appropriately. However, this awareness did not translate into active use of AI for learning or discovery.",
+              "isStrength": true,
+              "observation": "Created a custom chat with a Data Analyst persona, indicating some initial metacognitive awareness about the task requirements"
+            },
+            {
+              "comment": "You missed valuable opportunities to use AI as a cognitive partner to explore concepts like Personalizing, All-or-nothing thinking, or Mind reading. Engaging the AI in dialogue about these concepts could have helped you identify what you understood clearly versus where your knowledge needed development.",
+              "isStrength": false,
+              "observation": "No exploratory conversations with AI about thinking trap concepts were recorded, and no evidence of questioning, clarifying, or deepening understanding of the psychological concepts appeared in the interaction logs"
+            },
+            {
+              "comment": "The process of explaining complex concepts to AI typically reveals gaps in your own understanding—a powerful form of self-discovery. By not engaging in this teaching process, you missed the chance to use AI collaboration as a mirror for your own conceptual clarity and to iteratively deepen your grasp of the domain.",
+              "isStrength": false,
+              "observation": "The interaction remained at the level of initial setup without progressing to learning or discovery, with no attempts to articulate or structure the conceptual model of thinking traps"
+            }
+          ],
+          "summary": "Your engagement with AI as a discovery and learning tool was minimal in this task. While you demonstrated initial awareness by setting up a specialized chat environment, you did not proceed to use AI interaction to explore thinking trap concepts, clarify your understanding, or identify gaps in your knowledge.",
+          "dimension": "discovery"
+        },
+        {
+          "grade": "D",
+          "score": 0.05,
+          "proofs": [
+            {
+              "comment": "Iterative refinement fundamentally requires a test-and-learn cycle where you submit attempts, analyze what works and what doesn't, and make targeted improvements. Without entering this cycle at all, you missed the core opportunity to develop and demonstrate this critical AI collaboration skill.",
+              "isStrength": false,
+              "observation": "No test cases were run or analyzed, and the interaction log shows only a single chat creation action with no subsequent refinement activities"
+            },
+            {
+              "comment": "These test cases were specifically designed as learning tools to guide your refinement process through concrete feedback. Not utilizing this structured feedback mechanism represents a significant missed opportunity, as test-driven development is one of the most effective ways to improve prompt quality systematically.",
+              "isStrength": false,
+              "observation": "The task explicitly provided 25 public test cases for iterative development, but your interaction log shows no attempts to run tests, review results, or learn from specific examples"
+            },
+            {
+              "comment": "Effective iterative refinement requires moving beyond initial planning into active experimentation. Each iteration teaches you something new about how AI interprets your instructions and where gaps exist in your conceptual model, creating a learning loop that drives continuous improvement—a process you would benefit from engaging with in future tasks.",
+              "isStrength": false,
+              "observation": "No prompt iterations or adjustments were attempted; you did not progress to testing, analyzing results, diagnosing problems, or making targeted improvements"
+            }
+          ],
+          "summary": "Your interaction with this task did not demonstrate iterative refinement capabilities, as no testing, feedback analysis, or prompt adjustments were attempted after your initial chat setup. Developing iterative refinement skills requires actively engaging in cycles of experimentation, learning from results, and making progressive improvements—a process that was not initiated in this task.",
+          "dimension": "iterative-refinement"
+        },
+        {
+          "grade": "D",
+          "score": 0.1,
+          "proofs": [
+            {
+              "comment": "This demonstrates initial recognition that the task involved analytical classification work. Choosing to frame the AI as a data analyst shows appropriate domain-level thinking about the nature of the challenge you faced.",
+              "isStrength": true,
+              "observation": "You created a custom chat with the system prompt \"You are a well-experienced data analyst. Your task is to help users to analyze data\""
+            },
+            {
+              "comment": "World modeling requires translating abstract concepts into precise, operational instructions. Without defining what each thinking trap means, how to distinguish between them, or what characteristics identify each pattern, you did not provide the AI with the knowledge framework needed to perform classification tasks.",
+              "isStrength": false,
+              "observation": "No definitions, examples, or classification criteria for thinking traps were developed. No attempts to articulate or structure the conceptual model of thinking traps appeared in the logs"
+            },
+            {
+              "comment": "Effective world modeling involves breaking down domain concepts into their components and communicating distinctive features. The absence of any conceptual exploration means you did not engage in the fundamental work of building a shared understanding between yourself and the AI about the psychological patterns central to this task.",
+              "isStrength": false,
+              "observation": "You did not discuss or explore concepts like \"Personalizing,\" \"All-or-nothing thinking,\" or \"Mind reading\" with the AI, nor did you attempt to articulate what distinguishes these patterns"
+            }
+          ],
+          "summary": "Your natural language world modeling capability needs significant development. While you showed initial awareness by framing the task as data analysis work, you did not progress to the essential work of translating complex psychological concepts into structured, AI-understandable instructions, leaving the conceptual modeling work entirely undone.",
+          "dimension": "world-modeling"
+        }
+      ]
+    },
+    {
+      "bad": [
+        "Your minimal exploratory dialogue with AI during problem-solving represents missed opportunities to generate multiple hypotheses and discover patterns more efficiently through collaboration",
+        "Your verification efforts were concentrated at the end rather than integrated throughout, which could have caught potential issues earlier in your analysis",
+        "Your interaction logs show limited explicit hypothesis testing cycles, which would have helped ensure comprehensive exploration and guard against overlooking alternative explanations"
+      ],
+      "good": [
+        "You systematically verified AI claims against source material, explicitly identifying invented terms and unsupported assumptions by checking all six sentence pairs",
+        "You successfully recognized counter-intuitive language features like gender-neutral kinship terms, demonstrating ability to move beyond familiar linguistic assumptions",
+        "You clearly documented your reasoning processes with specific verification methods for each finding, making your analysis transparent and reproducible"
+      ],
+      "grade": "A",
+      "score": 0.9583333333333334,
+      "overview": "You completed the Language X translation task with **strong analytical rigor and systematic verification**, successfully translating most sentences and identifying the key insight that gender-neutral terms create ambiguity. Your **evidence-based approach to checking AI outputs** was thorough, catching multiple errors by cross-referencing against the source material. However, your **limited exploratory dialogue with AI** during the discovery phase meant you worked largely independently rather than leveraging collaborative hypothesis testing that could have enriched your analysis.",
+      "problemId": "001000-ling-bing",
+      "dimensionDetails": [
+        {
+          "grade": "C",
+          "score": 0.28,
+          "proofs": [
+            {
+              "comment": "This demonstrates your ability to identify non-obvious patterns that differ from familiar language structures. Recognizing that kinship terms lack inherent gender marking required moving beyond assumptions based on English or other Indo-European languages, showing genuine exploratory insight into an unfamiliar system.",
+              "isStrength": true,
+              "observation": "In section (b), you correctly identified that ruman and yiu are gender-neutral terms, recognizing that the sentence is ambiguous because both words are gender-neutral on their own, and provided four possible meanings showing understanding of combinatorial possibilities"
+            },
+            {
+              "comment": "This limited dialogue indicates you did not fully utilize AI as a collaborative partner for exploratory discovery. You missed opportunities to ask AI to propose multiple hypotheses about word order, analyze morphological patterns systematically, or suggest alternative grammatical structures that could have enriched your exploration and potentially revealed additional language features more efficiently.",
+              "isStrength": false,
+              "observation": "Your interaction log shows only two questions asked during the problem-solving process, with minimal back-and-forth exploration of language patterns with the AI"
+            },
+            {
+              "comment": "The absence of visible hypothesis testing through AI dialogue suggests your exploratory process remained largely internal rather than leveraging AI's capabilities to systematically examine multiple angles. This approach limits the breadth of exploration and may cause you to miss edge cases or alternative explanations that structured AI collaboration could surface.",
+              "isStrength": false,
+              "observation": "Your chat logs don't show explicit hypothesis generation and testing cycles, such as asking questions like \"If 'ta' is a present tense marker, does it appear in every present tense sentence?\" or \"Could 'mira' mean anything other than 'see'?\""
+            }
+          ],
+          "summary": "You demonstrated solid independent pattern recognition by identifying the counter-intuitive gender-neutral nature of Language X terms, showing you can break through familiar linguistic assumptions. However, your exploratory discovery was limited by minimal AI collaboration, with only two questions asked during the problem-solving phase, suggesting you worked largely independently rather than leveraging AI as a partner to generate multiple hypotheses and explore alternative explanations systematically.",
+          "dimension": "exploratory"
+        },
+        {
+          "grade": "C",
+          "score": 0.41,
+          "proofs": [
+            {
+              "comment": "This demonstrates a systematic cross-validation methodology where you used the source material as your evidentiary base rather than accepting AI outputs at face value. Your explicit comparison process shows disciplined verification thinking.",
+              "isStrength": true,
+              "observation": "I compared each word against the example sentences, and each one behaved consistently across the dataset"
+            },
+            {
+              "comment": "You successfully identified fabricated content by systematically checking AI claims against available evidence. This shows you can distinguish between plausible-sounding but incorrect AI outputs and genuinely supported information, which is crucial for maintaining quality control when working with AI tools.",
+              "isStrength": true,
+              "observation": "The AI invented additional pronouns such as 'minan' and I checked all six example pairs, and none introduce or suggest such a word"
+            },
+            {
+              "comment": "While your final verification was thorough, conducting verification iteratively during the exploration phase—through real-time dialogue and fact-checking with AI—could make your process more efficient and help catch errors earlier before they influence subsequent analysis.",
+              "isStrength": false,
+              "observation": "Your verification efforts appear concentrated at the end of your problem-solving process rather than integrated throughout, with the comprehensive verification section suggesting you developed your analysis first and then checked it"
+            }
+          ],
+          "summary": "You demonstrated strong systematic verification practices by cross-checking AI outputs against source material and successfully identifying specific errors such as invented vocabulary and unsupported claims. Your evidence-based approach and clear documentation of verification methods show solid critical evaluation skills, though integrating verification more actively during the exploration phase through dialogue could enhance efficiency.",
+          "dimension": "self-verification"
+        }
+      ]
+    },
+    {
+      "bad": [
+        "Your test case focused on an externally observable goal without exploring how the prompt handles inherently subjective goals like emotional states or relationship quality, which would have exposed its most fundamental limitation",
+        "You completed the task in a single iteration without using follow-up testing or AI dialogue to probe deeper patterns, missing opportunities to discover whether your identified defects represented the full scope of the prompt's problems",
+        "Your analysis didn't engage with the materials' emphasis on balancing objective metrics with subjective indicators, overlooking a key conceptual dimension that distinguishes effective from distorted operationalization"
+      ],
+      "good": [
+        "You articulated specific discrepancies with precision, clearly identifying how the actual output introduced elements like external verifiers and modified criteria that weren't part of your intended operationalization",
+        "You demonstrated systematic causal thinking by connecting the prompt's design philosophy (overemphasis on objectivity and binary rules) to the predictable problems it created in outputs",
+        "You translated your analytical insights into concrete, actionable improvement suggestions that could be directly implemented to address the defects you identified"
+      ],
+      "grade": "D",
+      "score": 0.3653846153846154,
+      "overview": "You successfully completed the basic structure of the operationalization testing task and identified meaningful defects in the prompt, particularly recognizing how it introduces **rigid external structures** that distort user intent. Your analysis was clear and logical, with actionable improvement suggestions that addressed observable problems. However, your single-pass approach and choice of a primarily objective test case meant you **missed the prompt's most critical systematic flaw**: its failure to accommodate subjective measurement dimensions that are essential for many real-world goals.",
+      "problemId": "001110-operationalize",
+      "dimensionDetails": [
+        {
+          "grade": "C",
+          "score": 0.29,
+          "proofs": [
+            {
+              "comment": "This shows you understood that operationalization requires precise definitions and that appropriate AI configuration could support your work. You successfully translated the general concept of \"tidy\" into specific, observable criteria.",
+              "isStrength": true,
+              "observation": "You created a custom chat titled \"Operationalization Expert\" with a focused system prompt and specified concrete standards in your expected output: \"clear surface except for laptop + one pen\""
+            },
+            {
+              "comment": "You didn't use AI dialogue to explore why the prompt produced these specific outputs, test alternative goal types, or probe deeper conceptual questions. This single-pass approach meant you didn't actively leverage AI as a cognitive aid to deepen your understanding of operationalization's nuances, particularly around subjective versus objective measurement—a key dimension the materials emphasized.",
+              "isStrength": false,
+              "observation": "Your interaction log shows a single test execution: you pasted the flawed prompt with \"Keep my desk tidy\" as input, received the output, and proceeded directly to write your analysis and submit"
+            },
+            {
+              "comment": "You didn't explore through AI dialogue whether the prompt's problems extended to goals requiring subjective measurement. This represents a missed opportunity to use AI conversation to clarify the boundaries of effective operationalization and discover whether your identified defects were the most critical ones.",
+              "isStrength": false,
+              "observation": "The operationalization materials prominently featured examples involving subjective dimensions like \"gain inner peace\" and \"read more focusedly,\" yet your test case \"Keep my desk tidy\" focused primarily on external, observable indicators"
+            }
+          ],
+          "summary": "You demonstrated a foundational understanding of operationalization principles and successfully identified key defects in the prompt, showing you could translate the concept into a concrete test case. However, your engagement with AI as a tool for deepening self-understanding was limited—you completed the task in a single pass without using dialogue to explore alternative perspectives, probe edge cases, or clarify the boundaries of your conceptual understanding.",
+          "dimension": "discovery"
+        },
+        {
+          "grade": "C",
+          "score": 0.2,
+          "proofs": [
+            {
+              "comment": "This linear progression from test to analysis to submission demonstrates task completion but misses the iterative refinement process that typically reveals deeper insights. Testing once means you identified some defects but didn't systematically explore whether different inputs would expose additional or more severe flaws in the prompt.",
+              "isStrength": false,
+              "observation": "Your interaction log shows a single test execution: you pasted the flawed prompt with \"Keep my desk tidy\" as input, received the output, and proceeded directly to write your analysis and submit. You used the feedback function once to verify your submission was complete, receiving confirmation that \"All required sections included.\""
+            },
+            {
+              "comment": "The absence of exploratory iterations limited your ability to discover systematic patterns across different scenarios. Iterative refinement involves testing variations to understand the boundaries and consistent weaknesses of what you're evaluating, which your single-pass approach couldn't accomplish.",
+              "isStrength": false,
+              "observation": "You did not test whether different types of inputs (such as goals involving emotional states or relationship quality) would expose different or more severe flaws in the prompt."
+            },
+            {
+              "comment": "This highlights the core limitation of non-iterative approaches: you can identify problems but may not discover the full scope or relative importance of different issues. Iterative refinement allows you to progressively build understanding by testing hypotheses, observing results, and adjusting your investigation strategy accordingly.",
+              "isStrength": false,
+              "observation": "Your process didn't include the iterative cycles of test-observe-refine that typically reveal deeper patterns. While your single test case yielded valid insights, multiple iterations testing different goal categories could have strengthened your analysis by revealing whether your identified defects were the most critical ones or whether other systematic problems existed."
+            }
+          ],
+          "summary": "Your approach to the operationalization testing task was efficient and produced valid insights, but you completed the work in a single iteration without exploring variations or refining your test strategy based on initial results. Developing iterative refinement practices—testing multiple scenarios, adjusting your approach based on what you learn, and progressively deepening your analysis—would significantly strengthen your ability to discover systematic patterns and extract maximum value from testing activities.",
+          "dimension": "iterative-refinement"
+        },
+        {
+          "grade": "C",
+          "score": 0.32,
+          "proofs": [
+            {
+              "comment": "This demonstrates your ability to articulate concrete differences with clarity and precision, translating complex observations into understandable language that clearly communicates the nature of the discrepancies.",
+              "isStrength": true,
+              "observation": "In your difference summary, you translated your observations into precise language: the actual output introduces elements that were not part of the intended operationalization, such as involving an office manager instead of the user themself. You identified the specific nature of discrepancies—weekly verification schedule and four-week duration versus your intended daily 14-day timeline"
+            },
+            {
+              "comment": "You successfully translated technical observations about the prompt's behavior into causal explanations and then into actionable modifications, showing competent ability to move between analysis and practical recommendations.",
+              "isStrength": true,
+              "observation": "Your defect analysis connected the prompt's design to its outputs: The flawed prompt overemphasizes 'objective' and 'binary' rules, which leads the model to invent rigid external structures. Your improvement suggestion proposed specific changes: The prompt should explicitly instruct the model to stay close to the user's original scenario and avoid introducing new actors, timelines, or rules unless stated by the user"
+            },
+            {
+              "comment": "This reveals a significant limitation in your translation capabilities within AI dialogue contexts. You did not use conversational iteration to refine your thinking or translate emerging questions into prompts that could deepen your analysis, representing a missed opportunity to demonstrate more sophisticated representation and translation skills through interactive AI collaboration.",
+              "isStrength": false,
+              "observation": "Your interaction log shows a single test execution: you pasted the flawed prompt with Keep my desk tidy as input, received the output, and proceeded directly to write your analysis and submit. You didn't probe deeper conceptual questions during your AI interaction, such as asking the AI to help you explore why the prompt might systematically prefer external verification or how different goal types might expose different flaws"
+            }
+          ],
+          "summary": "You demonstrated clear ability to translate observations into precise language and actionable recommendations. Your analysis articulated specific discrepancies effectively and connected prompt design features to their consequences. However, your translation capabilities were primarily demonstrated through direct analysis rather than through iterative AI dialogue, and you did not leverage conversational exploration to refine and deepen your conceptual understanding.",
+          "dimension": "representation"
+        },
+        {
+          "grade": "C",
+          "score": 0.3,
+          "proofs": [
+            {
+              "comment": "This shows you successfully built a working mental model of the operationalization concept and could translate it into structured output. You understood that operationalization has multiple interconnected components that need to work together, which is essential for communicating complex frameworks to AI.",
+              "isStrength": true,
+              "observation": "Your expected output demonstrated understanding of the operationalization framework structure: \"Goal,\" \"If it's working, you'll observe,\" \"Verification method\" (with Who/With what/Record what), \"Verification timing,\" and \"Success criteria.\" You applied this structure systematically, showing you had internalized the conceptual model."
+            },
+            {
+              "comment": "This demonstrates you could construct and communicate a mental model of causality—understanding how design philosophy creates behavioral consequences. You were able to express this relationship clearly to convey your understanding of the underlying mechanism.",
+              "isStrength": true,
+              "observation": "In your defect analysis, you articulated a principle: the prompt's emphasis on 'objective' and 'binary' rules creates problems because it leads the model to invent rigid external structures and causes outputs that distort the goal rather than operationalize it faithfully."
+            },
+            {
+              "comment": "This reveals a limitation in the depth and sophistication of your mental model. While you grasped the basic framework, you didn't build out the more complex dimensions involving the objective-subjective spectrum in goal verification. Additionally, you didn't use AI dialogue to probe deeper conceptual questions that could have refined and expanded your understanding, missing an opportunity to develop richer world models through iterative conversation.",
+              "isStrength": false,
+              "observation": "Your analysis didn't explore whether the prompt adequately addressed the balance between objective measurement and meaningful verification. The materials emphasized combining quantitative metrics with qualitative notes and warned against \"only numbers, no meaning,\" yet your conceptual model focused primarily on structural and procedural aspects without deeply engaging with these nuanced dimensions."
+            }
+          ],
+          "summary": "You demonstrated a solid foundational understanding of the operationalization framework, successfully translating the conceptual structure into your test case with clear components and principles. However, your mental model remained at a basic structural level without deeply engaging with the nuanced aspects of how different goal types require different approaches, and you didn't leverage AI dialogue to explore and refine your conceptual understanding.",
+          "dimension": "world-modeling"
+        }
+      ]
+    }
+  ],
+  "dimensionReports": [
+    {
+      "grade": "C",
+      "score": 0.195,
+      "summary": "You demonstrate a capability to engage with specialized tasks and apply conceptual knowledge directly, as evidenced by your ability to identify key defects and work with operationalization principles. However, your approach to **using AI as a collaborative discovery tool** remains underdeveloped—you tend to complete tasks in single passes rather than leveraging iterative dialogue to explore uncertainties, test assumptions, or deepen your conceptual understanding through conversation.",
+      "problems": [
+        {
+          "grade": "D",
+          "phrases": "Limited use of AI for conceptual exploration and self-discovery",
+          "problemId": "000500-thinking-traps"
+        },
+        {
+          "grade": "C",
+          "phrases": "Basic framework grasp with minimal exploration through AI dialogue",
+          "problemId": "001110-operationalize"
+        }
+      ],
+      "dimension": "discovery"
+    },
+    {
+      "grade": "C",
+      "score": 0.16,
+      "summary": "You demonstrate **capability to achieve quality results** when you understand task requirements, though your current approach tends toward single-pass completion rather than progressive refinement. Across the tasks examined, you frequently moved from initial attempts directly to final outputs without the intermediate testing and adjustment cycles that characterize strong iterative refinement skills. Building more **systematic habits of experimentation**—testing variations, analyzing feedback patterns, and making incremental adjustments—would transform your workflow from compressed problem-solving into truly iterative optimization that enhances both efficiency and depth of insight.",
+      "problems": [
+        {
+          "grade": "C",
+          "phrases": "Limited iterative process; eventual success through sudden realization rather than progressive refinement",
+          "problemId": "000340-meeting-verify"
+        },
+        {
+          "grade": "D",
+          "phrases": "No iterative refinement activity observed",
+          "problemId": "000500-thinking-traps"
+        },
+        {
+          "grade": "C",
+          "phrases": "Single-pass approach; limited iterative exploration",
+          "problemId": "001110-operationalize"
+        }
+      ],
+      "dimension": "iterative-refinement"
+    },
+    {
+      "grade": "C",
+      "score": 0.305,
+      "summary": "You demonstrate **strong capability in translating observations into precise, evidence-based language** once you grasp the task requirements, particularly when analyzing discrepancies and articulating actionable recommendations. However, your approach reveals an opportunity to strengthen the **upfront translation of ambiguous instructions into clear execution plans**—pausing to clarify vague requirements through dialogue or exploratory questions before beginning work would help you bridge the gap between abstract intentions and concrete action more efficiently.",
+      "problems": [
+        {
+          "grade": "C",
+          "phrases": "Eventual success in structuring outputs, but struggled initially to translate task requirements into action",
+          "problemId": "000340-meeting-verify"
+        },
+        {
+          "grade": "C",
+          "phrases": "Competent direct translation; limited use of AI dialogue for refinement",
+          "problemId": "001110-operationalize"
+        }
+      ],
+      "dimension": "representation"
+    },
+    {
+      "grade": "C",
+      "score": 0.34,
+      "summary": "You demonstrate **effective prioritization skills** by focusing your attention on high-impact errors that would genuinely mislead readers—such as speaker misattributions and fabricated decisions—rather than getting sidetracked by minor stylistic variations. This shows you can **distinguish between material issues and trivial differences**, which is essential for efficient collaboration with AI-generated content. To develop this ability further, consider broadening your verification approach to systematically evaluate the full spectrum of potential error types, ensuring you're not inadvertently overlooking other categories of issues that could matter.",
+      "problems": [
+        {
+          "grade": "C",
+          "phrases": "Good error prioritization but limited systematic exploration",
+          "problemId": "000340-meeting-verify"
+        }
+      ],
+      "dimension": "choosing"
+    },
+    {
+      "grade": "C",
+      "score": 0.28,
+      "summary": "You demonstrate a **strong capacity to challenge linguistic assumptions** and uncover unexpected patterns, particularly in recognizing the counter-intuitive gender-neutral structure in Language X. Your independent analytical skills enable you to break through conventional thinking frameworks. To fully develop your exploratory discovery abilities, consider **engaging more actively with AI as a collaborative thinking partner**—asking probing questions, testing multiple hypotheses simultaneously, and using dialogue to systematically explore alternative explanations that might not surface through solo analysis alone.",
+      "problems": [
+        {
+          "grade": "C",
+          "phrases": "Basic pattern recognition with limited collaborative AI exploration",
+          "problemId": "001000-ling-bing"
+        }
+      ],
+      "dimension": "exploratory"
+    },
+    {
+      "grade": "C",
+      "score": 0.2,
+      "summary": "You demonstrate **foundational structural thinking** when working with frameworks, successfully mapping conceptual elements into organized components. However, your natural language world modeling would benefit from deeper development in two key areas: **translating abstract concepts into AI-actionable instructions** and **using iterative dialogue to refine and test your mental models**. You show promise in understanding how to organize information, but there's significant opportunity to strengthen how you communicate complex real-world knowledge and contextual nuances to AI systems.",
+      "problems": [
+        {
+          "grade": "D",
+          "phrases": "Minimal conceptual modeling; requires foundational development",
+          "problemId": "000500-thinking-traps"
+        },
+        {
+          "grade": "C",
+          "phrases": "Functional basic framework; limited depth in nuanced modeling",
+          "problemId": "001110-operationalize"
+        }
+      ],
+      "dimension": "world-modeling"
+    },
+    {
+      "grade": "C",
+      "score": 0.355,
+      "summary": "You demonstrate **strong evidence-based verification practices**, consistently requiring concrete proof for claims and successfully identifying errors like invented vocabulary and unsupported assertions in AI-generated content. Your approach shows **solid critical evaluation skills** through systematic cross-checking against source materials and clear documentation of your verification methods. To elevate your verification capabilities further, consider developing more proactive audit strategies that go beyond format completion—actively questioning the AI's work for completeness, potential false positives, and overlooked error categories, and integrating verification dialogue more dynamically throughout the exploration phase rather than reserving it primarily for final validation.",
+      "problems": [
+        {
+          "grade": "C",
+          "phrases": "Evidence-based but lacks systematic verification depth",
+          "problemId": "000340-meeting-verify"
+        },
+        {
+          "grade": "C",
+          "phrases": "Systematic verification with thorough error detection",
+          "problemId": "001000-ling-bing"
+        }
+      ],
+      "dimension": "self-verification"
+    }
+  ]
+}

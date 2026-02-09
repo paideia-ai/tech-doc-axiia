@@ -1,0 +1,4 @@
+Grade,overallMean,overallAbilityScore,overallTaskScore,abilitySummaryScores.choosing,abilitySummaryScores.discovery,abilitySummaryScores.exploratory,abilitySummaryScores.iterative-refinement,abilitySummaryScores.representation,abilitySummaryScores.self-verification,abilitySummaryScores.world-modeling,problemTaskScores.meeting-verify,problemTaskScores.thinking-traps,problemTaskScores.ling-bing,problemTaskScores.operationalize
+A,0.498,0.498,0.599,0.61,0.447,0.515,0.462,0.602,0.564,0.481,0.648,0.856,0.736,0.551
+B,0.394,0.369,0.445,0.449,0.3,0.345,0.308,0.43,0.414,0.334,0.332,0.587,0.556,0.304
+C,0.291,0.239,0.29,0.289,0.153,0.175,0.154,0.257,0.263,0.188,0.015,0.318,0.376,0.056
