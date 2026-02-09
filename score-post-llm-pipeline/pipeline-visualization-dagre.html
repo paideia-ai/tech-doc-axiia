@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Post-LLM Pipeline — DAG (dagre-d3)</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://unpkg.com/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --grade-a: #16a34a; --grade-a-bg: #dcfce7;
+  --grade-b: #2563eb; --grade-b-bg: #dbeafe;
+  --grade-c: #d97706; --grade-c-bg: #fef3c7;
+  --grade-d: #dc2626; --grade-d-bg: #fee2e2;
+  --null-bg: #f1f5f9; --null-fg: #94a3b8;
+  --structural: #dc2626; --provenance: #d97706; --advisory: #2563eb;
+  --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b;
+  --border: #e2e8f0; --accent: #6366f1;
+  --success-bg: #f0fdf4; --failure-bg: #fef2f2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto;
+}
+
+h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.4rem; margin: 2rem 0 1rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.25rem; }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; }
+h4 { font-size: 0.95rem; margin: 1rem 0 0.5rem; color: var(--text-muted); }
+p { margin-bottom: 0.75rem; }
+
+.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+/* ===== Cards ===== */
+.card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.card-header .badge {
+  display: inline-flex; align-items: center; padding: 0.25rem 0.75rem;
+  border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+}
+.badge-node { background: #ede9fe; color: #6d28d9; }
+.badge-edge { background: #e0f2fe; color: #0369a1; }
+
+/* ===== Tables ===== */
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
+th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f8fafc; font-weight: 600; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.02em; }
+td { font-family: "SF Mono", "Fira Code", monospace; font-size: 0.82rem; }
+
+/* ===== Grade chips ===== */
+.grade { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; min-width: 1.5rem; text-align: center; }
+.grade-A { background: var(--grade-a-bg); color: var(--grade-a); }
+.grade-B { background: var(--grade-b-bg); color: var(--grade-b); }
+.grade-C { background: var(--grade-c-bg); color: var(--grade-c); }
+.grade-D { background: var(--grade-d-bg); color: var(--grade-d); }
+.grade-null { background: var(--null-bg); color: var(--null-fg); text-decoration: line-through; font-style: italic; }
+
+/* ===== Score value color ===== */
+.score { font-weight: 600; }
+.score-high { color: #1d4ed8; }
+.score-mid { color: #4f46e5; }
+.score-low { color: #7c3aed; }
+
+/* ===== Success / Failure tabs ===== */
+.example-tabs { display: flex; gap: 0; margin: 1rem 0 0; }
+.example-tab {
+  padding: 0.5rem 1.25rem; border: 1px solid var(--border); cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; background: var(--bg); transition: all 0.15s;
+}
+.example-tab:first-child { border-radius: 8px 0 0 0; }
+.example-tab:last-child { border-radius: 0 8px 0 0; }
+.example-tab.active-success { background: var(--success-bg); border-color: #16a34a; color: #16a34a; }
+.example-tab.active-failure { background: var(--failure-bg); border-color: #dc2626; color: #dc2626; }
+.example-panel {
+  border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px;
+  padding: 1.25rem; display: none;
+}
+.example-panel.active { display: block; }
+.example-panel.success-panel { background: var(--success-bg); }
+.example-panel.failure-panel { background: var(--failure-bg); }
+
+/* ===== Traffic light ===== */
+.traffic-light { display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0; }
+.light { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ccc; opacity: 0.25; }
+.light.on { opacity: 1; border-color: transparent; box-shadow: 0 0 8px currentColor; }
+.light-green { background: #16a34a; color: #16a34a; }
+.light-yellow { background: #eab308; color: #eab308; }
+.light-red { background: #dc2626; color: #dc2626; }
+.traffic-label { font-weight: 700; font-size: 0.9rem; margin-left: 0.5rem; }
+
+/* ===== Check table ===== */
+.check-tier { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+.tier-structural { background: #fee2e2; color: var(--structural); border: 1px solid var(--structural); }
+.tier-provenance { background: #fef3c7; color: var(--provenance); border: 1px solid var(--provenance); }
+.tier-advisory { background: #dbeafe; color: var(--advisory); border: 1px solid var(--advisory); }
+.check-pass { color: #16a34a; font-weight: 700; }
+.check-fail { color: #dc2626; font-weight: 700; }
+
+/* ===== Details / Summary (collapsible) ===== */
+details { margin: 0.75rem 0; }
+summary {
+  cursor: pointer; font-weight: 600; padding: 0.5rem 0; color: var(--accent);
+  list-style: none; display: flex; align-items: center; gap: 0.5rem;
+}
+summary::before { content: "\25B6"; font-size: 0.7rem; transition: transform 0.2s; }
+details[open] > summary::before { transform: rotate(90deg); }
+
+/* ===== Matrix cell ===== */
+.dim-matrix { display: grid; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin: 0.75rem 0; }
+.dim-cell { padding: 0.5rem; background: var(--card-bg); text-align: center; font-size: 0.8rem; }
+.dim-cell.header { background: #f1f5f9; font-weight: 600; }
+.dim-cell.active { background: #ede9fe; color: #6d28d9; font-weight: 600; }
+.dim-cell.inactive { background: #f8fafc; color: #cbd5e1; }
+
+/* ===== Dots pool ===== */
+.dot-pool { display: flex; flex-wrap: wrap; gap: 3px; padding: 0.5rem; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #6366f1; opacity: 0.6; }
+.dot.highlight { background: #f59e0b; opacity: 1; width: 10px; height: 10px; }
+
+/* ===== Bell curve ===== */
+.bell-container { display: flex; justify-content: center; margin: 1rem 0; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  body { padding: 1rem; }
+  .dim-matrix { font-size: 0.7rem; }
+  td, th { padding: 0.35rem 0.5rem; font-size: 0.78rem; }
+  #dag-svg { height: 400px; }
+}
+
+/* ===== Warning ===== */
+.warning-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: #fef3c7; color: #92400e; padding: 0.25rem 0.75rem;
+  border-radius: 6px; font-size: 0.8rem; font-weight: 600; border: 1px solid #f59e0b;
+}
+
+/* ===== Formula box ===== */
+.formula {
+  background: #f1f5f9; border-left: 3px solid var(--accent);
+  padding: 0.75rem 1rem; border-radius: 0 6px 6px 0;
+  font-family: "SF Mono", "Fira Code", monospace; font-size: 0.82rem;
+  margin: 0.75rem 0; line-height: 1.8;
+}
+
+/* ===== Anchor links ===== */
+.section-link { text-decoration: none; color: inherit; }
+.section-link:hover { text-decoration: underline; color: var(--accent); }
+
+/* ===== Mismatch highlight ===== */
+.mismatch { background: #fee2e2; padding: 0.15rem 0.35rem; border-radius: 3px; color: #dc2626; font-weight: 600; }
+.match { color: #16a34a; }
+
+/* ===== Edge arrow ===== */
+.edge-arrow { text-align: center; font-size: 2rem; color: var(--accent); margin: 0.5rem 0; }
+
+/* ================================================================ */
+/* dagre-d3 DAG overrides                                            */
+/* ================================================================ */
+.dag-container {
+  display: flex; justify-content: center; margin: 2rem 0;
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; position: relative;
+}
+#dag-svg { width: 100%; height: 680px; cursor: grab; }
+#dag-svg:active { cursor: grabbing; }
+
+/* Node label HTML content */
+.dn { text-align: center; padding: 8px 14px; cursor: pointer; user-select: none; }
+.dn-title { font-weight: 700; font-size: 12px; line-height: 1.3; }
+.dn-sub { font-size: 10px; margin-top: 2px; opacity: 0.75; }
+
+/* dagre-d3 generated node rects */
+.node rect { rx: 10; ry: 10; transition: filter 0.15s; }
+.node:hover rect { filter: brightness(0.95) drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+
+/* Data nodes */
+.node.data-node rect { fill: #ede9fe; stroke: #8b5cf6; stroke-width: 1.5; }
+.node.data-node .dn-title { color: #5b21b6; }
+.node.data-node .dn-sub { color: #7c3aed; }
+
+/* Transform nodes */
+.node.transform-node rect { fill: #e0f2fe; stroke: #0ea5e9; stroke-width: 1; }
+.node.transform-node .dn-title { color: #0369a1; }
+.node.transform-node .dn-sub { color: #0369a1; }
+
+/* Blocked terminal node */
+.node.blocked-node rect { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; }
+.node.blocked-node .dn-title { color: #dc2626; }
+.node.blocked-node .dn-sub { color: #dc2626; }
+
+/* Edge paths */
+.edgePath path.path { stroke-width: 2; fill: none; }
+.edgePath marker path { fill: #6366f1; }
+
+/* Edge labels */
+.edgeLabel text { font-size: 10px; font-weight: 600; }
+.edgeLabel rect { fill: transparent; stroke: none; }
+
+/* Zoom controls */
+.dag-controls {
+  position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 4px; z-index: 10;
+}
+.dag-controls button {
+  width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--card-bg); cursor: pointer; font-size: 16px; color: var(--text);
+  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+}
+.dag-controls button:hover { background: #f1f5f9; }
+
+/* Highlighted node (clicked) */
+.node.highlighted rect { stroke-width: 3; filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4)); }
+</style>
+</head>
+<body>
+
+<h1>Score Post-LLM Pipeline</h1>
+<p class="subtitle">Directed Acyclic Graph — how raw LLM scores become letter grades. Rendered with <strong>dagre-d3</strong> (auto-layout). Each node is a data entity; each edge is a transformation with success and failure examples from fixture data.</p>
+
+<!-- ================================================================== -->
+<!-- DAG OVERVIEW DIAGRAM (dagre-d3)                                     -->
+<!-- ================================================================== -->
+<h2 id="dag-overview">Pipeline Overview (DAG)</h2>
+
+<div class="dag-container">
+  <svg id="dag-svg"></svg>
+  <div class="dag-controls">
+    <button id="zoom-in" title="Zoom in">+</button>
+    <button id="zoom-out" title="Zoom out">&minus;</button>
+    <button id="zoom-fit" title="Fit to view">&#8859;</button>
+  </div>
+</div>
+
+<p style="text-align:center; color: var(--text-muted); font-size: 0.85rem;">Click any node to jump to its detailed section below. Scroll to zoom, drag to pan.</p>
+
+<!-- ================================================================== -->
+<!-- NODE: ProblemDimensionMap                                          -->
+<!-- ================================================================== -->
+<h2 id="node-dimmap"><a class="section-link" href="#node-dimmap">Node: ProblemDimensionMap</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">The "test blueprint" — which problems test which dimensions</span>
+  </div>
+
+  <p><strong>map_id:</strong> <code>d4e5f6a7-b8c9-4d0e-af12-345678901234</code><br>
+  <strong>label:</strong> 2024 Spring Assessment v2</p>
+
+  <h4>Problem &times; Dimension Matrix</h4>
+  <div class="dim-matrix" style="grid-template-columns: 200px repeat(5, 1fr);">
+    <div class="dim-cell header">Problem</div>
+    <div class="dim-cell header" style="font-size:0.7rem;">Discovery<br><span style="font-weight:400">发现与自我理解</span></div>
+    <div class="dim-cell header" style="font-size:0.7rem;">Expression<br><span style="font-weight:400">表达与转译</span></div>
+    <div class="dim-cell header" style="font-size:0.7rem;">Exploratory<br><span style="font-weight:400">探索式发现</span></div>
+    <div class="dim-cell header" style="font-size:0.7rem;">Verification<br><span style="font-weight:400">验证与确认</span></div>
+    <div class="dim-cell header" style="font-size:0.7rem;">Iterative<br><span style="font-weight:400">迭代优化</span></div>
+
+    <div class="dim-cell header">000340 meeting-verify</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell inactive">&mdash;</div>
+    <div class="dim-cell inactive">&mdash;</div>
+
+    <div class="dim-cell header">000500 thinking-traps</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell inactive">&mdash;</div>
+    <div class="dim-cell inactive">&mdash;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+
+    <div class="dim-cell header">001001 ling-bing</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+    <div class="dim-cell active">&#10003;</div>
+  </div>
+
+  <p style="font-size:0.85rem; color:var(--text-muted);">Every problem tests a subset of the 5 dimensions. Dimensions not tested by a problem get <code>null</code> in dimension_scores.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- NODE: JSONScores                                                   -->
+<!-- ================================================================== -->
+<h2 id="node-jsonscores"><a class="section-link" href="#node-jsonscores">Node: JSONScores</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">One student's raw scores from LLM evaluation</span>
+  </div>
+
+  <p><strong>participant_id:</strong> <code>student-0042</code> &nbsp;|&nbsp;
+  <strong>event_id:</strong> <code>spring-2024-final</code> &nbsp;|&nbsp;
+  <strong>prompt_snapshot.set_hash:</strong> <code>aabbcc...aabb</code></p>
+
+  <h4>Stored: problem_scores</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Problem</th>
+        <th>Task Score</th>
+        <th>Discovery<br>发现与自我理解</th>
+        <th>Expression<br>表达与转译</th>
+        <th>Exploratory<br>探索式发现</th>
+        <th>Verification<br>验证与确认</th>
+        <th>Iterative<br>迭代优化</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>000340 meeting-verify</td>
+        <td><span class="score score-mid">0.80</span></td>
+        <td><span class="score score-high">0.85</span></td>
+        <td><span class="score score-mid">0.78</span></td>
+        <td><span class="score score-mid">0.72</span></td>
+        <td><span class="grade grade-null">null</span></td>
+        <td><span class="grade grade-null">null</span></td>
+      </tr>
+      <tr>
+        <td>000500 thinking-traps</td>
+        <td><span class="score score-mid">0.75</span></td>
+        <td><span class="score score-high">0.90</span></td>
+        <td><span class="grade grade-null">null</span></td>
+        <td><span class="grade grade-null">null</span></td>
+        <td><span class="score score-low">0.65</span></td>
+        <td><span class="score score-low">0.70</span></td>
+      </tr>
+      <tr>
+        <td>001001 ling-bing</td>
+        <td><span class="score score-mid">0.82</span></td>
+        <td><span class="score score-high">0.88</span></td>
+        <td><span class="score score-mid">0.82</span></td>
+        <td><span class="score score-mid">0.79</span></td>
+        <td><span class="score score-low">0.71</span></td>
+        <td><span class="score score-low">0.68</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Derived: ability_scores (computed, not stored)</h4>
+  <div class="formula">
+    ability_scores[dim] = mean of that dim across problems (skip nulls)<br><br>
+    <strong>Discovery</strong> = mean(0.85, 0.90, 0.88) = <strong>0.877</strong><br>
+    <strong>Expression</strong> = mean(0.78, 0.82) = <strong>0.800</strong> &nbsp;(000500 is null &rarr; skipped)<br>
+    <strong>Exploratory</strong> = mean(0.72, 0.79) = <strong>0.755</strong> &nbsp;(000500 is null &rarr; skipped)<br>
+    <strong>Verification</strong> = mean(0.65, 0.71) = <strong>0.680</strong> &nbsp;(000340 is null &rarr; skipped)<br>
+    <strong>Iterative</strong> = mean(0.70, 0.68) = <strong>0.690</strong> &nbsp;(000340 is null &rarr; skipped)
+  </div>
+
+  <h4>Derived: totals (computed, not stored)</h4>
+  <div class="formula">
+    total_problem_score &nbsp;= mean(0.80, 0.75, 0.82) = <strong>0.790</strong><br>
+    total_ability_score = mean(0.877, 0.800, 0.755, 0.680, 0.690) = <strong>0.760</strong><br>
+    final_total_score &nbsp;&nbsp;= &radic;(0.790 &times; 0.760) = &radic;0.6004 = <strong>0.775</strong>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!-- EDGE 1: COLLECT                                                    -->
+<!-- ================================================================== -->
+<h2 id="edge-collect"><a class="section-link" href="#edge-collect">Edge 1: COLLECT &mdash; JSONScores[] &rarr; ScorePool</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-edge">Transformation</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Gather all students' scores into one pool</span>
+  </div>
+
+  <p><strong>What happens:</strong> Collect JSONScores from all students in an event. All must share the same <code>prompt_snapshot</code> (same prompts used) and the same <code>dimension_map</code> (same problem-dimension assignments). If any student was scored with different criteria, they are rejected.</p>
+
+  <div class="example-tabs">
+    <div class="example-tab active-success" onclick="switchTab(this, 'collect-success')">&#10003; Success</div>
+    <div class="example-tab" onclick="switchTab(this, 'collect-failure')">&#10007; Failure</div>
+  </div>
+
+  <div id="collect-success" class="example-panel success-panel active">
+    <h4>120 students, all matching</h4>
+    <table>
+      <tr><th>Field</th><th>Student-0042</th><th>Student-0001 &hellip; Student-0120</th><th>Match?</th></tr>
+      <tr>
+        <td>prompt_snapshot.set_hash</td>
+        <td><code>aabbcc&hellip;aabb</code></td>
+        <td><code>aabbcc&hellip;aabb</code></td>
+        <td class="check-pass">&#10003; identical</td>
+      </tr>
+      <tr>
+        <td>dimension_map.map_id</td>
+        <td><code>d4e5f6a7-&hellip;</code></td>
+        <td><code>d4e5f6a7-&hellip;</code></td>
+        <td class="check-pass">&#10003; identical</td>
+      </tr>
+    </table>
+    <p style="margin-top:0.75rem;"><strong>Result:</strong> ScorePool created with 120 students, all sharing the same scoring criteria.</p>
+  </div>
+
+  <div id="collect-failure" class="example-panel failure-panel">
+    <h4>Student-0099 scored with different prompts</h4>
+    <p>A prompt file was updated mid-assessment. Student-0099 was scored after the update.</p>
+    <table>
+      <tr><th>Field</th><th>Students 0001&ndash;0098, 0100&ndash;0120</th><th>Student-0099</th><th>Match?</th></tr>
+      <tr>
+        <td>prompt_snapshot.set_hash</td>
+        <td><code>aabbcc&hellip;aabb</code></td>
+        <td class="mismatch"><code>ffffff&hellip;ffff</code></td>
+        <td class="check-fail">&#10007; MISMATCH</td>
+      </tr>
+      <tr>
+        <td style="padding-left:2rem;">&rarr; framework:zh:task-eval</td>
+        <td><code>10000&hellip;00006</code></td>
+        <td class="mismatch"><code>99999&hellip;99999</code></td>
+        <td class="check-fail">sha256 differs</td>
+      </tr>
+      <tr>
+        <td>dimension_map.map_id</td>
+        <td><code>d4e5f6a7-&hellip;</code></td>
+        <td><code>d4e5f6a7-&hellip;</code></td>
+        <td class="check-pass">&#10003; identical</td>
+      </tr>
+    </table>
+    <p style="margin-top:0.75rem;"><strong>Result:</strong> Student-0099 is <strong>rejected</strong> from the pool. Mixing scoring criteria would make the curve meaningless. Pool created with 119 students; student-0099 must be re-scored with the correct prompts.</p>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!-- NODE: ScorePool                                                    -->
+<!-- ================================================================== -->
+<h2 id="node-scorepool"><a class="section-link" href="#node-scorepool">Node: ScorePool</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">All students' scores collected for curve computation</span>
+  </div>
+
+  <p><strong>pool_id:</strong> <code>UUID</code> &nbsp;|&nbsp;
+  <strong>source_event_ids:</strong> <code>["spring-2024-final"]</code> &nbsp;|&nbsp;
+  <strong>sample_size:</strong> 120 students</p>
+
+  <h4>Visual: 120 students in the pool</h4>
+  <div class="dot-pool">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot highlight" title="student-0042"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Each <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6366f1;vertical-align:middle;"></span> = one student. The <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;vertical-align:middle;"></span> = student-0042. All share the same prompt_snapshot and dimension_map.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- EDGE 2: COMPUTE                                                    -->
+<!-- ================================================================== -->
+<h2 id="edge-compute"><a class="section-link" href="#edge-compute">Edge 2: COMPUTE &mdash; ScorePool &rarr; Curve</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-edge">Transformation</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Compute grade boundaries from the pool's distribution</span>
+  </div>
+
+  <p><strong>What happens:</strong> For each score category (per-problem task_score, per-dimension ability, and overall), compute the mean (&mu;) and standard deviation (&sigma;) across all students, then set grade boundaries:</p>
+
+  <div class="formula">
+    A threshold = &mu; + 1&sigma;<br>
+    B threshold = &mu; + 0&sigma; = &mu;<br>
+    C threshold = &mu; &minus; 1&sigma;<br>
+    D = anything below C threshold
+  </div>
+
+  <div class="example-tabs">
+    <div class="example-tab active-success" onclick="switchTab(this, 'compute-success')">&#10003; Success</div>
+    <div class="example-tab" onclick="switchTab(this, 'compute-warning')">&#9888; Advisory</div>
+  </div>
+
+  <div id="compute-success" class="example-panel success-panel active">
+    <h4>Problem 000340 task_score across 120 students</h4>
+    <p>&mu; = 0.72, &sigma; = 0.13</p>
+    <table>
+      <tr><th>Grade</th><th>Condition</th><th>Threshold</th><th>Zone Color</th></tr>
+      <tr><td><span class="grade grade-A">A</span></td><td>score &ge; &mu; + &sigma;</td><td>&ge; 0.85</td><td style="background:var(--grade-a-bg);width:60px;"></td></tr>
+      <tr><td><span class="grade grade-B">B</span></td><td>&mu; &le; score &lt; &mu; + &sigma;</td><td>&ge; 0.72</td><td style="background:var(--grade-b-bg);width:60px;"></td></tr>
+      <tr><td><span class="grade grade-C">C</span></td><td>&mu; &minus; &sigma; &le; score &lt; &mu;</td><td>&ge; 0.59</td><td style="background:var(--grade-c-bg);width:60px;"></td></tr>
+      <tr><td><span class="grade grade-D">D</span></td><td>score &lt; &mu; &minus; &sigma;</td><td>&lt; 0.59</td><td style="background:var(--grade-d-bg);width:60px;"></td></tr>
+    </table>
+
+    <!-- Bell curve SVG -->
+    <div class="bell-container">
+      <svg viewBox="0 0 500 200" width="500" height="200" xmlns="http://www.w3.org/2000/svg" style="font-family: -apple-system, sans-serif;">
+        <defs>
+          <clipPath id="clip-d"><rect x="30" y="0" width="97" height="200"/></clipPath>
+          <clipPath id="clip-c"><rect x="127" y="0" width="108" height="200"/></clipPath>
+          <clipPath id="clip-b"><rect x="235" y="0" width="108" height="200"/></clipPath>
+          <clipPath id="clip-a"><rect x="343" y="0" width="140" height="200"/></clipPath>
+        </defs>
+
+        <line x1="30" y1="165" x2="470" y2="165" stroke="#94a3b8" stroke-width="1"/>
+
+        <path id="bell" d="M30,165 C70,163 100,155 127,135 C145,122 160,100 185,70 C210,38 230,18 250,10 C270,18 290,38 315,70 C340,100 355,122 373,135 C400,155 430,163 470,165" fill="none" stroke="#6366f1" stroke-width="2.5"/>
+
+        <path d="M30,165 C70,163 100,155 127,135 L127,165 Z" fill="#fee2e2" opacity="0.6"/>
+        <path d="M127,135 C145,122 160,100 185,70 C210,38 230,18 235,15 L235,165 L127,165 Z" fill="#fef3c7" opacity="0.6"/>
+        <path d="M235,15 C240,18 260,38 285,70 C310,100 325,122 343,135 L343,165 L235,165 Z" fill="#dbeafe" opacity="0.6"/>
+        <path d="M343,135 C370,155 400,163 470,165 L343,165 Z" fill="#dcfce7" opacity="0.6"/>
+
+        <line x1="127" y1="135" x2="127" y2="175" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4"/>
+        <line x1="235" y1="15" x2="235" y2="175" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4"/>
+        <line x1="343" y1="135" x2="343" y2="175" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4"/>
+
+        <text x="78" y="188" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="700">D</text>
+        <text x="181" y="188" text-anchor="middle" font-size="11" fill="#d97706" font-weight="700">C</text>
+        <text x="289" y="188" text-anchor="middle" font-size="11" fill="#2563eb" font-weight="700">B</text>
+        <text x="406" y="188" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="700">A</text>
+
+        <text x="127" y="130" text-anchor="middle" font-size="9" fill="#d97706">0.59</text>
+        <text x="235" y="10" text-anchor="middle" font-size="9" fill="#2563eb">&mu;=0.72</text>
+        <text x="343" y="130" text-anchor="middle" font-size="9" fill="#16a34a">0.85</text>
+
+        <text x="127" y="143" text-anchor="middle" font-size="8" fill="#94a3b8">&mu;&minus;&sigma;</text>
+        <text x="343" y="143" text-anchor="middle" font-size="8" fill="#94a3b8">&mu;+&sigma;</text>
+
+        <line x1="306" y1="50" x2="306" y2="165" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3"/>
+        <circle cx="306" cy="50" r="5" fill="#f59e0b"/>
+        <text x="306" y="42" text-anchor="middle" font-size="8" fill="#92400e" font-weight="600">0042: 0.80</text>
+      </svg>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text-muted);">Student-0042's task_score of 0.80 for problem 000340 falls in the <span class="grade grade-B">B</span> zone (&ge; 0.72 but &lt; 0.85).</p>
+  </div>
+
+  <div id="compute-warning" class="example-panel failure-panel">
+    <h4>Advisory: Small sample size</h4>
+    <p>Computation itself always succeeds once you have a valid pool. However:</p>
+    <div class="warning-badge">&#9888; sample_size = 15 &lt; 30 &mdash; standard deviation may not be statistically meaningful</div>
+    <p style="margin-top:0.75rem;">With only 15 students, the &sigma; may be unreliable. The curve will still be computed, but the advisory check will flag this when the curve is applied to a student's scores.</p>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!-- NODE: Curve                                                        -->
+<!-- ================================================================== -->
+<h2 id="node-curve"><a class="section-link" href="#node-curve">Node: Curve</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Grade boundaries computed from the pool distribution</span>
+  </div>
+
+  <p><strong>curve_id:</strong> <code>11111111-2222-3333-4444-555555555555</code><br>
+  <strong>label:</strong> Spring 2024 Standard Deviation Curve<br>
+  <strong>method:</strong> standard_deviation, sigma_boundaries: [1, 0, &minus;1]<br>
+  <strong>sample_size:</strong> 120 &nbsp;|&nbsp; <strong>computed_at:</strong> 2024-06-15</p>
+
+  <h4>Grade Boundaries</h4>
+  <table>
+    <thead>
+      <tr><th>Category</th><th><span class="grade grade-A">A</span> &ge;</th><th><span class="grade grade-B">B</span> &ge;</th><th><span class="grade grade-C">C</span> &ge;</th><th><span class="grade grade-D">D</span></th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Overall (final_total)</strong></td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td colspan="5" style="background:#f1f5f9; font-weight:600; font-size:0.8rem;">Per-Problem Task Scores</td></tr>
+      <tr><td>000340 meeting-verify</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>000500 thinking-traps</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>001001 ling-bing</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td colspan="5" style="background:#f1f5f9; font-weight:600; font-size:0.8rem;">Per-Dimension Ability Scores</td></tr>
+      <tr><td>Discovery-Self-Understanding / 发现与自我理解</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>Expression-Translation / 表达与转译</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>Exploratory-Discovery / 探索式发现</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>Verification-Confirmation / 验证与确认</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+      <tr><td>Iterative-Optimization / 迭代优化</td><td>0.85</td><td>0.72</td><td>0.55</td><td>&lt; 0.55</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:0.85rem; color:var(--text-muted);">In this fixture, all categories share the same thresholds (0.85/0.72/0.55). In production, each category has its own &mu; and &sigma;, producing different thresholds.</p>
+</div>
+
+<!-- ================================================================== -->
+<!-- EDGE 3: COMPATIBILITY CHECK                                        -->
+<!-- ================================================================== -->
+<h2 id="edge-check"><a class="section-link" href="#edge-check">Edge 3: CHECK &mdash; Curve + JSONScores &rarr; CompatibilityResult</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-edge">Transformation</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Three-tier compatibility check before applying curve</span>
+  </div>
+
+  <p><strong>What happens:</strong> Before applying a curve to a student's scores, verify compatibility. Three tiers of checks determine whether the curve can be applied automatically, needs human approval, or is blocked entirely.</p>
+
+  <h4>Three Possible Outcomes</h4>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+    <div style="border:2px solid #16a34a; border-radius:8px; padding:1rem; text-align:center;">
+      <div class="traffic-light" style="justify-content:center;">
+        <div class="light light-green on"></div>
+      </div>
+      <strong style="color:#16a34a;">Compatible</strong>
+      <p style="font-size:0.8rem; margin:0.5rem 0 0;">All checks pass. Curve applied automatically.</p>
+    </div>
+    <div style="border:2px solid #eab308; border-radius:8px; padding:1rem; text-align:center;">
+      <div class="traffic-light" style="justify-content:center;">
+        <div class="light light-yellow on"></div>
+      </div>
+      <strong style="color:#d97706;">Requires Override</strong>
+      <p style="font-size:0.8rem; margin:0.5rem 0 0;">Structural OK, provenance mismatch. Human must approve.</p>
+    </div>
+    <div style="border:2px solid #dc2626; border-radius:8px; padding:1rem; text-align:center;">
+      <div class="traffic-light" style="justify-content:center;">
+        <div class="light light-red on"></div>
+      </div>
+      <strong style="color:#dc2626;">Incompatible</strong>
+      <p style="font-size:0.8rem; margin:0.5rem 0 0;">Structural fail. Blocked &mdash; cannot proceed.</p>
+    </div>
+  </div>
+
+  <h3 style="border-left: 4px solid var(--structural); padding-left: 0.75rem;">Structural Checks <span class="check-tier tier-structural">MUST PASS</span></h3>
+  <p>If any structural check fails, the curve literally cannot be applied to these scores.</p>
+
+  <table>
+    <thead><tr><th>Check</th><th>What it verifies</th><th>&#10003; Success (fixture)</th><th>&#10007; Failure (fixture)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Problem coverage</strong></td>
+        <td>Curve has boundaries for every problem the student took</td>
+        <td class="check-pass">Curve has 000340, 000500, 001001. Student has exactly those 3.</td>
+        <td class="check-fail">Curve only has 000340 + 000500 (missing 001001). Student has 001001 but no boundary exists for it &rarr; cannot grade.</td>
+      </tr>
+      <tr>
+        <td><strong>Dimension match</strong></td>
+        <td>For each problem, curve and scores agree on which dimensions are tested</td>
+        <td class="check-pass">Curve says 000340 tests [Discovery, Expression, Exploratory]. Scores agree &mdash; those 3 are non-null, the other 2 are null.</td>
+        <td class="check-fail">Curve says 000340 tests [Discovery, Expression] but scores say [Discovery, Expression, <span class="mismatch">Exploratory</span>] &rarr; mismatch.</td>
+      </tr>
+      <tr>
+        <td><strong>Threshold ordering</strong></td>
+        <td>A &ge; B &ge; C (thresholds are monotonically non-increasing)</td>
+        <td class="check-pass">A=0.85 &ge; B=0.72 &ge; C=0.55 &#10003;</td>
+        <td class="check-fail">A=0.55, B=0.72, C=0.85 &mdash; <span class="mismatch">inverted</span>, indicates data corruption.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="border-left: 4px solid var(--provenance); padding-left: 0.75rem;">Provenance Checks <span class="check-tier tier-provenance">SHOULD MATCH</span></h3>
+  <p>If any provenance check fails, a human must review and explicitly approve ("override") before the curve is applied.</p>
+
+  <table>
+    <thead><tr><th>Check</th><th>What it verifies</th><th>&#10003; Success (fixture)</th><th>&#10007; Failure (fixture)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Prompt version</strong></td>
+        <td>Student and curve were scored with the same prompts</td>
+        <td class="check-pass">Both have <code>set_hash = "aabbcc&hellip;aabb"</code></td>
+        <td class="check-fail">Curve: <code>set_hash = "<span class="mismatch">ffffff&hellip;ffff</span>"</code>. Specific diff: <code>framework:zh:task-eval: sha256 differs</code></td>
+      </tr>
+      <tr>
+        <td><strong>Event membership</strong></td>
+        <td>Student's event is in the curve's source_event_ids</td>
+        <td class="check-pass">Student event = <code>"spring-2024-final"</code>, curve source = <code>["spring-2024-final"]</code> &#10003;</td>
+        <td class="check-fail">Student event = <code>"spring-2024-final"</code>, curve source = <code>["<span class="mismatch">different-event</span>"]</code></td>
+      </tr>
+      <tr>
+        <td><strong>Dimension map ID</strong></td>
+        <td>Same version of the problem-dimension mapping</td>
+        <td class="check-pass">Both <code>map_id = "d4e5f6a7-&hellip;"</code></td>
+        <td class="check-fail">Curve <code>map_id = "<span class="mismatch">00000000-&hellip;</span>"</code> (different version of the map)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="border-left: 4px solid var(--advisory); padding-left: 0.75rem;">Advisory Checks <span class="check-tier tier-advisory">INFORMATIONAL</span></h3>
+  <p>These never block application. They provide useful context for interpretation.</p>
+
+  <table>
+    <thead><tr><th>Check</th><th>What it checks</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Extra curve problems</strong></td>
+        <td>Curve covers problems the student didn't take</td>
+        <td>Curve has 5 problems, student only took 3 &mdash; harmless, unused boundaries are ignored.</td>
+      </tr>
+      <tr>
+        <td><strong>Sample size</strong></td>
+        <td>Pool had enough students for reliable statistics</td>
+        <td>15 students &lt; 30 threshold &rarr; <span class="warning-badge" style="font-size:0.75rem;">&#9888; warning</span></td>
+      </tr>
+      <tr>
+        <td><strong>Staleness</strong></td>
+        <td>Time gap between curve computation and scoring</td>
+        <td>&gt; 90 days apart &rarr; <span class="warning-badge" style="font-size:0.75rem;">&#9888; warning</span></td>
+      </tr>
+      <tr>
+        <td><strong>Score range</strong></td>
+        <td>Are scores within the curve's practical grading range</td>
+        <td>Some scores below all C thresholds &rarr; many D grades, flagged for review.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================== -->
+<!-- NODE: CompatibilityResult                                          -->
+<!-- ================================================================== -->
+<h2 id="node-compat"><a class="section-link" href="#node-compat">Node: CompatibilityResult</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Result of the three-tier compatibility check</span>
+  </div>
+
+  <div class="example-tabs">
+    <div class="example-tab active-success" onclick="switchTab(this, 'compat-pass')">&#10003; Compatible</div>
+    <div class="example-tab" onclick="switchTab(this, 'compat-override')">&#9888; Override</div>
+    <div class="example-tab" onclick="switchTab(this, 'compat-fail')">&#10007; Incompatible</div>
+  </div>
+
+  <div id="compat-pass" class="example-panel success-panel active">
+    <div class="traffic-light">
+      <div class="light light-green on"></div>
+      <div class="light light-yellow"></div>
+      <div class="light light-red"></div>
+      <span class="traffic-label" style="color:#16a34a;">COMPATIBLE</span>
+    </div>
+    <p>Student-0042 with the Spring 2024 curve (from fixture data):</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Problem coverage</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Dimension match</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Threshold ordering</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Prompt version</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Event membership</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Dimension map ID</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-advisory">Advisory</span></td><td>Extra curve problems</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-advisory">Advisory</span></td><td>Sample size</td><td class="check-pass">&#10003; pass (120 &ge; 30)</td></tr>
+        <tr><td><span class="check-tier tier-advisory">Advisory</span></td><td>Staleness</td><td class="check-pass">&#10003; pass (5 days)</td></tr>
+        <tr><td><span class="check-tier tier-advisory">Advisory</span></td><td>Score range</td><td class="check-pass">&#10003; pass</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="compat-override" class="example-panel" style="background:#fffbeb;">
+    <div class="traffic-light">
+      <div class="light light-green"></div>
+      <div class="light light-yellow on"></div>
+      <div class="light light-red"></div>
+      <span class="traffic-label" style="color:#d97706;">REQUIRES OVERRIDE</span>
+    </div>
+    <p>Student-0042 scored with correct structure, but the curve was built from a different event:</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Problem coverage</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Dimension match</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Threshold ordering</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Prompt version</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Event membership</td><td class="check-fail">&#10007; FAIL &mdash; student event "spring-2024-final" not in curve sources</td></tr>
+        <tr><td><span class="check-tier tier-provenance">Provenance</span></td><td>Dimension map ID</td><td class="check-pass">&#10003; pass</td></tr>
+        <tr><td><span class="check-tier tier-advisory">Advisory</span></td><td colspan="2">all pass</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.75rem;">A human reviewer must approve this override before the curve is applied.</p>
+  </div>
+
+  <div id="compat-fail" class="example-panel failure-panel">
+    <div class="traffic-light">
+      <div class="light light-green"></div>
+      <div class="light light-yellow"></div>
+      <div class="light light-red on"></div>
+      <span class="traffic-label" style="color:#dc2626;">INCOMPATIBLE</span>
+    </div>
+    <p>Student took problem 001001 but the curve doesn't have boundaries for it:</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><span class="check-tier tier-structural">Structural</span></td><td>Problem coverage</td><td class="check-fail">&#10007; FAIL &mdash; curve missing problem 001001 (ling-bing)</td></tr>
+        <tr><td colspan="3" style="color:var(--text-muted); font-style:italic;">Remaining checks skipped &mdash; structural failure blocks everything</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.75rem;"><strong>Blocked.</strong> The curve cannot be applied. A new curve must be computed that includes problem 001001.</p>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!-- EDGE 4: APPLY                                                      -->
+<!-- ================================================================== -->
+<h2 id="edge-apply"><a class="section-link" href="#edge-apply">Edge 4: APPLY &mdash; Curve + JSONScores &rarr; CurvedScores</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-edge">Transformation</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Assign letter grades by comparing scores against thresholds</span>
+  </div>
+
+  <p><strong>What happens:</strong> For every score, compare it against the corresponding threshold to assign A/B/C/D. Null dimension scores (not tested) remain null.</p>
+
+  <div class="example-tabs">
+    <div class="example-tab active-success" onclick="switchTab(this, 'apply-success')">&#10003; Success</div>
+    <div class="example-tab" onclick="switchTab(this, 'apply-failure')">&#10007; Failure</div>
+  </div>
+
+  <div id="apply-success" class="example-panel success-panel active">
+    <h4>Student-0042 with compatible curve</h4>
+
+    <table>
+      <thead><tr><th>Problem</th><th>Score Type</th><th>Value</th><th>A &ge;</th><th>B &ge;</th><th>C &ge;</th><th>Grade</th></tr></thead>
+      <tbody>
+        <tr style="background:#f8fafc;"><td rowspan="4"><strong>000340</strong><br>meeting-verify</td><td>task_score</td><td>0.80</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span> <span style="font-size:0.75rem;color:var(--text-muted);">&ge;0.72 &lt;0.85</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Discovery / 发现与自我理解</td><td>0.85</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-A">A</span> <span style="font-size:0.75rem;color:var(--text-muted);">&ge;0.85</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Expression / 表达与转译</td><td>0.78</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Exploratory / 探索式发现</td><td>0.72</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span> <span style="font-size:0.75rem;color:var(--text-muted);">&ge;0.72</span></td></tr>
+
+        <tr><td rowspan="4"><strong>000500</strong><br>thinking-traps</td><td>task_score</td><td>0.75</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr><td>Discovery / 发现与自我理解</td><td>0.90</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-A">A</span></td></tr>
+        <tr><td>Verification / 验证与确认</td><td>0.65</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+        <tr><td>Iterative / 迭代优化</td><td>0.70</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+
+        <tr style="background:#f8fafc;"><td rowspan="6"><strong>001001</strong><br>ling-bing</td><td>task_score</td><td>0.82</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Discovery / 发现与自我理解</td><td>0.88</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-A">A</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Expression / 表达与转译</td><td>0.82</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Exploratory / 探索式发现</td><td>0.79</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Verification / 验证与确认</td><td>0.71</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+        <tr style="background:#f8fafc;"><td>Iterative / 迭代优化</td><td>0.68</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+
+        <tr><td colspan="7" style="background:#ede9fe; font-weight:600; font-size:0.8rem;">Ability Grades (from ability_scores)</td></tr>
+        <tr><td colspan="2">Discovery / 发现与自我理解</td><td>0.877</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-A">A</span></td></tr>
+        <tr><td colspan="2">Expression / 表达与转译</td><td>0.800</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr><td colspan="2">Exploratory / 探索式发现</td><td>0.755</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+        <tr><td colspan="2">Verification / 验证与确认</td><td>0.680</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+        <tr><td colspan="2">Iterative / 迭代优化</td><td>0.690</td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-C">C</span></td></tr>
+
+        <tr><td colspan="7" style="background:#ede9fe; font-weight:600; font-size:0.8rem;">Overall Grade (from final_total_score)</td></tr>
+        <tr><td colspan="2"><strong>final_total_score</strong></td><td><strong>0.775</strong></td><td>0.85</td><td>0.72</td><td>0.55</td><td><span class="grade grade-B">B</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="apply-failure" class="example-panel failure-panel">
+    <h4>Curve is incompatible &mdash; APPLY blocked</h4>
+    <p><code>applyCurve</code> refuses to proceed because the compatibility check returned <span style="color:#dc2626; font-weight:700;">INCOMPATIBLE</span>.</p>
+    <div style="background:#fff; border:2px solid #dc2626; border-radius:8px; padding:1rem; margin:1rem 0; font-family:monospace; font-size:0.85rem;">
+      <span style="color:#dc2626; font-weight:700;">Error: Cannot apply curve: incompatible.</span><br>
+      Structural check failed: problem_coverage<br>
+      Curve missing problem 001001 (ling-bing).<br><br>
+      Resolution: Recompute curve with a ScorePool that includes problem 001001,<br>
+      or remove problem 001001 from the student's assessment.
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!-- NODE: CurvedScores                                                 -->
+<!-- ================================================================== -->
+<h2 id="node-curved"><a class="section-link" href="#node-curved">Node: CurvedScores</a></h2>
+<div class="card">
+  <div class="card-header">
+    <span class="badge badge-node">Data Entity</span>
+    <span style="color:var(--text-muted); font-size:0.85rem;">Final output: scores with assigned letter grades</span>
+  </div>
+
+  <p><strong>curved_scores_id:</strong> <code>c625c77d-3a71-4b72-a769-2ac2c315b253</code><br>
+  <strong>applied_curve_id:</strong> <code>11111111-2222-3333-4444-555555555555</code><br>
+  <strong>participant_id:</strong> <code>student-0042</code><br>
+  <strong>overall_grade:</strong> <span class="grade grade-B">B</span></p>
+
+  <h4>Student-0042 &mdash; Scores &amp; Grades Side by Side</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Problem</th>
+        <th>Dimension</th>
+        <th>Score</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#f8fafc;">
+        <td rowspan="4"><strong>000340</strong><br>meeting-verify</td>
+        <td><em>task_score</em></td>
+        <td>0.80</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Discovery / 发现与自我理解</td>
+        <td>0.85</td>
+        <td><span class="grade grade-A">A</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Expression / 表达与转译</td>
+        <td>0.78</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Exploratory / 探索式发现</td>
+        <td>0.72</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+
+      <tr>
+        <td rowspan="4"><strong>000500</strong><br>thinking-traps</td>
+        <td><em>task_score</em></td>
+        <td>0.75</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr>
+        <td>Discovery / 发现与自我理解</td>
+        <td>0.90</td>
+        <td><span class="grade grade-A">A</span></td>
+      </tr>
+      <tr>
+        <td>Verification / 验证与确认</td>
+        <td>0.65</td>
+        <td><span class="grade grade-C">C</span></td>
+      </tr>
+      <tr>
+        <td>Iterative / 迭代优化</td>
+        <td>0.70</td>
+        <td><span class="grade grade-C">C</span></td>
+      </tr>
+
+      <tr style="background:#f8fafc;">
+        <td rowspan="6"><strong>001001</strong><br>ling-bing</td>
+        <td><em>task_score</em></td>
+        <td>0.82</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Discovery / 发现与自我理解</td>
+        <td>0.88</td>
+        <td><span class="grade grade-A">A</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Expression / 表达与转译</td>
+        <td>0.82</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Exploratory / 探索式发现</td>
+        <td>0.79</td>
+        <td><span class="grade grade-B">B</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Verification / 验证与确认</td>
+        <td>0.71</td>
+        <td><span class="grade grade-C">C</span></td>
+      </tr>
+      <tr style="background:#f8fafc;">
+        <td>Iterative / 迭代优化</td>
+        <td>0.68</td>
+        <td><span class="grade grade-C">C</span></td>
+      </tr>
+
+      <tr><td colspan="4" style="background:#ede9fe; font-weight:600; font-size:0.8rem;">Ability Grades</td></tr>
+      <tr><td colspan="2">Discovery / 发现与自我理解</td><td>0.877</td><td><span class="grade grade-A">A</span></td></tr>
+      <tr><td colspan="2">Expression / 表达与转译</td><td>0.800</td><td><span class="grade grade-B">B</span></td></tr>
+      <tr><td colspan="2">Exploratory / 探索式发现</td><td>0.755</td><td><span class="grade grade-B">B</span></td></tr>
+      <tr><td colspan="2">Verification / 验证与确认</td><td>0.680</td><td><span class="grade grade-C">C</span></td></tr>
+      <tr><td colspan="2">Iterative / 迭代优化</td><td>0.690</td><td><span class="grade grade-C">C</span></td></tr>
+
+      <tr style="background:#ede9fe;">
+        <td colspan="2"><strong>Overall (final_total)</strong></td>
+        <td><strong>0.775</strong></td>
+        <td><span class="grade grade-B" style="font-size:1rem; padding:0.3rem 0.75rem;">B</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <details>
+    <summary>Null dimensions (not tested)</summary>
+    <table>
+      <tr><th>Problem</th><th>Dimension</th><th>Score</th><th>Grade</th></tr>
+      <tr><td>000340</td><td>Verification / 验证与确认</td><td><span class="grade grade-null">null</span></td><td><span class="grade grade-null">null</span></td></tr>
+      <tr><td>000340</td><td>Iterative / 迭代优化</td><td><span class="grade grade-null">null</span></td><td><span class="grade grade-null">null</span></td></tr>
+      <tr><td>000500</td><td>Expression / 表达与转译</td><td><span class="grade grade-null">null</span></td><td><span class="grade grade-null">null</span></td></tr>
+      <tr><td>000500</td><td>Exploratory / 探索式发现</td><td><span class="grade grade-null">null</span></td><td><span class="grade grade-null">null</span></td></tr>
+    </table>
+    <p style="font-size:0.85rem; color:var(--text-muted);">These dimensions were not tested by these problems (see the ProblemDimensionMap). They pass through as null &mdash; no score, no grade.</p>
+  </details>
+</div>
+
+<!-- ================================================================== -->
+<!-- SUMMARY                                                            -->
+<!-- ================================================================== -->
+<h2 id="summary">Summary</h2>
+<div class="card">
+  <p>The pipeline transforms raw LLM scores into letter grades through 4 steps:</p>
+  <table>
+    <thead><tr><th>Step</th><th>Input</th><th>Output</th><th>Can fail?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1. COLLECT</strong></td>
+        <td>JSONScores (&times;N)</td>
+        <td>ScorePool</td>
+        <td>Yes &mdash; prompt/dimmap mismatch rejects students</td>
+      </tr>
+      <tr>
+        <td><strong>2. COMPUTE</strong></td>
+        <td>ScorePool</td>
+        <td>Curve</td>
+        <td>No (advisory: small sample)</td>
+      </tr>
+      <tr>
+        <td><strong>3. CHECK</strong></td>
+        <td>Curve + JSONScores</td>
+        <td>CompatibilityResult</td>
+        <td>Yes &mdash; 3 tiers: structural/provenance/advisory</td>
+      </tr>
+      <tr>
+        <td><strong>4. APPLY</strong></td>
+        <td>Curve + JSONScores</td>
+        <td>CurvedScores</td>
+        <td>Yes &mdash; blocked if incompatible</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>The 5 AI Competency Dimensions</h4>
+  <table>
+    <thead><tr><th>English ID</th><th>Chinese Name</th></tr></thead>
+    <tbody>
+      <tr><td>Discovery-Self-Understanding</td><td>发现与自我理解</td></tr>
+      <tr><td>Expression-Translation</td><td>表达与转译</td></tr>
+      <tr><td>Exploratory-Discovery</td><td>探索式发现</td></tr>
+      <tr><td>Verification-Confirmation</td><td>验证与确认</td></tr>
+      <tr><td>Iterative-Optimization</td><td>迭代优化</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:2rem;">
+  Generated from fixture data in <code>v3-effect/test-data/</code>. Schema: <code>v3-effect/schemas.ts</code>.<br>
+  DAG rendered with <a href="https://github.com/dagrejs/dagre-d3" style="color:var(--accent);">dagre-d3</a> + <a href="https://d3js.org/" style="color:var(--accent);">D3.js v5</a>.
+</p>
+
+<!-- ================================================================== -->
+<!-- JavaScript: Tab switching + dagre-d3 DAG rendering                 -->
+<!-- ================================================================== -->
+<script>
+// ===== Tab switching =====
+function switchTab(clickedTab, panelId) {
+  var tabGroup = clickedTab.parentElement;
+  var card = tabGroup.parentElement;
+  var tabs = tabGroup.querySelectorAll('.example-tab');
+  var panels = card.querySelectorAll('.example-panel');
+
+  tabs.forEach(function(t) { t.className = 'example-tab'; });
+  panels.forEach(function(p) { p.classList.remove('active'); });
+
+  var panel = document.getElementById(panelId);
+  panel.classList.add('active');
+
+  if (panel.classList.contains('success-panel')) {
+    clickedTab.classList.add('active-success');
+  } else {
+    clickedTab.classList.add('active-failure');
+  }
+}
+
+// ===== dagre-d3 DAG rendering =====
+(function() {
+  var g = new dagreD3.graphlib.Graph()
+    .setGraph({
+      rankdir: 'TB',
+      nodesep: 60,
+      ranksep: 55,
+      marginx: 40,
+      marginy: 30,
+      edgesep: 30
+    })
+    .setDefaultEdgeLabel(function() { return {}; });
+
+  // ----- Node definitions -----
+  // Map from node ID → anchor to scroll to on click
+  var nodeLinks = {
+    dimmap: '#node-dimmap',
+    jsonscores_n: '#node-jsonscores',
+    collect: '#edge-collect',
+    scorepool: '#node-scorepool',
+    compute: '#edge-compute',
+    curve: '#node-curve',
+    jsonscores_one: '#node-jsonscores',
+    check: '#edge-check',
+    compat: '#node-compat',
+    apply: '#edge-apply',
+    curved: '#node-curved',
+    blocked: null
+  };
+
+  function dn(title, sub) {
+    return '<div class="dn"><div class="dn-title">' + title + '</div><div class="dn-sub">' + sub + '</div></div>';
+  }
+
+  // Data entity nodes
+  g.setNode('dimmap', {
+    labelType: 'html',
+    label: dn('ProblemDimensionMap', '3 problems \u00d7 5 dims'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('jsonscores_n', {
+    labelType: 'html',
+    label: dn('JSONScores (\u00d7N)', '120 students'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('scorepool', {
+    labelType: 'html',
+    label: dn('ScorePool', 'same prompts + dimmap'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('curve', {
+    labelType: 'html',
+    label: dn('Curve', 'A/B/C/D boundaries'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('jsonscores_one', {
+    labelType: 'html',
+    label: dn('JSONScores (one)', 'student-0042'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('compat', {
+    labelType: 'html',
+    label: dn('CompatibilityResult', '\ud83d\udfe2 / \ud83d\udfe1 / \ud83d\udd34'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+  g.setNode('curved', {
+    labelType: 'html',
+    label: dn('CurvedScores', 'scores + grades'),
+    class: 'data-node', padding: 0, rx: 10, ry: 10
+  });
+
+  // Transformation nodes
+  g.setNode('collect', {
+    labelType: 'html',
+    label: dn('COLLECT', 'Edge 1: can fail'),
+    class: 'transform-node', padding: 0, rx: 6, ry: 6, shape: 'rect'
+  });
+  g.setNode('compute', {
+    labelType: 'html',
+    label: dn('COMPUTE', 'Edge 2: \u03bc \u00b1 \u03c3'),
+    class: 'transform-node', padding: 0, rx: 6, ry: 6, shape: 'rect'
+  });
+  g.setNode('check', {
+    labelType: 'html',
+    label: dn('COMPATIBILITY CHECK', 'Edge 3: 3-tier check'),
+    class: 'transform-node', padding: 0, rx: 6, ry: 6, shape: 'rect'
+  });
+  g.setNode('apply', {
+    labelType: 'html',
+    label: dn('APPLY', 'Edge 4: grade assign'),
+    class: 'transform-node', padding: 0, rx: 6, ry: 6, shape: 'rect'
+  });
+
+  // Blocked terminal
+  g.setNode('blocked', {
+    labelType: 'html',
+    label: dn('\u274c BLOCKED', 'fail / override'),
+    class: 'blocked-node', padding: 0, rx: 6, ry: 6, shape: 'rect'
+  });
+
+  // ----- Edge definitions -----
+  var purple = 'stroke: #6366f1; stroke-width: 2;';
+  var purpleArrow = 'fill: #6366f1;';
+  var green = 'stroke: #16a34a; stroke-width: 2;';
+  var greenArrow = 'fill: #16a34a;';
+  var red = 'stroke: #dc2626; stroke-width: 2;';
+  var redArrow = 'fill: #dc2626;';
+  var dashed = 'stroke: #8b5cf6; stroke-width: 1.5; stroke-dasharray: 5,3;';
+  var dashedArrow = 'fill: #8b5cf6;';
+
+  // DimMap feeds into COLLECT as a blueprint
+  g.setEdge('dimmap', 'collect', {
+    style: dashed, arrowheadStyle: dashedArrow,
+    label: 'blueprint', labelStyle: 'font-size: 9px; fill: #8b5cf6;',
+    curve: d3.curveBasis
+  });
+
+  // JSONScores (×N) → COLLECT
+  g.setEdge('jsonscores_n', 'collect', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // COLLECT → ScorePool
+  g.setEdge('collect', 'scorepool', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // ScorePool → COMPUTE
+  g.setEdge('scorepool', 'compute', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // COMPUTE → Curve
+  g.setEdge('compute', 'curve', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // Curve → CHECK
+  g.setEdge('curve', 'check', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // JSONScores (one) → CHECK
+  g.setEdge('jsonscores_one', 'check', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // CHECK → CompatibilityResult
+  g.setEdge('check', 'compat', {
+    style: purple, arrowheadStyle: purpleArrow,
+    curve: d3.curveBasis
+  });
+
+  // CompatibilityResult → APPLY (PASS path)
+  g.setEdge('compat', 'apply', {
+    style: green, arrowheadStyle: greenArrow,
+    label: 'PASS', labelStyle: 'font-size: 10px; fill: #16a34a; font-weight: 700;',
+    curve: d3.curveBasis
+  });
+
+  // CompatibilityResult → BLOCKED (FAIL path)
+  g.setEdge('compat', 'blocked', {
+    style: red, arrowheadStyle: redArrow,
+    label: 'FAIL / OVERRIDE', labelStyle: 'font-size: 10px; fill: #dc2626; font-weight: 700;',
+    curve: d3.curveBasis
+  });
+
+  // APPLY → CurvedScores
+  g.setEdge('apply', 'curved', {
+    style: green, arrowheadStyle: greenArrow,
+    curve: d3.curveBasis
+  });
+
+  // ----- Render -----
+  var render = new dagreD3.render();
+  var svg = d3.select('#dag-svg');
+  var inner = svg.append('g');
+
+  render(inner, g);
+
+  // ----- Zoom & pan -----
+  var zoom = d3.zoom()
+    .scaleExtent([0.3, 3])
+    .on('zoom', function() {
+      inner.attr('transform', d3.event.transform);
+    });
+  svg.call(zoom);
+
+  // ----- Fit to container -----
+  function fitGraph() {
+    var graphWidth = g.graph().width || 600;
+    var graphHeight = g.graph().height || 500;
+    var svgEl = svg.node();
+    var containerWidth = svgEl.parentElement.clientWidth;
+    var containerHeight = 680;
+    var pad = 40;
+
+    var scaleX = (containerWidth - pad * 2) / graphWidth;
+    var scaleY = (containerHeight - pad * 2) / graphHeight;
+    var scale = Math.min(scaleX, scaleY, 1.2);
+    var tx = (containerWidth - graphWidth * scale) / 2;
+    var ty = (containerHeight - graphHeight * scale) / 2;
+
+    svg.call(zoom.transform,
+      d3.zoomIdentity.translate(tx, ty).scale(scale)
+    );
+  }
+  fitGraph();
+
+  // ----- Zoom controls -----
+  d3.select('#zoom-in').on('click', function() {
+    svg.transition().duration(300).call(zoom.scaleBy, 1.3);
+  });
+  d3.select('#zoom-out').on('click', function() {
+    svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+  });
+  d3.select('#zoom-fit').on('click', function() {
+    svg.transition().duration(500).call(function() { fitGraph(); });
+  });
+
+  // ----- Click to navigate -----
+  svg.selectAll('.node').on('click', function() {
+    var nodeId = d3.select(this).attr('id') || '';
+    // dagre-d3 prefixes node IDs — extract the original
+    // The node's data-id is stored in the class or we can match by iterating
+    var classes = d3.select(this).attr('class') || '';
+    // Find which node this is by checking the group's transform against node positions
+    var that = this;
+    Object.keys(nodeLinks).forEach(function(key) {
+      var nodeData = g.node(key);
+      if (!nodeData) return;
+      // Match by checking if this DOM element corresponds to this node
+      var groupTransform = d3.select(that).attr('transform');
+      if (groupTransform) {
+        var match = groupTransform.match(/translate\(\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
+        if (match) {
+          var gx = parseFloat(match[1]);
+          var gy = parseFloat(match[2]);
+          if (Math.abs(gx - nodeData.x) < 1 && Math.abs(gy - nodeData.y) < 1) {
+            var href = nodeLinks[key];
+            if (href) {
+              document.querySelector(href).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        }
+      }
+    });
+  });
+
+  // Change cursor on data/transform nodes
+  svg.selectAll('.node').style('cursor', 'pointer');
+
+})();
+</script>
+
+</body>
+</html>

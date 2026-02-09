@@ -1,0 +1,162 @@
+{
+  "curve_id": "7ae86f9d-96dd-469a-9039-7735b5c66119",
+  "label": "StdDev Curve",
+  "source_event_ids": [
+    "event-A"
+  ],
+  "prompt_snapshot": {
+    "git_hash": "a3f8b2c",
+    "set_hash": "aabbccddee00112233445566778899aabbccddee00112233445566778899aabb",
+    "entries": [
+      {
+        "key": "framework:zh:ability-summary",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "key": "framework:zh:expert-review",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000002"
+      },
+      {
+        "key": "framework:zh:final-summary",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000003"
+      },
+      {
+        "key": "framework:zh:problem-ability",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000004"
+      },
+      {
+        "key": "framework:zh:problem-summary",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000005"
+      },
+      {
+        "key": "framework:zh:task-eval",
+        "sha256": "1000000000000000000000000000000000000000000000000000000000000006"
+      },
+      {
+        "key": "problem:000340:scoring",
+        "sha256": "2000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "key": "problem:000340:task-eval",
+        "sha256": "2000000000000000000000000000000000000000000000000000000000000002"
+      },
+      {
+        "key": "problem:000500:scoring",
+        "sha256": "3000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "key": "problem:000500:task-eval",
+        "sha256": "3000000000000000000000000000000000000000000000000000000000000002"
+      },
+      {
+        "key": "problem:001001:scoring",
+        "sha256": "4000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "key": "problem:001001:task-eval",
+        "sha256": "4000000000000000000000000000000000000000000000000000000000000002"
+      }
+    ]
+  },
+  "dimension_map": {
+    "map_id": "d4e5f6a7-b8c9-4d0e-af12-345678901234",
+    "label": "2024 Spring Assessment v2",
+    "created_at": "2024-06-10T00:00:00.000Z",
+    "entries": [
+      {
+        "problem_id": {
+          "digit": "000340",
+          "name": "meeting-verify"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "000500",
+          "name": "thinking-traps"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "dimensions": [
+          "Discovery-Self-Understanding",
+          "Expression-Translation",
+          "Exploratory-Discovery",
+          "Verification-Confirmation",
+          "Iterative-Optimization"
+        ]
+      }
+    ]
+  },
+  "method": {
+    "type": "standard_deviation",
+    "sigma_boundaries": [
+      1,
+      0,
+      -1
+    ]
+  },
+  "sample_size": 6,
+  "computed_at": "2026-02-09T04:38:23.339Z",
+  "overall_mean": {
+    "A": 0.7836494677073808,
+    "B": 0.6367358064821859,
+    "C": 0.48982214525699097
+  },
+  "ability_curves": {
+    "Discovery-Self-Understanding": {
+      "A": 0.8773077514428864,
+      "B": 0.7383333333333333,
+      "C": 0.5993589152237802
+    },
+    "Expression-Translation": {
+      "A": 0.8064935264853547,
+      "B": 0.6541666666666667,
+      "C": 0.5018398068479787
+    },
+    "Exploratory-Discovery": {
+      "A": 0.7513707858585942,
+      "B": 0.6341666666666667,
+      "C": 0.5169625474747391
+    },
+    "Verification-Confirmation": {
+      "A": 0.693131127280004,
+      "B": 0.5833333333333334,
+      "C": 0.4735355393866627
+    },
+    "Iterative-Optimization": {
+      "A": 0.6801771713913393,
+      "B": 0.5624999999999999,
+      "C": 0.4448228286086605
+    }
+  },
+  "problem_curves": {
+    "000340": {
+      "A": 0.8207825127659933,
+      "B": 0.65,
+      "C": 0.4792174872340067
+    },
+    "000500": {
+      "A": 0.7707825127659933,
+      "B": 0.6,
+      "C": 0.42921748723400666
+    },
+    "001001": {
+      "A": 0.8407825127659934,
+      "B": 0.67,
+      "C": 0.4992174872340067
+    }
+  }
+}

@@ -12,6 +12,7 @@ Documentation and implementation for the score processing pipeline that transfor
 | `pipeline-phases.md` | Documents the 6 pipeline phases (Test Event → LLM Scoring → Score Extraction → Curve Computation → Curve Application → Merge Back) with data flow and where ProblemDimensionMap enters |
 | `pipeline-diagram.html` | Visual diagram of the pipeline flow |
 | `pipeline-visualization.html` | Interactive DAG visualization of the full pipeline with node/edge detail cards, success/failure examples from fixture data, and the 10 compatibility checks |
+| `pipeline-visualization-dagre.html` | Same content as above but with the DAG overview rendered via dagre-d3 (auto-layout, zoom/pan, click-to-navigate) instead of hand-crafted SVG |
 | `data-format-fixtures.json` | Example ProblemDimensionMap + source/target JSON pair with per-problem dimension subsets |
 
 ### Historical Documentation
@@ -59,6 +60,7 @@ graph TD
         DC[domain-context.md] --> PP[pipeline-phases.md]
         PP --> DIAG[pipeline-diagram.html]
         PP --> VIZ[pipeline-visualization.html]
+        PP --> VIZD[pipeline-visualization-dagre.html]
     end
 
     subgraph "Current Implementation"
