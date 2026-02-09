@@ -1,0 +1,1263 @@
+
+           Claude Code v2.1.34
+ ▐▛███▜▌   Opus 4.6 · Claude Max
+▝▜█████▛▘  ~/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline
+  ▘▘ ▝▝    Opus 4.6 is here · $50 free extra usage · /extra-usage to enable
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ Plan to implement                                                            │
+│                                                                              │
+│ Plan: Align applyCurve with Production Behavior                              │
+│                                                                              │
+│ Context                                                                      │
+│                                                                              │
+│ Production only curves 3 score types — not the 6 our schema currently        │
+│ supports. Our TotalCurves has 3 threshold sets and TotalGrades assigns 3     │
+│ grades, but production only grades overallMean (our final_total_score). The  │
+│ sub-totals (total_problem_score, total_ability_score) exist as numeric       │
+│ scores but never receive letter grades.                                      │
+│                                                                              │
+│ What stays unchanged:                                                        │
+│ - JSONScores.totals getter — keeps all 3 derived scores (total_problem,      │
+│ total_ability, final_total). These are useful numeric values; they just      │
+│ don't get graded.                                                            │
+│ - Per-problem dimension grading — already correctly uses                     │
+│ curve.ability_curves[dim] (matches production Step 4). No change needed.     │
+│                                                                              │
+│ Files to modify                                                              │
+│                                                                              │
+│ 1. v3-effect/schemas.ts — remove TotalCurves + TotalGrades, simplify Curve   │
+│ and CurvedScores                                                             │
+│ 2. v3-effect/apply-curve.ts — update checkCompatibility and applyCurve +     │
+│ print output                                                                 │
+│ 3. v3-effect/curve-fixture.ts — update fixture builders for new Curve shape  │
+│                                                                              │
+│ 1. Schema changes (schemas.ts)                                               │
+│                                                                              │
+│ Remove TotalCurves (lines 270-275) and TotalGrades (lines 200-205)           │
+│                                                                              │
+│ Curve: totals: TotalCurves → overall_mean: GradeThresholds                   │
+│                                                                              │
+│ // Line 297: replace                                                         │
+│   totals: TotalCurves,                                                       │
+│ // with                                                                      │
+│   overall_mean: GradeThresholds,                                             │
+│                                                                              │
+│ CurvedScores: total_grades: TotalGrades → overall_grade: LetterGrade         │
+│                                                                              │
+│ // Line 219: replace                                                         │
+│   total_grades: TotalGrades,                                                 │
+│ // with                                                                      │
+│   overall_grade: LetterGrade,                                                │
+│                                                                              │
+│ Update section comments (§6, §8) to reflect the change.                      │
+│                                                                              │
+│ 2. apply-curve.ts changes                                                    │
+│                                                                              │
+│ checkCompatibility — threshold_ordering check                                │
+│                                                                              │
+│ Replace 3 totals.* ordering checks (lines 108-110) with 1:                   │
+│                                                                              │
+│ checkOrdering("overall_mean", curve.overall_mean);                           │
+│                                                                              │
+│ applyCurve — total_grades block                                              │
+│                                                                              │
+│ Replace lines 271-276:                                                       │
+│ const total_grades = {                                                       │
+│   total_problem_grade: assignGrade(..., curve.totals.total_problem),         │
+│   total_ability_grade: assignGrade(..., curve.totals.total_ability),         │
+│   final_total_grade: assignGrade(..., curve.totals.final_total),             │
+│ };                                                                           │
+│                                                                              │
+│ With:                                                                        │
+│ const overall_grade = assignGrade(scores.totals.final_total_score,           │
+│ curve.overall_mean);                                                         │
+│                                                                              │
+│ Update raw object: total_grades → overall_grade.                             │
+│                                                                              │
+│ Print output (lines 362-365)                                                 │
+│                                                                              │
+│ Replace 3 total grade lines with:                                            │
+│ console.log(`\nOverall grade: ${curved.overall_grade}`);                     │
+│                                                                              │
+│ 3. curve-fixture.ts changes                                                  │
+│                                                                              │
+│ Both buildCompatibleCurve and buildIncompatibleCurve: replace totals: {      │
+│ total_problem, total_ability, final_total } with overall_mean: { ...T }.     │
+│                                                                              │
+│ Verification                                                                 │
+│                                                                              │
+│ cd score-post-llm-pipeline && npx tsx v3-effect/apply-curve.ts               │
+│                                                                              │
+│ Expected output:                                                             │
+│ 1. Compatible check — all structural/provenance pass                         │
+│ 2. CurvedScores with problem grades, ability grades, and single              │
+│ overall_grade                                                                │
+│ 3. Incompatible check with structured failures                               │
+│ 4. Expected error on applyCurve with incompatible curve                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+⏺ I'll start by reading the three files that need to be modified.
+
+⏺ Read 3 files (ctrl+o to expand)
+
+⏺ Now I have all three files. Let me create tasks and make the edits in
+  parallel.
+
+⏺ Let me make all the schema changes:
+
+⏺ Update(v3-effect/schemas.ts)
+  ⎿  Added 1 line, removed 1 line
+      182  // ===========================================================
+           ==================
+      183  // 6. Grades — per-problem grades use Record + Option (mirrors
+            scores)
+      184  //
+      185 -// Aggregates (ability_grades, total_grades) ARE stored becaus
+          -e                                                             
+      185 +// Aggregates (ability_grades, overall_grade) ARE stored becau
+          +se                                                            
+      186  // computing them requires the curve function, not simple aver
+           aging.
+      187  // ===========================================================
+           ==================
+      188  
+
+⏺ Update(v3-effect/schemas.ts)
+  ⎿  Added 2 lines, removed 8 lines
+      197  });
+      198  export type ProblemGrade = typeof ProblemGrade.Type;
+      199  
+      200 -export const TotalGrades = Schema.Struct({                    
+      201 -  total_problem_grade: LetterGrade,                           
+      202 -  total_ability_grade: LetterGrade,                           
+      203 -  final_total_grade: LetterGrade,                             
+      204 -});                                                           
+      205 -export type TotalGrades = typeof TotalGrades.Type;            
+      206 -                                                              
+      200  // ===========================================================
+           ==================
+      201  // 7. CurvedScores — composes JSONScores, adds grades
+      202  // ===========================================================
+           ==================
+     ...
+      209    problem_grades: Schema.Array(ProblemGrade),
+      210    /** Stored because computing these requires the curve functi
+           on */
+      211    ability_grades: Schema.Record({ key: Dimension, value: Lette
+           rGrade }),
+      219 -  total_grades: TotalGrades,                                  
+      212 +  /** Single overall grade from final_total_score — production
+          + only grades this one */                                      
+      213 +  overall_grade: LetterGrade,                                 
+      214  });
+      215  export type CurvedScores = typeof CurvedScores.Type;
+      216  
+
+⏺ Update(v3-effect/schemas.ts)
+  ⎿  Added 1 line
+      221  // CurveMethod: discriminated union — currently only standard_
+           deviation.
+      222  // Curve embeds ProblemDimensionMap (same pattern as JSONScore
+           s).
+      223  // problem_curves keyed by ProblemDigitId (the stable string p
+           art of ProblemId).
+      224 +// overall_mean: single GradeThresholds for the final_total_sc
+          +ore (production only grades this).                            
+      225  // ===========================================================
+           ==================
+      226  
+      227  /** Minimum score thresholds for A/B/C. D = score < C threshol
+           d. */
+
+⏺ Update(v3-effect/schemas.ts)
+  ⎿  Added 2 lines, removed 9 lines
+      261  );
+      262  export type CurveMethod = typeof CurveMethod.Type;
+      263  
+      264 -/** Thresholds for the three total score categories */        
+      265 -export const TotalCurves = Schema.Struct({                    
+      266 -  total_problem: GradeThresholds,                             
+      267 -  total_ability: GradeThresholds,                             
+      268 -  final_total: GradeThresholds,                               
+      269 -});                                                           
+      270 -export type TotalCurves = typeof TotalCurves.Type;            
+      271 -                                                              
+      264  /**
+      265   * Curve: computed from a ScorePool, used to assign letter gra
+           des.
+      266   *
+     ...
+      268   * - dimension_map: embedded for compatibility checking when a
+           pplying
+      269   * - problem_curves keyed by ProblemDigitId (O(1) lookup)
+      270   * - ability_curves keyed by Dimension (O(1) lookup)
+      271 + * - overall_mean: thresholds for the single graded total (fin
+          +al_total_score)                                               
+      272   */
+      273  export const Curve = Schema.Struct({
+      274    curve_id: Schema.UUID,
+     ...
+      282      Schema.greaterThan(0)
+      283    ),
+      284    computed_at: Schema.DateTimeUtc,
+      292 -  totals: TotalCurves,                                        
+      285 +  overall_mean: GradeThresholds,                              
+      286    ability_curves: Schema.Record({ key: Dimension, value: Grade
+           Thresholds }),
+      287    problem_curves: Schema.Record({
+      288      key: ProblemDigitId,
+
+⏺ Now update apply-curve.ts and curve-fixture.ts:
+
+⏺ Update(v3-effect/apply-curve.ts)
+  ⎿  Added 1 line, removed 3 lines
+      105        orderingViolations.push(name);
+      106      }
+      107    }
+      108 -  checkOrdering("totals.total_problem", curve.totals.total_pro
+          -blem);                                                        
+      109 -  checkOrdering("totals.total_ability", curve.totals.total_abi
+          -lity);                                                        
+      110 -  checkOrdering("totals.final_total", curve.totals.final_total
+          -);                                                            
+      108 +  checkOrdering("overall_mean", curve.overall_mean);          
+      109    for (const dim of DIMENSIONS) {
+      110      checkOrdering(`ability_curves.${dim}`, curve.ability_curve
+           s[dim]);
+      111    }
+
+⏺ Update(v3-effect/apply-curve.ts)
+  ⎿  Added 3 lines, removed 8 lines
+      265      ability_grades[dim] = assignGrade(abilities[dim], curve.ab
+           ility_curves[dim]);
+      266    }
+      267  
+      268 -  // Build total_grades from derived totals                   
+      269 -  const totals = scores.totals;                               
+      270 -  const total_grades = {                                      
+      271 -    total_problem_grade: assignGrade(totals.total_problem_scor
+          -e, curve.totals.total_problem),                               
+      272 -    total_ability_grade: assignGrade(totals.total_ability_scor
+          -e, curve.totals.total_ability),                               
+      273 -    final_total_grade: assignGrade(totals.final_total_score, c
+          -urve.totals.final_total),                                     
+      274 -  };                                                          
+      268 +  // Assign single overall grade from final_total_score       
+      269 +  const overall_grade = assignGrade(scores.totals.final_total_
+          +score, curve.overall_mean);                                   
+      270  
+      271    const raw = {
+      272      curved_scores_id: crypto.randomUUID(),
+     ...
+      275      curved_at: new Date().toISOString(),
+      276      problem_grades,
+      277      ability_grades,
+      283 -    total_grades,                                             
+      278 +    overall_grade,                                            
+      279    };
+      280  
+      281    return decodeCurvedScores(raw);
+
+⏺ Update(v3-effect/apply-curve.ts)
+  ⎿  Added 1 line, removed 4 lines
+      352  for (const dim of DIMENSIONS) {
+      353    console.log(`  ${dim}: ${curved.ability_grades[dim]}`);
+      354  }
+      355 -console.log("\nTotal grades:");                               
+      356 -console.log(`  total_problem: ${curved.total_grades.total_prob
+          -lem_grade}`);                                                 
+      357 -console.log(`  total_ability: ${curved.total_grades.total_abil
+          -ity_grade}`);                                                 
+      358 -console.log(`  final_total:   ${curved.total_grades.final_tota
+          -l_grade}`);                                                   
+      355 +console.log(`\nOverall grade: ${curved.overall_grade}`);      
+      356  
+      357  // ── 3. Incompatible check ──────────────────────────────────
+           ──────────
+      358  console.log("\n=== 3. Incompatible Curve: checkCompatibility =
+           ==\n");
+
+⏺ Update(v3-effect/curve-fixture.ts)
+  ⎿  Added 1 line, removed 5 lines
+      71      method: { type: "standard_deviation", sigma_boundaries: [1,
+           0, -1] },
+      72      sample_size: 120,
+      73      computed_at: "2024-06-15T00:00:00.000Z",
+      74 -    totals: {                                                  
+      75 -      total_problem: { ...T },                                 
+      76 -      total_ability: { ...T },                                 
+      77 -      final_total: { ...T },                                   
+      78 -    },                                                         
+      74 +    overall_mean: { ...T },                                    
+      75      ability_curves,
+      76      problem_curves,
+      77    });
+
+⏺ Update(v3-effect/curve-fixture.ts)
+  ⎿  Added 1 line, removed 5 lines
+      115      method: { type: "standard_deviation", sigma_boundaries: [1
+           , 0, -1] },
+      116      sample_size: 15,
+      117      computed_at: "2024-06-15T00:00:00.000Z",
+      118 -    totals: {                                                 
+      119 -      total_problem: { ...T },                                
+      120 -      total_ability: { ...T },                                
+      121 -      final_total: { ...T },                                  
+      122 -    },                                                        
+      118 +    overall_mean: { ...T },                                   
+      119      ability_curves,
+      120      problem_curves,
+      121    });
+
+⏺ All edits done. Now let me mark tasks complete and run the verification.
+
+⏺ Bash(cd /Users/yihan/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline
+       && npx tsx v3-effect/apply-curve.ts)
+  ⎿  === 1. Compatible Curve: checkCompatibility ===
+
+     {
+     … +135 lines (ctrl+o to expand)
+
+⏺ All 4 test sections pass cleanly. Now let me update the index.md for the
+  folder.
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ The index.md doesn't need structural changes — no new files were created and
+  the file descriptions still hold. The descriptions are general enough that
+  they cover the simplified schema.
+
+  Here's a summary of all changes made:
+
+  schemas.ts:
+  - Removed TotalGrades schema (3 letter grades → gone)
+  - Removed TotalCurves schema (3 threshold sets → gone)
+  - CurvedScores.total_grades: TotalGrades → CurvedScores.overall_grade: 
+  LetterGrade
+  - Curve.totals: TotalCurves → Curve.overall_mean: GradeThresholds
+  - Updated section comments (§6, §8) to reflect the changes
+
+  apply-curve.ts:
+  - checkCompatibility: replaced 3 totals.* ordering checks with single
+  checkOrdering("overall_mean", curve.overall_mean)
+  - applyCurve: replaced 3-line total_grades block with single overall_grade = 
+  assignGrade(scores.totals.final_total_score, curve.overall_mean)
+  - Print output: replaced 4-line total grades section with Overall grade: 
+  ${curved.overall_grade}
+
+  curve-fixture.ts:
+  - Both buildCompatibleCurve and buildIncompatibleCurve: replaced totals: { 
+  total_problem, total_ability, final_total } with overall_mean: { ...T }
+
+  Verification output confirms all 4 sections pass: compatible check (all pass),
+   CurvedScores with single Overall grade: B, incompatible check with structured
+   failures, and expected error on incompatible applyCurve.
+
+✻ Worked for 1m 46s
+
+❯ make following test                                                       
+                                                                            
+  some json curve file                                                      
+  some json score file                                                      
+                                                                            
+  load decode the json                                                      
+                                                                            
+  apply                                                                     
+                                                                            
+  and generate the final json grade file                                    
+
+⏺ Let me first generate the exact encoded JSON shapes from the existing fixtures
+   so the test data is realistic.
+
+⏺ Bash(npx tsx -e '
+      import { Schema } from "effect";…)
+  ⎿  Error: Exit code 1
+     /Users/yihan/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline/node
+     modules/tsx/dist/register-D46fvsV_.cjs:3
+     `)},"createLog"),x=I(g.bgLightYellow(g.black(" CJS "))),ae=I(g.bgBlue(" ESM
+     ")),oe=[".cts",".mts",".ts",".tsx",".jsx"],ie=[".js",".cjs",".mjs"],k=[".ts
+     ,".tsx",".jsx"],F=o((s,e,r,n)=>{const 
+     t=Object.getOwnPropertyDescriptor(s,e);t?.set?s[e]=r:(!t||t.configurable)&&
+     bject.defineProperty(s,e,{value:r,enumerable:t?.enumerable||n?.enumerable,w
+     itable:n?.writable??(t?t.writable:!0),configurable:n?.configurable??(t?t.co
+     figurable:!0)})},"safeSet"),ce=o((s,e,r)=>{const 
+     n=e[".js"],t=o((a,i)=>{if(s.enabled===!1)return 
+     n(a,i);const[c,f]=i.split("?");if((new 
+     URLSearchParams(f).get("namespace")??void 0)!==r)return n(a,i);x(2,"load",{
+     ilePath:i}),a.id.startsWith("data:text/javascript,")&&(a.path=m.dirname(c))
+     R.parent?.send&&R.parent.send({type:"dependency",path:c});const 
+     p=oe.some(h=>c.endsWith(h)),P=ie.some(h=>c.endsWith(h));if(!p&&!P)return 
+     n(a,c);let d=O.readFileSync(c,"utf8");if(c.endsWith(".cjs")){const 
+     h=w.transformDynamicImport(i,d);h&&(d=A()?$(h):h.code)}else 
+     if(p||w.isESM(d)){const h=w.transformSync(d,i,{tsconfigRaw:exports.fileMatc
+     er?.(c)});d=A()?$(h):h.code}x(1,"loaded",{filePath:c}),a._compile(d,c)},"tr
+     nsformer");F(e,".js",t);for(const a of 
+     k)F(e,a,t,{enumerable:!r,writable:!0,configurable:!0});return F(e,".mjs",t,
+     writable:!0,configurable:!0}),()=>{e[".js"]===t&&(e[".js"]=n);for(const a 
+     of[...k,".mjs"])e[a]===t&&delete e[a]}},"createExtensions"),le=o(s=>e=>{if(
+     e==="."||e===".."||e.endsWith("/.."))&&(e+="/"),_.test(e)){let 
+     r=m.join(e,"index.js");e.startsWith("./")&&(r=`./${r}`);try{return 
+     s(r)}catch{}}try{return s(e)}catch(r){const 
+     n=r;if(n.code==="MODULE_NOT_FOUND")try{return 
+     s(`${e}${m.sep}index.js`)}catch{}throw n}},"createImplicitResolver"),B=[".j
+     ",".json"],G=[".ts",".tsx",".jsx"],fe=[...G,...B],he=[...B,...G],y=Object.c
+     eate(null);y[".js"]=[".ts",".tsx",".js",".jsx"],y[".jsx"]=[".tsx",".ts",".j
+     x",".js"],y[".cjs"]=[".cts"],y[".mjs"]=[".mts"];const X=o(s=>{const e=s.spl
+     t("?"),r=e[1]?`?${e[1]}`:"",[n]=e,t=m.extname(n),a=[],i=y[t];if(i){const 
+     f=n.slice(0,-t.length);a.push(...i.map(l=>f+l+r))}const c=!(s.startsWith(v)
+     |j(n))||n.includes(J)||n.includes("/node_modules/")?he:fe;return 
+     a.push(...c.map(f=>n+f+r)),a},"mapTsExtensions"),S=o((s,e,r)=>{if(x(3,"reso
+     veTsFilename",{request:e,isDirectory:_.test(e),isTsParent:r,allowJs:exports
+     allowJs}),_.test(e)||!r&&!exports.allowJs)return;const n=X(e);if(n)for(cons
+      t of n)try{return s(t)}catch(a){const{code:i}=a;if(i!=="MODULE_NOT_FOUND"&
+     i!=="ERR_PACKAGE_PATH_NOT_EXPORTED")throw 
+     a}},"resolveTsFilename"),me=o((s,e)=>r=>{if(x(3,"resolveTsFilename",{reques
+     :r,isTsParent:e,isFilePath:j(r)}),j(r)){const n=S(s,r,e);if(n)return 
+     n}try{return s(r)}catch(n){const 
+     t=n;if(t.code==="MODULE_NOT_FOUND"){if(t.path){const 
+     i=t.message.match(/^Cannot find module '([^']+)'$/);if(i){const 
+     f=i[1],l=S(s,f,e);if(l)return l}const c=t.message.match(/^Cannot find modul
+      '([^']+)'. Please verify that the package.json has a valid "main" 
+     entry$/);if(c){const f=c[1],l=S(s,f,e);if(l)return l}}const 
+     a=S(s,r,e);if(a)return a}throw t}},"createTsExtensionResolver"),z="at 
+     cjsPreparseModuleExports (node:internal",de=o(s=>{const e=s.stack.split(`
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                     
+
+     Error: Cannot find module './v3-effect/schemas.js'
+     Require stack:
+     - /Users/yihan/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline/[e
+     al]
+         at Module._resolveFilename (node:internal/modules/cjs/loader:1447:15)
+         at nextResolveSimple (/Users/yihan/LocalYihan/paideia/tech-doc-axiia/sc
+     re-post-llm-pipeline/node_modules/tsx/dist/register-D46fvsV_.cjs:4:1004)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     … +15 lines (ctrl+o to see all)
+
+⏺ Inline eval doesn't resolve paths well. Let me write a generator script
+  instead.
+
+⏺ Write(v3-effect/gen-test-data.ts)
+  ⎿  Wrote 71 lines to v3-effect/gen-test-data.ts
+       1 /**
+       2  * One-shot generator: dump encoded JSONScores and Curve as JSON
+          files.
+       3  * Run: npx tsx v3-effect/gen-test-data.ts
+       4  * Then delete this file.
+       5  */
+       6 
+       7 import { writeFileSync, mkdirSync } from "node:fs";
+       8 import { Schema } from "effect";
+       9 import {
+      10   JSONScores,
+     … +61 lines (ctrl+o to expand)
+
+⏺ Bash(npx tsx v3-effect/gen-test-data.ts)
+  ⎿ Wrote v3-effect/test-data/scores.json and v3-effect/test-data/curve.jso
+    n
+
+
+⏺ Good. Now let me read the generated files and clean up.
+
+⏺ Read 2 files (ctrl+o to expand)
+
+⏺ JSON fixtures look good. Now let me delete the generator and write the actual
+  test script.
+
+⏺ Bash(rm /Users/yihan/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline
+      /v3-effect/gen-test-data.ts)
+  ⎿  (No content)
+
+⏺ Write(v3-effect/apply-curve-test.ts)
+  ⎿  Wrote 60 lines to v3-effect/apply-curve-test.ts
+       1 /**
+       2  * End-to-end test: load JSON files → decode → apply curve → wri
+         te graded JSON.
+       3  *
+       4  * Inputs:  test-data/scores.json, test-data/curve.json
+       5  * Output:  test-data/curved-scores.json
+       6  *
+       7  * Run: npx tsx v3-effect/apply-curve-test.ts
+       8  */
+       9 
+      10 import { readFileSync, writeFileSync } from "node:fs";
+     … +50 lines (ctrl+o to expand)
+
+⏺ I need to export checkCompatibility and applyCurve — let me verify they're
+  already exported.
+
+⏺ Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Good, both already exported. Now run the test.
+
+⏺ Bash(npx tsx v3-effect/apply-curve-test.ts)
+  ⎿  === 1. Compatible Curve: checkCompatibility ===
+
+     {
+     … +150 lines (ctrl+o to expand)
+
+⏺ The first block of output is from apply-curve.ts's top-level code (it runs as
+  an imported side effect). Let me fix that — apply-curve.ts should guard its
+  top-level demo with an import.meta.url check, just like curve-fixture.ts does.
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ The demo code at lines 330-373 runs unconditionally when imported. I need to
+  wrap it in an import.meta.url guard.
+
+⏺ Update(v3-effect/apply-curve.ts)
+  ⎿  Added 41 lines, removed 39 lines
+      324  }
+      325  
+      326  // ===========================================================
+           ==================
+      327 -// Run                                                        
+      327 +// Run (only when executed directly)                          
+      328  // ===========================================================
+           ==================
+      329  
+      330 -const scores = buildScoresFromReport();                       
+      331 -const compatibleCurve = buildCompatibleCurve(scores);         
+      332 -const incompatibleCurve = buildIncompatibleCurve(scores);     
+      330 +if (import.meta.url === `file://${process.argv[1]}`) {        
+      331 +  const scores = buildScoresFromReport();                     
+      332 +  const compatibleCurve = buildCompatibleCurve(scores);       
+      333 +  const incompatibleCurve = buildIncompatibleCurve(scores);   
+      334  
+      334 -// ── 1. Compatible check ────────────────────────────────────
+          -──────────                                                    
+      335 -console.log("=== 1. Compatible Curve: checkCompatibility ===\n
+          -");                                                           
+      336 -const compatResult = checkCompatibility(compatibleCurve, score
+          -s);                                                           
+      337 -console.log(JSON.stringify(compatResult, null, 2));           
+      338 -console.log(`\nStatus: ${compatResult.status}`);              
+      335 +  // ── 1. Compatible check ──────────────────────────────────
+          +────────────                                                  
+      336 +  console.log("=== 1. Compatible Curve: checkCompatibility ===
+          +\n");                                                         
+      337 +  const compatResult = checkCompatibility(compatibleCurve, sco
+          +res);                                                         
+      338 +  console.log(JSON.stringify(compatResult, null, 2));         
+      339 +  console.log(`\nStatus: ${compatResult.status}`);            
+      340  
+      340 -// ── 2. Apply the compatible curve ──────────────────────────
+          -──────────                                                    
+      341 -console.log("\n=== 2. applyCurve → CurvedScores ===\n");      
+      342 -const curved = applyCurve(compatibleCurve, scores);           
+      343 -console.log("Problem grades:");                               
+      344 -for (const pg of curved.problem_grades) {                     
+      345 -  const dimGrades = DIMENSIONS.map((d) => {                   
+      346 -    const opt = pg.dimension_grades[d];                       
+      347 -    return `${d}=${Option.isSome(opt) ? opt.value : "-"}`;    
+      348 -  }).join(", ");                                              
+      349 -  console.log(`  ${pg.problem_id.digit} (${pg.problem_id.name}
+          -): task=${pg.task_grade}  [${dimGrades}]`);                   
+      350 -}                                                             
+      351 -console.log("\nAbility grades:");                             
+      352 -for (const dim of DIMENSIONS) {                               
+      353 -  console.log(`  ${dim}: ${curved.ability_grades[dim]}`);     
+      354 -}                                                             
+      355 -console.log(`\nOverall grade: ${curved.overall_grade}`);      
+      341 +  // ── 2. Apply the compatible curve ────────────────────────
+          +────────────                                                  
+      342 +  console.log("\n=== 2. applyCurve → CurvedScores ===\n");    
+      343 +  const curved = applyCurve(compatibleCurve, scores);         
+      344 +  console.log("Problem grades:");                             
+      345 +  for (const pg of curved.problem_grades) {                   
+      346 +    const dimGrades = DIMENSIONS.map((d) => {                 
+      347 +      const opt = pg.dimension_grades[d];                     
+      348 +      return `${d}=${Option.isSome(opt) ? opt.value : "-"}`;  
+      349 +    }).join(", ");                                            
+      350 +    console.log(`  ${pg.problem_id.digit} (${pg.problem_id.nam
+          +e}): task=${pg.task_grade}  [${dimGrades}]`);                 
+      351 +  }                                                           
+      352 +  console.log("\nAbility grades:");                           
+      353 +  for (const dim of DIMENSIONS) {                             
+      354 +    console.log(`  ${dim}: ${curved.ability_grades[dim]}`);   
+      355 +  }                                                           
+      356 +  console.log(`\nOverall grade: ${curved.overall_grade}`);    
+      357  
+      357 -// ── 3. Incompatible check ──────────────────────────────────
+          -──────────                                                    
+      358 -console.log("\n=== 3. Incompatible Curve: checkCompatibility =
+          -==\n");                                                       
+      359 -const incompatResult = checkCompatibility(incompatibleCurve, s
+          -cores);                                                       
+      360 -console.log(JSON.stringify(incompatResult, null, 2));         
+      361 -console.log(`\nStatus: ${incompatResult.status}`);            
+      358 +  // ── 3. Incompatible check ────────────────────────────────
+          +────────────                                                  
+      359 +  console.log("\n=== 3. Incompatible Curve: checkCompatibility
+          + ===\n");                                                     
+      360 +  const incompatResult = checkCompatibility(incompatibleCurve,
+          + scores);                                                     
+      361 +  console.log(JSON.stringify(incompatResult, null, 2));       
+      362 +  console.log(`\nStatus: ${incompatResult.status}`);          
+      363  
+      363 -// Verify applyCurve throws on incompatible                   
+      364 -console.log("\n=== 4. applyCurve on incompatible curve → expec
+          -ted error ===\n");                                            
+      365 -try {                                                         
+      366 -  applyCurve(incompatibleCurve, scores);                      
+      367 -  console.log("ERROR: should have thrown!");                  
+      368 -} catch (e) {                                                 
+      369 -  console.log(`Caught expected error: ${(e as Error).message.s
+          -plit("\n")[0]}`);                                             
+      370 -}                                                             
+      364 +  // Verify applyCurve throws on incompatible                 
+      365 +  console.log("\n=== 4. applyCurve on incompatible curve → exp
+          +ected error ===\n");                                          
+      366 +  try {                                                       
+      367 +    applyCurve(incompatibleCurve, scores);                    
+      368 +    console.log("ERROR: should have thrown!");                
+      369 +  } catch (e) {                                               
+      370 +    console.log(`Caught expected error: ${(e as Error).message
+          +.split("\n")[0]}`);                                           
+      371 +  }                                                           
+      372  
+      372 -console.log("\nDone.");                                       
+      373 +  console.log("\nDone.");                                     
+      374 +}                                                             
+
+⏺ Now verify both scripts work independently:
+
+⏺ Bash(npx tsx v3-effect/apply-curve-test.ts)
+  ⎿  Decoded scores: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+     Decoded curve:  11111111-2222-3333-4444-555555555555
+       3 problems, 3 curve entries
+     … +12 lines (ctrl+o to expand)
+
+⏺ Bash(npx tsx v3-effect/apply-curve.ts 2>&1 | head -5)
+  ⎿  === 1. Compatible Curve: checkCompatibility ===
+
+     {
+     … +2 lines (ctrl+o to expand)
+
+⏺ Clean. Let me check the generated output file:
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Now update the folder's index.md.
+
+⏺ Update(v3-effect/index.md)
+  ⎿  Added 8 lines
+      11  | `report-to-scores.ts` | Transform: axiia-website Report → JSO
+          NScores stored form, with verification that derived values matc
+          h |
+      12  | `curve-fixture.ts` | Builder functions (buildCompatibleCurve,
+           buildIncompatibleCurve) that derive Curve fixtures from JSONSc
+          ores; prints full encoded form when run directly |
+      13  | `apply-curve.ts` | Compatibility check (checkCompatibility) a
+          nd curve application (applyCurve) demonstrating the full JSONSc
+          ores → CurvedScores flow |
+      14 +| `apply-curve-test.ts` | End-to-end test: loads JSON scores + 
+         +curve from test-data/, applies curve, writes curved-scores.json
+         + |                                                             
+      15 +| `test-data/scores.json` | Encoded JSONScores fixture (3 probl
+         +ems, 5 dimensions) |                                           
+      16 +| `test-data/curve.json` | Encoded Curve fixture matching the s
+         +cores (A≥0.85, B≥0.72, C≥0.55) |                               
+      17 +| `test-data/curved-scores.json` | Generated output: full Curve
+         +dScores with problem grades, ability grades, overall grade |   
+      18  | `curve-application-analysis.md` | Analysis of how axiia-websi
+          te currently applies curves: which scores get thresholds, execu
+          tion order, what's not curved |
+      19  
+      20  ```mermaid
+     ...
+      26      CF[curve-fixture.ts] --> AC[apply-curve.ts]
+      27      RF --> AC
+      28      AC -. "checks & applies" .-> S
+      29 +    SJ[test-data/scores.json] --> ACT[apply-curve-test.ts]     
+      30 +    CJ[test-data/curve.json] --> ACT                           
+      31 +    ACT -. "writes" .-> CSJ[test-data/curved-scores.json]      
+      32 +    ACT --> AC                                                 
+      33  ```
+
+⏺ Done. Here's what was created:
+
+  New files:
+  - test-data/scores.json — encoded JSONScores (3 problems, 5 dimensions)
+  - test-data/curve.json — encoded Curve (thresholds A≥0.85, B≥0.72, C≥0.55)
+  - apply-curve-test.ts — end-to-end test script
+  - test-data/curved-scores.json — generated output
+
+  Flow: apply-curve-test.ts does:
+  1. Reads & decodes scores.json and curve.json via Effect Schema
+  2. Runs checkCompatibility → confirms "compatible"
+  3. Calls applyCurve → produces CurvedScores
+  4. Encodes & writes curved-scores.json
+  5. Prints grading summary (all 3 problems get task=B, overall grade=B)
+
+  Side fix: wrapped apply-curve.ts's top-level demo in import.meta.url guard so
+  it no longer runs as a side effect when imported.
+
+  Run: npx tsx v3-effect/apply-curve-test.ts
+
+✻ Worked for 2m 4s
+
+❯ commit what we have                                                       
+                                                                            
+  you use struct for many schema design                                     
+  what is pros and cons of the effect class?                                
+
+⏺ Let me commit first, then answer your question.
+
+⏺ Bash(git status)
+  ⎿  On branch master
+     Your branch is up to date with 'origin/master'.
+     … +17 lines (ctrl+o to expand)
+
+⏺ Bash(git diff)
+  ⎿ diff --git a/score-post-llm-pipeline/v3-effect/index.md b/score-post-ll
+    m-pipeline/v3-effect/index.md
+    index e690142..68440da 100644
+    … +265 lines (ctrl+o to expand)
+
+
+⏺ Bash(git log --oneline -5)
+  ⎿ 9681039 Split ProblemId into digit+name, align docs to v3-effect schema
+    018c133 Remove problem_version from DimMapEntry
+    c2f709f Effect schema v3: Schema.Class with derived getters, embed DimM
+    … +5 lines (ctrl+o to expand)
+
+
+
+⏺ Bash(git add score-post-llm-pipeline/v3-effect/schemas.ts
+      score-post-llm-pipeline/v3-effect/index.md
+      score-post-llm-pipeline/v3-effect/apply-curve.ts score-post-llm-…)
+  ⎿  (No content)
+
+⏺ Bash(git commit -m "Align applyCurve with production: single overall_grade,
+      add JSON test…)
+  ⎿ [master 62e8c75] Align applyCurve with production: single overall_grade
+    , add JSON test
+     11 files changed, 1741 insertions(+), 11 deletions(-)
+    … +15 lines (ctrl+o to expand)
+
+
+⏺ Committed as 62e8c75.
+
+  ---
+  Schema.Class vs Schema.Struct — pros and cons
+
+  Schema.Struct (what most of our schemas use):
+  Pros: Pure data — no behavior, easy to reason about
+  Cons: No computed properties; derived values must live elsewhere
+  ────────────────────────────────────────
+  Pros: Composes freely (nest, union, intersect)
+  Cons: No instanceof check — it's just a plain object
+  ────────────────────────────────────────
+  Pros: Lighter — no class prototype overhead
+  Cons: If you want methods, you end up writing free functions
+  Schema.Class (what JSONScores uses):
+  Pros: get properties for derived data (ability_scores, totals) — computed on
+    access, never serialized
+  Cons: Heavier abstraction; class instances, prototypes
+  ────────────────────────────────────────
+  Pros: instanceof JSONScores works for runtime type checks
+  Cons: Composes less naturally — you can't Schema.Union two Classes easily
+  ────────────────────────────────────────
+  Pros: Methods can encapsulate invariants alongside the data
+  Cons: Getters are invisible to Schema.encode — can confuse people expecting
+    them in JSON
+  ────────────────────────────────────────
+  Pros: Self-documenting: the derivation formula lives with the data
+  Cons: Testing is trickier: you must decode to get an instance, can't just
+    spread a plain object
+  When to use which:
+
+  - Struct for plain data bags — ProblemGrade, GradeThresholds, Curve,
+  CurvedScores. No behavior needed, just shape + validation.
+  - Class when a type has derived values that shouldn't be stored. JSONScores is
+   the textbook case: ability_scores and totals are computed from problem_scores
+   — storing them would create a consistency risk (stale derived values). The
+  getter pattern guarantees they're always fresh.
+
+  In our codebase, only JSONScores genuinely benefits from Class. Everything
+  else is pure structure, so Struct is the right default.
+
+✻ Cooked for 37s
+
+❯ https://playbooks.com/skills/andrueandersoncs/claude-skill-effect-ts/sche 
+  ma                                                                        
+  check this skill, what would this suggest?                                
+
+⏺ Fetch(https://playbooks.com/skills/andrueandersoncs/claude-skill-effect-ts/sch
+       ema)
+  ⎿  Received 133KB (200 OK)
+
+⏺ Interesting. Here's what this skill would suggest for our codebase, and where
+  I agree/disagree:
+
+  1. "Class-Based Schemas Preferred" — challenges our Struct-heavy design
+
+  The skill recommends Schema.Class / Schema.TaggedClass broadly, not just for
+  derived getters. Applied to us, it would push CurvedScores, Curve,
+  ProblemGrade, etc. toward Class.
+
+  My take: partially disagree. Class earns its weight when you have computed
+  properties (like JSONScores.ability_scores). For pure data bags like
+  GradeThresholds or ProblemGrade, Class adds prototype overhead and makes
+  composition harder — you can't easily union or intersect Classes. Our current
+  split (Class for JSONScores, Struct for everything else) is well-motivated.
+
+  Where the skill does have a point: CurvedScores could benefit from Class if we
+   ever add derived getters to it (e.g. a summary method). Worth watching.
+
+  2. Tagged Unions — we already do this well
+
+  Our CurveMethod is exactly the pattern they recommend:
+  Schema.Union(
+    Schema.Struct({ type: Literal("standard_deviation"), ... }),
+    Schema.Struct({ type: Literal("percentile"), ... }),
+    ...
+  )
+
+  3. Schema.is() instead of direct ._tag access
+
+  We don't use ._tag anywhere — we use Option.isSome() which is the idiomatic
+  Effect way. We're fine here.
+
+  4. Schema.parseJson — relevant for our test
+
+  Our apply-curve-test.ts does:
+  const raw = JSON.parse(readFileSync(...));
+  const scores = decodeJSONScores(raw);
+
+  The skill suggests combining these via Schema.parseJson. Would collapse two
+  failure modes into one. Minor improvement — could adopt but low priority.
+
+  5. Branded types to prevent ID mixing — we already do this
+
+  ProblemDigitId, PromptVersionHash, EventId, ScoreValue are all branded.
+  Matches the recommendation exactly.
+
+  Summary: what's actionable
+  ┌─────────────────────┬──────────────────────┬───────────────────────────────┐
+  │     Suggestion      │      Our status      │            Action?            │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │                     │ Selective use        │ Keep as-is; promote           │
+  │ Class over Struct   │ (JSONScores only)    │ CurvedScores if it gains      │
+  │                     │                      │ derived behavior              │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │ Tagged unions       │ Already using for    │ None                          │
+  │                     │ CurveMethod          │                               │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │ Schema.is() type    │ Using                │                               │
+  │ guards              │ Option.isSome()      │ None                          │
+  │                     │ correctly            │                               │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │ Schema.parseJson    │ Not using in test    │ Low-pri improvement           │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │ Branded types       │ Already branded      │ None                          │
+  ├─────────────────────┼──────────────────────┼───────────────────────────────┤
+  │ No                  │ Not using any        │ None                          │
+  │ Schema.Any/Unknown  │                      │                               │
+  └─────────────────────┴──────────────────────┴───────────────────────────────┘
+  The skill is a reasonable general guide, but our Struct-heavy approach is a
+  deliberate trade-off — we chose composability and simplicity over the
+  ergonomics Class provides, and only use Class where derived getters justify
+  it.
+
+✻ Cooked for 39s
+
+❯  you can't easily union or intersect Classes.                             
+                                                                            
+  why, justfiy this argument using documentation of effect                  
+
+⏺ Web Search("Effect-TS Schema.Class union intersection limitations
+            documentation 2025 2026")
+  ⎿  Did 1 search in 7s
+
+⏺ Fetch(https://effect.website/docs/schema/classes)
+  ⎿  Received 1.7MB (200 OK)
+
+⏺ Fetch(https://effect.website/docs/schema/basic-usage/)
+  ⎿  Received 3MB (200 OK)
+
+⏺ Fetch(https://effect.website/docs/schema/classes/)
+  ⎿  Received 1.7MB (200 OK)
+
+⏺ Fetch(https://effect.website/docs/schema/advanced-usage/)
+  ⎿  Received 4.2MB (200 OK)
+
+⏺ Web Search("site:effect.website "Schema.extend" class struct limitations")
+  ⎿  Did 1 search in 3s
+
+⏺ Web Search("effect-ts Schema.Class Schema.Union "cannot" OR "not supported" OR
+             "limitation" OR "extend" site:github.com/Effect-TS")
+  ⎿  Did 1 search in 4s
+
+⏺ Fetch(https://github.com/Effect-TS/effect/issues/4762)
+  ⎿  Received 273.3KB (200 OK)
+
+⏺ Web Search("effect-ts "Schema.extend" class "declaration schema" "not
+            supported" OR "cannot extend"")
+  ⎿  Did 1 search in 5s
+
+⏺ Let me check the actual source code to see if extend explicitly rejects Class
+  schemas.
+
+⏺ Web Search("effect schema extend "Struct or refinement of a Struct" OR "not a
+            Struct" class declaration")
+  ⎿  Did 1 search in 4s
+
+⏺ Fetch(https://effect.website/docs/schema/classes/)
+  ⎿  Received 1.7MB (200 OK)
+
+⏺ Web Search("effect schema class "extend" "declaration" union composition
+            site:effect.website")
+  ⎿  Did 1 search in 4s
+
+⏺ Bash(cd /Users/yihan/LocalYihan/paideia/tech-doc-axiia/score-post-llm-pipeline
+       && node -e "
+      const { Schema } = require('effect');…)
+  ⎿  extend Class+Struct: Unsupported schema or overlapping types
+     details: cannot extend Foo with { readonly c: boolean }
+     extend Class+Class: Unsupported schema or overlapping types
+     … +4 lines (ctrl+o to expand)
+
+⏺ There it is — concrete proof. Let me test one more thing:
+
+⏺ Bash(node -e "
+      const { Schema } = require('effect');…)
+  ⎿  extend Struct+Struct: OK
+     decoded: { a: 'hi', b: 42 }
+     … +3 lines (ctrl+o to expand)
+
+⏺ Now I can justify the claim with evidence.
+
+  ---
+  Schema.extend explicitly rejects Class schemas. Here's the proof:
+
+  // Struct + Struct — works
+  const S1 = Schema.Struct({ a: Schema.String });
+  const S2 = Schema.Struct({ b: Schema.Number });
+  Schema.extend(S1, S2); // ✅ { a: string, b: number }
+
+  // Class + Struct — throws
+  class Foo extends Schema.Class("Foo")({ a: Schema.String }) {}
+  Schema.extend(Foo, Schema.Struct({ b: Schema.Number }));
+  // ❌ "Unsupported schema or overlapping types"
+  // "cannot extend Foo with { readonly b: number }"
+
+  // Class + Class — also throws
+  class Bar extends Schema.Class("Bar")({ b: Schema.Number }) {}
+  Schema.extend(Foo, Bar);
+  // ❌ "cannot extend (Foo (Encoded side) <-> Foo) with (Bar (Encoded side) <->
+   Bar)"
+
+  Why: The https://effect.website/docs/schema/classes/ state that "Class schemas
+   transform a struct schema into a declaration schema." Schema.extend only
+  works on Structs (or refinements of Structs). Once a Struct becomes a Class,
+  it's a declaration/transformation schema — a different AST node type that
+  extend doesn't support.
+
+  Union does work — Schema.Union(Foo, Bar) compiles and decodes correctly,
+  producing proper instanceof instances. So my original statement was too
+  strong. The accurate version:
+  ┌───────────────────────────────────────┬────────┬───────────────────┐
+  │               Operation               │ Struct │       Class       │
+  ├───────────────────────────────────────┼────────┼───────────────────┤
+  │ Schema.extend(A, B)                   │ works  │ throws at runtime │
+  ├───────────────────────────────────────┼────────┼───────────────────┤
+  │ Schema.Union(A, B)                    │ works  │ works             │
+  ├───────────────────────────────────────┼────────┼───────────────────┤
+  │ Schema.Record, Schema.Array embedding │ works  │ works             │
+  └───────────────────────────────────────┴────────┴───────────────────┘
+  The real limitation is extend (merging fields from two schemas), not union.
+  For our codebase, this matters if you ever want to build a schema by composing
+   smaller pieces — something Struct supports freely.
+
+  Sources:
+  - https://effect.website/docs/schema/classes/
+  - https://github.com/Effect-TS/effect/issues/4762
+
+✻ Crunched for 2m 2s
+
+❯ in our codebase, can you suggest potential meaninful usage of extend? 
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Honestly, looking at the schemas closely — there isn't a strong case for 
+  extend in this codebase. Here's why:
+
+  The two structural parallels that look tempting
+
+  1. ProblemScore ↔ ProblemGrade — mirror shapes
+
+  ProblemScore:  { problem_id, task_score,  dimension_scores: Record<Dim,
+  Option<ScoreValue>> }
+  ProblemGrade:  { problem_id, task_grade,  dimension_grades:  Record<Dim,
+  Option<LetterGrade>> }
+
+  You could extract problem_id into a base:
+  const ProblemBase = Schema.Struct({ problem_id: ProblemId });
+  const ProblemScore = Schema.extend(ProblemBase, Schema.Struct({ task_score:
+  ..., dimension_scores: ... }));
+  const ProblemGrade = Schema.extend(ProblemBase, Schema.Struct({ task_grade:
+  ..., dimension_grades: ... }));
+
+  But: the shared part is a single field. The indirection costs more readability
+   than it saves duplication. Not worth it.
+
+  2. JSONScores and Curve — both embed dimension_map and prompt_version_hash
+
+  // shared fields:
+  //   prompt_version_hash: PromptVersionHash
+  //   dimension_map: ProblemDimensionMap
+
+  You could extract a ProvenanceFields base and extend both from it. But:
+  JSONScores is a Class (extend throws), and these two types are conceptually
+  different entities that happen to share provenance metadata. Forcing a base
+  would create a misleading inheritance relationship.
+
+  When extend would become meaningful
+
+  ScorePool (mentioned in the header as "not yet ported"). If ScorePool shares
+  significant structure with Curve — same provenance fields, same
+  source_event_ids, same dimension_map — then:
+
+  const CurveProvenance = Schema.Struct({
+    source_event_ids: Schema.NonEmptyArray(EventId),
+    prompt_version_hash: PromptVersionHash,
+    dimension_map: ProblemDimensionMap,
+  });
+
+  const Curve = Schema.extend(CurveProvenance, Schema.Struct({
+    curve_id: Schema.UUID,
+    method: CurveMethod,
+    // ... curve-specific fields
+  }));
+
+  const ScorePool = Schema.extend(CurveProvenance, Schema.Struct({
+    pool_id: Schema.UUID,
+    // ... pool-specific fields
+  }));
+
+  That's 3 shared fields — enough to justify a named base. But until ScorePool
+  exists, it's premature.
+
+  Bottom line
+
+  The current codebase has no duplication that justifies extend. Each schema has
+   clear boundaries and minimal field overlap. The one real future opportunity
+  is a shared provenance base between Curve and ScorePool, but that should wait
+  until ScorePool is actually designed.
+
+❯ so should we change everything to class? 
+
+⏺ No. The current split is well-motivated. Here's the decision in one table:
+  Schema: JSONScores
+  Class?: yes
+  Reason: ability_scores, totals are derived getters — computed on access, never
+
+    serialized. Class is the only way to get this.
+  ────────────────────────────────────────
+  Schema: Everything else
+  Class?: no
+  Reason: Pure data. No derived behavior. Struct is simpler, composes freely.
+  What Class would buy for the others
+
+  Nothing meaningful. Take CurvedScores — all its fields are stored, none are
+  computed. Making it a Class gives you instanceof CurvedScores, but we never
+  check that. Same for Curve, ProblemGrade, GradeThresholds, CompatibilityResult
+   — all plain validated shapes.
+
+  What Class would cost
+
+  - Every decode produces a class instance instead of a plain object — heavier,
+  harder to inspect in logs/debugger
+  - Can't Schema.extend if we ever need to (Curve + ScorePool provenance base)
+  - Spreading ({ ...curved, newField }) produces a plain object, silently losing
+   the class prototype — a subtle bug source
+  - More boilerplate: Schema.Class<Foo>("Foo")({...}) vs Schema.Struct({...})
+
+  The rule
+
+  Class when you have derived getters that shouldn't be stored. Struct for 
+  everything else.
+
+  That's one schema out of ~12. The skill's blanket "prefer Class" advice
+  optimizes for a different concern (ergonomics, instanceof guards) that doesn't
+   apply here — we validate at boundaries with decodeUnknownSync and don't need
+  runtime type checks after that.
+
+❯ search internet for broader community disucssion on when to use each      
+  and especially check how people relate them to more fp style concept like 
+   adt                                                                      
+
+⏺ Web Search("effect-ts Schema.Class vs Schema.Struct when to use community
+            discussion")
+  ⎿  Did 1 search in 6s
+
+⏺ Web Search("effect-ts Schema.TaggedClass ADT algebraic data types pattern
+            matching")
+  ⎿  Did 1 search in 8s
+
+⏺ Web Search("effect-ts Schema.Class functional programming "sum type" "product
+            type" discriminated union")
+  ⎿  Did 1 search in 8s
+
+⏺ Web Search("effect-ts discord "Schema.Class" vs struct when opinion
+            recommendation")
+  ⎿  Did 1 search in 6s
+
+⏺ Web Search("effect-ts "TaggedClass" "Data.TaggedEnum" schema ADT sum type best
+             practice")
+  ⎿  Did 1 search in 7s
+
+⏺ Fetch(https://dnlytras.com/blog/effect-ts)
+  ⎿  Received 330.8KB (200 OK)
+
+⏺ Fetch(https://www.effect.solutions/data-modeling)
+  ⎿  Received 126.1KB (200 OK)
+
+⏺ Fetch(https://github.com/Effect-TS/effect/pull/4736)
+  ⎿  Received 296.5KB (200 OK)
+
+⏺ Web Search("effect-ts "Data.TaggedEnum" vs "Schema.TaggedClass" "Schema.Union"
+             when to use plain data")
+  ⎿  Did 1 search in 7s
+
+⏺ Fetch(https://dev.to/gcanti/functional-design-algebraic-data-types-36kf)
+  ⎿  Received 270.4KB (200 OK)
+
+⏺ Fetch(https://effect.website/docs/data-types/data/)
+  ⎿  Received 1.5MB (200 OK)
+
+⏺ Web Search(""effect" "Schema.Class" opaque type "nominal" "structural typing"
+            reason motivation")
+  ⎿  Did 3 searches in 13s
+
+⏺ Here's what the broader community discussion reveals, mapped to FP concepts:
+
+  ---
+  The FP framing: Effect's data modeling = ADTs in TypeScript
+
+  In classic FP (Haskell, OCaml), data modeling uses two constructs:
+  - Product types — all fields present simultaneously (data User = User String 
+  Int)
+  - Sum types — exactly one variant at a time (data Shape = Circle Float | 
+  Square Float)
+
+  Effect maps these to TypeScript:
+  FP concept: Product type
+  Effect construct: Schema.Struct or Schema.Class
+  TypeScript result: Plain object or class instance
+  ────────────────────────────────────────
+  FP concept: Sum type
+  Effect construct: Schema.Union of Schema.TaggedClass variants
+  TypeScript result: Discriminated union with _tag
+  ────────────────────────────────────────
+  FP concept: Branded primitive
+  Effect construct: Schema.brand()
+  TypeScript result: Nominal wrapper (prevents ID mixing)
+  Community consensus on Class vs Struct
+
+  From what I found across https://www.effect.solutions/data-modeling, the
+  https://effect.website/docs/schema/classes/,
+  https://dnlytras.com/blog/effect-ts, and
+  https://dev.to/gcanti/functional-design-algebraic-data-types-36kf, there are
+  two schools:
+
+  1. "Class-first" (Effect's official examples lean this way)
+
+  Use Schema.TaggedClass for every variant in a sum type. The _tag discriminant
+  + instanceof + Match.valueTags gives you the closest thing to real pattern
+  matching:
+
+  class Circle extends Schema.TaggedClass<Circle>()("Circle", { radius:
+  Schema.Number }) {}
+  class Square extends Schema.TaggedClass<Square>()("Square", { side:
+  Schema.Number }) {}
+  const Shape = Schema.Union(Circle, Square)
+
+  This is the ADT-as-classes pattern. Each variant is a Class, the union is the
+  sum type. You get exhaustive matching via Match, Equal trait for structural
+  equality, and _tag for discrimination. The
+  https://github.com/Effect-TS/effect/pull/4736 further simplifies this, showing
+   the community wants even less boilerplate for this pattern.
+
+  2. "Struct-default, Class-when-needed" (pragmatic camp)
+
+  Lytras captures this well: "I write my code using Effect-ts in an imperative 
+  way. It's inspired by functional libraries...but it's not dogmatic. If 
+  anything, sometimes using Classes is more convenient." Use Struct for plain
+  validated data, promote to Class only when you need behavior (getters,
+  methods) or nominal typing.
+
+  What this means for our codebase
+
+  Our schemas map cleanly to FP concepts:
+  ┌────────────────────┬─────────────┬─────────────────────────────────────────┐
+  │     Our schema     │ FP concept  │             Right construct             │
+  ├────────────────────┼─────────────┼─────────────────────────────────────────┤
+  │ CurveMethod        │             │ Already correct: Schema.Union of tagged │
+  │ (std_dev |         │             │  Structs. Could use TaggedClass if we   │
+  │ percentile |       │ Sum type    │ wanted Match integration, but we        │
+  │ absolute)          │             │ destructure on type field directly —    │
+  │                    │             │ works fine.                             │
+  ├────────────────────┼─────────────┼─────────────────────────────────────────┤
+  │ CheckOutcome (pass │ Sum type    │ Same — Schema.Union of tagged Structs.  │
+  │  | fail)           │             │                                         │
+  ├────────────────────┼─────────────┼─────────────────────────────────────────┤
+  │                    │ Product     │                                         │
+  │ JSONScores         │ type with   │ Schema.Class — correct, the one place   │
+  │                    │ derived     │ it earns its weight.                    │
+  │                    │ fields      │                                         │
+  ├────────────────────┼─────────────┼─────────────────────────────────────────┤
+  │ Curve,             │ Plain       │ Schema.Struct — no behavior, no         │
+  │ CurvedScores,      │ product     │ discrimination needed.                  │
+  │ ProblemScore, etc. │ types       │                                         │
+  └────────────────────┴─────────────┴─────────────────────────────────────────┘
+  The one place where the "Class-first" camp has a point we're not using: if we 
+  ever needed Match.valueTags exhaustive matching on CurveMethod or 
+  CheckOutcome, upgrading those union variants to TaggedClass would enable that.
+   But currently we switch on .type / .status with plain if — simpler and
+  sufficient.
+
+  Bottom line: The community is split, but the split aligns with whether you're
+  building an Effect-native application (where Match, Equal, _tag conventions
+  permeate everything) vs. using Effect Schema as a validation layer (our case).
+   For a validation/transformation layer, Struct-default is the pragmatic
+  choice.
+
+  Sources:
+  - https://www.effect.solutions/data-modeling
+  - https://effect.website/docs/schema/classes/
+  - https://dnlytras.com/blog/effect-ts
+  - https://dev.to/gcanti/functional-design-algebraic-data-types-36kf
+  - https://github.com/Effect-TS/effect/pull/4736
+  - https://effect.website/docs/data-types/data/
+  - https://github.com/Effect-TS/effect/issues/4762
+
+✻ Cooked for 1m 47s

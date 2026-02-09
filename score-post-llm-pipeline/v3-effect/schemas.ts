@@ -14,7 +14,7 @@
  * 4. COMPOSITION — CurvedScores wraps JSONScores (via source).
  *
  * Scope: JSONScores, CurvedScores, Curve, ProblemDimensionMap, ScorePool,
- * EventConfig (stub), and their dependencies.
+ * EventConfig, and their dependencies.
  */
 
 import { Schema, Option } from "effect";
@@ -397,18 +397,25 @@ export class ScorePool extends Schema.Class<ScorePool>("ScorePool")({
 }) {}
 
 // =============================================================================
-// 11. EventConfig — assessment event configuration (stub)
+// 11. EventConfig — assessment event configuration
+//
+// Defines an event's scoring context: which problems, which prompts,
+// which dimension mapping, and when the event took place.
 // =============================================================================
 
-/** TODO: define fields — assessment event setup and scoring parameters. */
 export class EventConfig extends Schema.Class<EventConfig>("EventConfig")({
   event_id: EventId,
+  problem_ids: Schema.NonEmptyArray(ProblemId),
+  prompt_snapshot: PromptSnapshot,
+  dimension_map: ProblemDimensionMap,
+  event_date: Schema.DateTimeUtc,
 }) {}
 
 // =============================================================================
 // Decode / Encode helpers
 // =============================================================================
 
+export const decodeEventConfig = Schema.decodeUnknownSync(EventConfig);
 export const decodePromptSnapshot = Schema.decodeUnknownSync(PromptSnapshot);
 export const decodeJSONScores = Schema.decodeUnknownSync(JSONScores);
 export const decodeCurvedScores = Schema.decodeUnknownSync(CurvedScores);

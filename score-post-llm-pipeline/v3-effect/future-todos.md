@@ -22,6 +22,21 @@ Context: Already implemented in `apply-curve.ts` as `checkCompatibility()`. Thre
 
 **Status**: Implemented. See `apply-curve.ts` lines 57–213.
 
+## Future TODOs
+
+### PromptSnapshot Key Completeness Validation
+
+How do we verify that a PromptSnapshot contains **all required keys** for its context (no missing keys) and **no extraneous keys** (no irrelevant entries)?
+
+Context: The current schema only enforces structural constraints — entries are sorted, keys are non-empty strings, sha256 values are valid hex. The key naming convention (`framework:{lang}:{name}`, `problem:{digitId}:{name}`) is documented but **not enforced**.
+
+All existing checks (`strictSetHash`, `perProblemComparison`, pool builder) compare two snapshots **against each other** (symmetric diff). If both snapshots share the same missing key, it goes unnoticed. There is no ground-truth validation that, for example:
+- Every problem in the dimension map has its required `problem:{digitId}:scoring` and `problem:{digitId}:task-eval` entries
+- All framework templates (`framework:zh:task-eval`, etc.) are present
+- No stale or irrelevant keys remain from a previous config
+
+**What's needed**: A `validateSnapshotKeys(snapshot, dimensionMap)` function that checks completeness against the dimension map's problem set and a known set of required framework keys. This would run at construction time (when building JSONScores or EventConfig), not just at comparison time.
+
 ---
 
 ## Q1 Analysis: ScorePool Assembly — Event-Centric Construction

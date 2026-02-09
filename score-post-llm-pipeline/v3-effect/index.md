@@ -17,11 +17,16 @@ Effect Schema implementation of the score post-LLM pipeline data types.
 | `test-data/curved-scores.json` | Generated output: full CurvedScores with problem grades, ability grades, overall grade |
 | `curve-application-analysis.md` | Analysis of how axiia-website currently applies curves: which scores get thresholds, execution order, what's not curved |
 | `prompt-locations.md` | Reference doc: where scoring prompts live in axiia-website, key naming convention for PromptSnapshot entries |
-| `open-questions.md` | Design questions: ScorePool assembly validation (Q1) and Curve–Score compatibility requirements (Q2), with proposed validation tiers |
+| `future-todos.md` | Future TODOs and design questions: PromptSnapshot key completeness validation, ScorePool assembly validation (Q1), Curve–Score compatibility requirements (Q2) |
 | `score-pool-builder.ts` | ScorePool construction functions (initPool, addScore, addEvent) with prompt snapshot and dimension map compatibility checks using Either for error handling |
 | `score-pool-builder-test.ts` | Runnable tests for score-pool-builder: happy path (init + addEvent + addScore), prompt mismatch rejection, dimmap mismatch rejection, duplicate score rejection |
+| `compute-curve.ts` | Edge 2 — COMPUTE: pure function `computeCurve(pool, method, label)` that statistically derives a Curve from a ScorePool using standard_deviation, percentile, or absolute methods |
+| `compute-curve-test.ts` | Runnable tests for compute-curve: all three CurveMethod variants, threshold ordering/variation checks, round-trip through applyCurve, writes computed-curve.json |
 | `partial-application-scenarios.md` | Catalog of all curve–score mismatch scenarios (S1–S8): which crash, which are meaningful for partial application, and what changes are needed |
 | `data-construction.md` | Step-by-step guide to constructing valid JSONScores (including PromptSnapshot set_hash computation) and assembling a ScorePool |
+| `test-data/computed-curve.json` | Generated output: Curve computed from a 6-student pool using standard_deviation method, with varying thresholds across problems and dimensions |
+| `pipeline-walkthrough.ts` | Annotated end-to-end tutorial script walking through all 4 pipeline edges (COLLECT → COMPUTE → CHECK → APPLY) with heavy comments explaining each Effect Schema pattern |
+| `test-data/walkthrough-output.json` | Generated output: CurvedScores produced by the walkthrough script's round-trip demonstration |
 
 ```mermaid
 graph LR
@@ -43,4 +48,18 @@ graph LR
     SPB -. "reuses strategy from" .-> AC
     F --> SPBT[score-pool-builder-test.ts]
     SPBT --> SPB
+    CC[compute-curve.ts] --> S
+    CC -. "Edge 2: COMPUTE" .-> SPB
+    F --> CCT[compute-curve-test.ts]
+    CCT --> CC
+    CCT --> SPB
+    CCT --> AC
+    CCT -. "writes" .-> CCJ[test-data/computed-curve.json]
+    PW[pipeline-walkthrough.ts] --> S
+    PW --> F
+    PW --> SPB
+    PW --> CC
+    PW --> AC
+    PW -. "reads" .-> SJ
+    PW -. "writes" .-> WOJ[test-data/walkthrough-output.json]
 ```
