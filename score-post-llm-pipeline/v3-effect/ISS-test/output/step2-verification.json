@@ -1,0 +1,3845 @@
+[
+  {
+    "participant": "chengming6@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.308,
+        "report": 0.308275641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.224,
+        "report": 0.2128571428571428,
+        "diff": 0.011,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.263,
+        "report": 0.2561614181745021,
+        "diff": 0.007,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.14,
+        "report": 0.14,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.325,
+        "report": 0.325,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.295,
+        "report": 0.295,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "chenshuo4@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.412,
+        "report": 0.4124775641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.533,
+        "report": 0.5266666666666667,
+        "diff": 0.007,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.469,
+        "report": 0.4660881716592728,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.29,
+        "report": 0.29,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.68,
+        "report": 0.6799999999999999,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.427,
+        "report": 0.4266666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.62,
+        "report": 0.62,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.65,
+        "report": 0.65,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "chensj19@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.408,
+        "report": 0.4082564102564103,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.504,
+        "report": 0.5078571428571429,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.454,
+        "report": 0.4553415575871964,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.515,
+        "report": 0.515,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.625,
+        "report": 0.625,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.51,
+        "report": 0.51,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.42,
+        "report": 0.42,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "chenwx17@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.397,
+        "report": 0.3974391025641025,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.483,
+        "report": 0.4816666666666666,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.438,
+        "report": 0.4375307620442735,
+        "diff": 0.001,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.325,
+        "report": 0.325,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.565,
+        "report": 0.565,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.507,
+        "report": 0.5066666666666666,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.57,
+        "report": 0.57,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "denglp6@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.296,
+        "report": 0.2956730769230769,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.164,
+        "report": 0.185952380952381,
+        "diff": 0.022,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.22,
+        "report": 0.2344805165410607,
+        "diff": 0.014,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.14,
+        "report": 0.14,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.205,
+        "report": 0.205,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.077,
+        "report": 0.07666666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "gaochen7@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.408,
+        "report": 0.4083461538461538,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.472,
+        "report": 0.4788095238095238,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.439,
+        "report": 0.4421764664390536,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.39,
+        "report": 0.39,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.6,
+        "report": 0.6,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.527,
+        "report": 0.5266666666666666,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.42,
+        "report": 0.42,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.425,
+        "report": 0.425,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liangjw5@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.58,
+        "report": 0.5797307692307693,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.44,
+        "report": 0.4642857142857143,
+        "diff": 0.024,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.505,
+        "report": 0.518807010636628,
+        "diff": 0.014,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.425,
+        "report": 0.425,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.525,
+        "report": 0.525,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "lijie44@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.421,
+        "report": 0.4209358974358974,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.528,
+        "report": 0.5202380952380953,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.472,
+        "report": 0.4679603503496739,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.6,
+        "report": 0.6000000000000001,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.477,
+        "report": 0.4766666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.55,
+        "report": 0.55,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.665,
+        "report": 0.665,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "lijre@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.441,
+        "report": 0.4411089743589743,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.355,
+        "report": 0.3592857142857143,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.396,
+        "report": 0.3981006819014544,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.29,
+        "report": 0.29,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.6,
+        "report": 0.6000000000000001,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.42,
+        "report": 0.42,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.265,
+        "report": 0.265,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "limy64@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.347,
+        "report": 0.3473589743589743,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.31,
+        "report": 0.3390476190476191,
+        "diff": 0.029,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.328,
+        "report": 0.3431781362663321,
+        "diff": 0.015,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.26,
+        "report": 0.26,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.485,
+        "report": 0.485,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.383,
+        "report": 0.3833333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.08,
+        "report": 0.08,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "list6@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.768,
+        "report": 0.7682083333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.537,
+        "report": 0.5211904761904762,
+        "diff": 0.015,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.642,
+        "report": 0.6327581426291503,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.325,
+        "report": 0.325,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.65,
+        "report": 0.65,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.393,
+        "report": 0.3933333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.6,
+        "report": 0.6,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.715,
+        "report": 0.7150000000000001,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liuht10@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.509,
+        "report": 0.5088878205128204,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.507,
+        "report": 0.4902380952380953,
+        "diff": 0.017,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.508,
+        "report": 0.4994759211594397,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.275,
+        "report": 0.275,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.517,
+        "report": 0.5166666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.58,
+        "report": 0.58,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.715,
+        "report": 0.7150000000000001,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liuhui46@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.325,
+        "report": 0.3253108974358974,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.413,
+        "report": 0.4335714285714286,
+        "diff": 0.021,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.367,
+        "report": 0.3755602621832288,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.325,
+        "report": 0.325,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.39,
+        "report": 0.39,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liund1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.275,
+        "report": 0.275,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.241,
+        "report": 0.2921428571428571,
+        "diff": 0.051,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.257,
+        "report": 0.283441855967473,
+        "diff": 0.026,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.14,
+        "report": 0.14,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.3,
+        "report": 0.3,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.1,
+        "report": 0.1,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.505,
+        "report": 0.505,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liuxy47@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.418,
+        "report": 0.4176858974358975,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.423,
+        "report": 0.4307142857142857,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.42,
+        "report": 0.4241500712802403,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.29,
+        "report": 0.29,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.365,
+        "report": 0.365,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.32,
+        "report": 0.32,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.58,
+        "report": 0.58,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.56,
+        "report": 0.56,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liuzw25@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.484,
+        "report": 0.4844391025641026,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.26,
+        "report": 0.2714285714285714,
+        "diff": 0.011,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.355,
+        "report": 0.3626163448510196,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.175,
+        "report": 0.175,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.125,
+        "report": 0.125,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.44,
+        "report": 0.4399999999999999,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liyao7@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.142,
+        "report": 0.1424679487179487,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.183,
+        "report": 0.2138095238095238,
+        "diff": 0.03,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.162,
+        "report": 0.1745308118170092,
+        "diff": 0.013,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.215,
+        "report": 0.215,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.26,
+        "report": 0.26,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.137,
+        "report": 0.1366666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.1,
+        "report": 0.1,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.205,
+        "report": 0.205,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "masy6@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.606,
+        "report": 0.6060833333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.372,
+        "report": 0.3969047619047619,
+        "diff": 0.025,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.475,
+        "report": 0.490466472973547,
+        "diff": 0.016,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.625,
+        "report": 0.625,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.393,
+        "report": 0.3933333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "qiji@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.487,
+        "report": 0.4869679487179487,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.172,
+        "report": 0.1947619047619047,
+        "diff": 0.023,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.289,
+        "report": 0.3079655910167648,
+        "diff": 0.019,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.165,
+        "report": 0.165,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.28,
+        "report": 0.28,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.113,
+        "report": 0.1133333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.13,
+        "report": 0.13,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.17,
+        "report": 0.17,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "rongdi1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.618,
+        "report": 0.6183076923076923,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.38,
+        "report": 0.4171428571428571,
+        "diff": 0.037,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.485,
+        "report": 0.507860844486595,
+        "diff": 0.023,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.24,
+        "report": 0.24,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.375,
+        "report": 0.375,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.26,
+        "report": 0.26,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.575,
+        "report": 0.575,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "shanyw1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.446,
+        "report": 0.4463525641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.589,
+        "report": 0.5869047619047619,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.513,
+        "report": 0.5118265774265688,
+        "diff": 0.001,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.525,
+        "report": 0.525,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.66,
+        "report": 0.6599999999999999,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.593,
+        "report": 0.5933333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.55,
+        "report": 0.55,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.615,
+        "report": 0.615,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "suhang1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.441,
+        "report": 0.4413942307692307,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.443,
+        "report": 0.4802380952380952,
+        "diff": 0.037,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.442,
+        "report": 0.4604066948185045,
+        "diff": 0.018,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.535,
+        "report": 0.5349999999999999,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.615,
+        "report": 0.615,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.467,
+        "report": 0.4666666666666666,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.13,
+        "report": 0.13,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.47,
+        "report": 0.47,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wandc2@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.355,
+        "report": 0.3552275641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.553,
+        "report": 0.5423809523809524,
+        "diff": 0.011,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.443,
+        "report": 0.4389403883557704,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.6,
+        "report": 0.6,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.517,
+        "report": 0.5166666666666666,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.6,
+        "report": 0.6,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.65,
+        "report": 0.6499999999999999,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wangrp1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.453,
+        "report": 0.4534102564102564,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.174,
+        "report": 0.189047619047619,
+        "diff": 0.015,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.281,
+        "report": 0.2927731706050427,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.14,
+        "report": 0.14,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.093,
+        "report": 0.09333333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.18,
+        "report": 0.18,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.255,
+        "report": 0.255,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wangxb21@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.319,
+        "report": 0.3185897435897436,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.458,
+        "report": 0.47,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.382,
+        "report": 0.3869588860424056,
+        "diff": 0.005,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.44,
+        "report": 0.4399999999999999,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.435,
+        "report": 0.435,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.4,
+        "report": 0.4000000000000001,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.48,
+        "report": 0.48,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.535,
+        "report": 0.535,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wangxy169@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.731,
+        "report": 0.7309423076923077,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.199,
+        "report": 0.2107142857142857,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.381,
+        "report": 0.3924538014387633,
+        "diff": 0.011,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.29,
+        "report": 0.29,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.18,
+        "report": 0.18,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.215,
+        "report": 0.215,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wangzh40@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.554,
+        "report": 0.5535641025641026,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.236,
+        "report": 0.2288095238095238,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.362,
+        "report": 0.3558942802374586,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.12,
+        "report": 0.12,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.165,
+        "report": 0.165,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.127,
+        "report": 0.1266666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.32,
+        "report": 0.32,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wangzy87@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.335,
+        "report": 0.3346891025641025,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.381,
+        "report": 0.3864285714285715,
+        "diff": 0.005,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.357,
+        "report": 0.3596295757811873,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.325,
+        "report": 0.325,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.39,
+        "report": 0.39,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wuch17@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.382,
+        "report": 0.3816442307692308,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.352,
+        "report": 0.3697619047619048,
+        "diff": 0.018,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.366,
+        "report": 0.3756560896759464,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.375,
+        "report": 0.375,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.333,
+        "report": 0.3333333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "wuwj6@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.328,
+        "report": 0.3275224358974358,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.201,
+        "report": 0.2126190476190476,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.256,
+        "report": 0.2638891971915171,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.225,
+        "report": 0.225,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.165,
+        "report": 0.165,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.153,
+        "report": 0.1533333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.22,
+        "report": 0.22,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.24,
+        "report": 0.24,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "xiatianb@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.306,
+        "report": 0.3055448717948718,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.361,
+        "report": 0.3471428571428571,
+        "diff": 0.014,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.332,
+        "report": 0.3256803951425688,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.31,
+        "report": 0.31,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.635,
+        "report": 0.635,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.36,
+        "report": 0.36,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "xiett8@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.392,
+        "report": 0.3922467948717948,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.372,
+        "report": 0.3897619047619048,
+        "diff": 0.018,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.382,
+        "report": 0.3910023758316347,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.425,
+        "report": 0.425,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.333,
+        "report": 0.3333333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "xingcr1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.355,
+        "report": 0.3553878205128205,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.493,
+        "report": 0.4878571428571429,
+        "diff": 0.005,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.419,
+        "report": 0.4163874238273915,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.515,
+        "report": 0.515,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.6,
+        "report": 0.6,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "xuyf18@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.482,
+        "report": 0.4817307692307692,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.234,
+        "report": 0.2426190476190476,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.336,
+        "report": 0.3418728717514165,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.115,
+        "report": 0.115,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.203,
+        "report": 0.2033333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.36,
+        "report": 0.36,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "xuzz2@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.375,
+        "report": 0.3747275641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.184,
+        "report": 0.1942857142857143,
+        "diff": 0.01,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.263,
+        "report": 0.2698225573487369,
+        "diff": 0.007,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.13,
+        "report": 0.13,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.215,
+        "report": 0.215,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.08,
+        "report": 0.08,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.295,
+        "report": 0.295,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "yangzh17@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.712,
+        "report": 0.7118878205128205,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.609,
+        "report": 0.6204761904761905,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.658,
+        "report": 0.6646122500512558,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.625,
+        "report": 0.625,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.725,
+        "report": 0.7250000000000001,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.593,
+        "report": 0.5933333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.65,
+        "report": 0.65,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "yyang28@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.436,
+        "report": 0.4356955128205128,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.525,
+        "report": 0.5211904761904762,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.478,
+        "report": 0.4765294868116524,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.475,
+        "report": 0.475,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.64,
+        "report": 0.64,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.483,
+        "report": 0.4833333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.575,
+        "report": 0.575,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "zhangjie56@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.46,
+        "report": 0.4596282051282051,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.415,
+        "report": 0.4771428571428571,
+        "diff": 0.062,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.437,
+        "report": 0.4683036568491805,
+        "diff": 0.032,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.3,
+        "report": 0.3,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.525,
+        "report": 0.525,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "zhangyp34@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.708,
+        "report": 0.70775,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.284,
+        "report": 0.305,
+        "diff": 0.021,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.448,
+        "report": 0.4646113967607768,
+        "diff": 0.016,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.265,
+        "report": 0.265,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.26,
+        "report": 0.26,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.345,
+        "report": 0.345,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "zhaohj16@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.342,
+        "report": 0.3420352564102563,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.464,
+        "report": 0.4769047619047619,
+        "diff": 0.013,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.398,
+        "report": 0.4038789948999174,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.585,
+        "report": 0.585,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.443,
+        "report": 0.4433333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.44,
+        "report": 0.44,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "zhouyr9@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.272,
+        "report": 0.2720384615384615,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.386,
+        "report": 0.3778571428571428,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.324,
+        "report": 0.3206114093792918,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.24,
+        "report": 0.24,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.54,
+        "report": 0.54,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.35,
+        "report": 0.35,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "ahashim2@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.237,
+        "report": 0.2365320512820512,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.126,
+        "report": 0.1433333333333333,
+        "diff": 0.018,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.172,
+        "report": 0.1841274758161512,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.09,
+        "report": 0.09,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.093,
+        "report": 0.09333333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.13,
+        "report": 0.13,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.165,
+        "report": 0.165,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "amcpeak@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.461,
+        "report": 0.4612435897435896,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.372,
+        "report": 0.3888095238095238,
+        "diff": 0.016,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.414,
+        "report": 0.4234806967128495,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.39,
+        "report": 0.39,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.307,
+        "report": 0.3066666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.4,
+        "report": 0.4,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.425,
+        "report": 0.425,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "aphillips4@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.36,
+        "report": 0.3604166666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.192,
+        "report": 0.2128571428571429,
+        "diff": 0.021,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.263,
+        "report": 0.2769788112920588,
+        "diff": 0.014,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "asingh91@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.509,
+        "report": 0.5086025641025641,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.524,
+        "report": 0.5176190476190476,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.516,
+        "report": 0.5130910005519244,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.59,
+        "report": 0.59,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.495,
+        "report": 0.495,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.423,
+        "report": 0.4233333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.63,
+        "report": 0.63,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.48,
+        "report": 0.48,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "chrisg@motorola.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.532,
+        "report": 0.5319294871794872,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.547,
+        "report": 0.5028571428571429,
+        "diff": 0.044,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.539,
+        "report": 0.5171890777312899,
+        "diff": 0.022,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.315,
+        "report": 0.315,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.75,
+        "report": 0.75,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.63,
+        "report": 0.63,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.59,
+        "report": 0.59,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "gpahlberg@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.555,
+        "report": 0.5554326923076923,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.419,
+        "report": 0.3888095238095238,
+        "diff": 0.031,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.483,
+        "report": 0.4647122987444981,
+        "diff": 0.018,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.3,
+        "report": 0.3,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.44,
+        "report": 0.44,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.277,
+        "report": 0.2766666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.58,
+        "report": 0.58,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "gpalanisamy@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.701,
+        "report": 0.7011955128205128,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.309,
+        "report": 0.3707142857142857,
+        "diff": 0.062,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.465,
+        "report": 0.509846245138001,
+        "diff": 0.044,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.18,
+        "report": 0.18,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.445,
+        "report": 0.445,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.21,
+        "report": 0.21,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.23,
+        "report": 0.23,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.48,
+        "report": 0.48,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "ipangracova@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.209,
+        "report": 0.2088461538461538,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.48,
+        "report": 0.4542857142857142,
+        "diff": 0.026,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.317,
+        "report": 0.3080191944925253,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.3,
+        "report": 0.3,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.525,
+        "report": 0.525,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.4,
+        "report": 0.4000000000000001,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.55,
+        "report": 0.55,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.625,
+        "report": 0.625,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "istanciu@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.272,
+        "report": 0.2719391025641025,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.172,
+        "report": 0.1819047619047619,
+        "diff": 0.01,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.216,
+        "report": 0.2224118200647567,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.09,
+        "report": 0.09,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.18,
+        "report": 0.18,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.093,
+        "report": 0.09333333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.345,
+        "report": 0.345,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "jtisnado@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.385,
+        "report": 0.3853301282051282,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.191,
+        "report": 0.2042857142857143,
+        "diff": 0.013,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.271,
+        "report": 0.2805662853519476,
+        "diff": 0.009,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.15,
+        "report": 0.15,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.21,
+        "report": 0.21,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.12,
+        "report": 0.12,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.18,
+        "report": 0.18,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.295,
+        "report": 0.295,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "liujy72@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.774,
+        "report": 0.7737083333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.265,
+        "report": 0.3033333333333333,
+        "diff": 0.039,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.453,
+        "report": 0.4844497164595906,
+        "diff": 0.032,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.255,
+        "report": 0.255,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.315,
+        "report": 0.315,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.183,
+        "report": 0.1833333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.23,
+        "report": 0.23,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "mbialoskorsk@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.457,
+        "report": 0.4565897435897436,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.369,
+        "report": 0.3897619047619047,
+        "diff": 0.021,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.41,
+        "report": 0.4218545817651956,
+        "diff": 0.012,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.465,
+        "report": 0.465,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.48,
+        "report": 0.48,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.383,
+        "report": 0.3833333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.315,
+        "report": 0.315,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "mbobus2@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.317,
+        "report": 0.3165865384615385,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.401,
+        "report": 0.3954761904761905,
+        "diff": 0.005,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.356,
+        "report": 0.3538395656039799,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.115,
+        "report": 0.115,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.47,
+        "report": 0.47,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.263,
+        "report": 0.2633333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.63,
+        "report": 0.63,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.525,
+        "report": 0.525,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "mszetyinszki@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.375,
+        "report": 0.3745224358974359,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.551,
+        "report": 0.5457142857142857,
+        "diff": 0.005,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.454,
+        "report": 0.4520865443582053,
+        "diff": 0.002,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.505,
+        "report": 0.505,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.655,
+        "report": 0.655,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.5,
+        "report": 0.5,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.58,
+        "report": 0.58,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.515,
+        "report": 0.515,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "myusoff3@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.286,
+        "report": 0.2856153846153846,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.2,
+        "report": 0.2326190476190476,
+        "diff": 0.033,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.239,
+        "report": 0.2577587607717316,
+        "diff": 0.019,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.23,
+        "report": 0.23,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.133,
+        "report": 0.1333333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.13,
+        "report": 0.13,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.255,
+        "report": 0.255,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "ngaur1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.685,
+        "report": 0.6850544871794872,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.259,
+        "report": 0.2621428571428571,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.421,
+        "report": 0.4237713305165483,
+        "diff": 0.003,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.195,
+        "report": 0.195,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.305,
+        "report": 0.305,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.16,
+        "report": 0.16,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.28,
+        "report": 0.28,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.355,
+        "report": 0.355,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "pkulkarni3@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.531,
+        "report": 0.5310961538461538,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.564,
+        "report": 0.5816666666666668,
+        "diff": 0.017,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.547,
+        "report": 0.5558065576144091,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.48,
+        "report": 0.48,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.7,
+        "report": 0.7,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.567,
+        "report": 0.5666666666666668,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.45,
+        "report": 0.45,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.625,
+        "report": 0.625,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "pr11@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.573,
+        "report": 0.5734711538461538,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.233,
+        "report": 0.2345238095238095,
+        "diff": 0.001,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.366,
+        "report": 0.3667323815154787,
+        "diff": 0.001,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.125,
+        "report": 0.125,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.34,
+        "report": 0.34,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.207,
+        "report": 0.2066666666666667,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.23,
+        "report": 0.23,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.265,
+        "report": 0.265,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "rchan5@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.304,
+        "report": 0.3038461538461539,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.389,
+        "report": 0.3807142857142857,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.344,
+        "report": 0.3401155265914384,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.665,
+        "report": 0.665,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.465,
+        "report": 0.465,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.37,
+        "report": 0.3699999999999999,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.245,
+        "report": 0.245,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "rsinghm@motorola.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.926,
+        "report": 0.925875,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.206,
+        "report": 0.2354761904761905,
+        "diff": 0.03,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.436,
+        "report": 0.4669277437218128,
+        "diff": 0.031,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.09,
+        "report": 0.09,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.33,
+        "report": 0.33,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.093,
+        "report": 0.09333333333333334,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.315,
+        "report": 0.315,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "sg2@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.42,
+        "report": 0.4204711538461539,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.2,
+        "report": 0.1919047619047619,
+        "diff": 0.008,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.29,
+        "report": 0.2840605862605136,
+        "diff": 0.006,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.165,
+        "report": 0.165,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.25,
+        "report": 0.25,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.103,
+        "report": 0.1033333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.28,
+        "report": 0.28,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.2,
+        "report": 0.2,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "participant": "sparimi1@lenovo.com",
+    "checks": [
+      {
+        "field": "taskEvalMean ↔ total_problem_score",
+        "derived": 0.305,
+        "report": 0.3050865384615384,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "abilityMean (report=7dim, derived=5dim)",
+        "derived": 0.254,
+        "report": 0.2461904761904762,
+        "diff": 0.007,
+        "pass": true
+      },
+      {
+        "field": "overallMean (report=7dim, derived=5dim)",
+        "derived": 0.278,
+        "report": 0.2740609424619826,
+        "diff": 0.004,
+        "pass": true
+      },
+      {
+        "field": "ability.discovery",
+        "derived": 0.24,
+        "report": 0.24,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.representation",
+        "derived": 0.19,
+        "report": 0.19,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.iterative-refinement",
+        "derived": 0.143,
+        "report": 0.1433333333333333,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.exploratory",
+        "derived": 0.38,
+        "report": 0.38,
+        "diff": 0,
+        "pass": true
+      },
+      {
+        "field": "ability.self-verification",
+        "derived": 0.315,
+        "report": 0.315,
+        "diff": 0,
+        "pass": true
+      }
+    ]
+  }
+]

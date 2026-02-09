@@ -102,11 +102,11 @@ export type EventId = typeof EventId.Type;
 // =============================================================================
 
 export const DIMENSIONS = [
-  "Discovery-Self-Understanding",
-  "Expression-Translation",
-  "Exploratory-Discovery",
-  "Verification-Confirmation",
-  "Iterative-Optimization",
+  "discovery",
+  "representation",
+  "iterative-refinement",
+  "exploratory",
+  "self-verification",
 ] as const;
 
 export const Dimension = Schema.Literal(...DIMENSIONS);
@@ -420,5 +420,14 @@ export const decodePromptSnapshot = Schema.decodeUnknownSync(PromptSnapshot);
 export const decodeJSONScores = Schema.decodeUnknownSync(JSONScores);
 export const decodeCurvedScores = Schema.decodeUnknownSync(CurvedScores);
 export const decodeCurve = Schema.decodeUnknownSync(Curve);
+export const decodeScorePool = Schema.decodeUnknownSync(ScorePool);
 export const decodeProblemDimensionMap =
   Schema.decodeUnknownSync(ProblemDimensionMap);
+
+export const encodeEventConfig = Schema.encodeSync(EventConfig);
+export const encodePromptSnapshot = Schema.encodeSync(PromptSnapshot);
+export const encodeJSONScores = Schema.encodeSync(JSONScores);
+export const encodeCurvedScores = Schema.encodeSync(CurvedScores);
+export const encodeCurve = Schema.encodeSync(Curve);
+export const encodeScorePool = Schema.encodeSync(ScorePool);
+export const encodeProblemDimensionMap = Schema.encodeSync(ProblemDimensionMap);

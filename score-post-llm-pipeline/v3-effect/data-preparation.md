@@ -17,11 +17,11 @@ How to prepare raw JSON data for the v3-effect pipeline. All data enters as plai
       "problem_id": { "digit": "000340", "name": "meeting-verify" },
       "task_score": 0.80,
       "dimension_scores": {
-        "Discovery-Self-Understanding": 0.85,
-        "Expression-Translation": 0.78,
-        "Exploratory-Discovery": 0.72,
-        "Verification-Confirmation": null,
-        "Iterative-Optimization": null
+        "discovery": 0.85,
+        "representation": 0.78,
+        "iterative-refinement": null,
+        "exploratory": 0.72,
+        "self-verification": null
       }
     }
   ]
@@ -61,7 +61,7 @@ How to prepare raw JSON data for the v3-effect pipeline. All data enters as plai
   "entries": [
     {
       "problem_id": { "digit": "000340", "name": "meeting-verify" },
-      "dimensions": ["Discovery-Self-Understanding", "Expression-Translation", "Exploratory-Discovery"]
+      "dimensions": ["discovery", "exploratory", "representation"]
     }
   ]
 }
@@ -96,7 +96,7 @@ const raw = JSON.parse(fs.readFileSync("scores.json", "utf-8"));
 const scores = decodeJSONScores(raw);
 
 // 3. Encode back → plain JSON (strips derived getters, converts DateTimeUtc → ISO string)
-const encoded = Schema.encodeSync(JSONScoresSchema)(scores);
+const encoded = encodeJSONScores(scores);
 ```
 
 ## What Decode Does
@@ -125,8 +125,8 @@ These are **stripped on encode** — they never appear in stored JSON.
 When re-encoding decoded objects that contain `DateTimeUtc` fields (e.g. `PromptSnapshot`, `ProblemDimensionMap`), always use `Schema.encodeSync`:
 
 ```typescript
-const rawSnapshot = Schema.encodeSync(PromptSnapshot)(decodedSnapshot);
-const rawDimMap = Schema.encodeSync(ProblemDimensionMap)(decodedDimMap);
+const rawSnapshot = encodePromptSnapshot(decodedSnapshot);
+const rawDimMap = encodeProblemDimensionMap(decodedDimMap);
 ```
 
 Never use `.toString()` on `DateTimeUtc` — it produces `DateTime.Utc(...)` format which fails decoding.

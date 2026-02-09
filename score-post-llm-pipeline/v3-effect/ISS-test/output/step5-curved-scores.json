@@ -1,0 +1,5546 @@
+[
+  {
+    "participant_id": "chengming6@lenovo.com",
+    "curved_scores_id": "fc599ecf-1353-4162-89c9-3aa1318fbcb1",
+    "overall_grade": "D",
+    "overall_mean": 0.263,
+    "total_problem_score": 0.308,
+    "total_ability_score": 0.224,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.14,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.325,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.295,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "chenshuo4@lenovo.com",
+    "curved_scores_id": "359a1f4f-38f0-4671-aa48-452cdee8130f",
+    "overall_grade": "B",
+    "overall_mean": 0.469,
+    "total_problem_score": 0.412,
+    "total_ability_score": 0.533,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.29,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.68,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.427,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.62,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.65,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "chensj19@lenovo.com",
+    "curved_scores_id": "d5d7a8f5-fa2e-4e76-8da7-f7bc14764050",
+    "overall_grade": "B",
+    "overall_mean": 0.454,
+    "total_problem_score": 0.408,
+    "total_ability_score": 0.504,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.515,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.625,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.51,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.42,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "chenwx17@lenovo.com",
+    "curved_scores_id": "87f965e1-a78e-4420-8759-72bff507f5a4",
+    "overall_grade": "B",
+    "overall_mean": 0.438,
+    "total_problem_score": 0.397,
+    "total_ability_score": 0.483,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.325,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.565,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.507,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.57,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "denglp6@lenovo.com",
+    "curved_scores_id": "e4296068-eb8e-4c0c-99c5-113235fe759b",
+    "overall_grade": "D",
+    "overall_mean": 0.22,
+    "total_problem_score": 0.296,
+    "total_ability_score": 0.164,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.14,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.205,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.077,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.25,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "gaochen7@lenovo.com",
+    "curved_scores_id": "329a6f8f-5d1e-4650-b022-5961a6917feb",
+    "overall_grade": "B",
+    "overall_mean": 0.439,
+    "total_problem_score": 0.408,
+    "total_ability_score": 0.472,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.39,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.6,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.527,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.42,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.425,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liangjw5@lenovo.com",
+    "curved_scores_id": "d9a754fd-28ac-4b22-a311-0bdbec612840",
+    "overall_grade": "A",
+    "overall_mean": 0.505,
+    "total_problem_score": 0.58,
+    "total_ability_score": 0.44,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.425,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.525,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.4,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "lijie44@lenovo.com",
+    "curved_scores_id": "c5e4273e-62bd-43c0-ba01-3b909b9c894f",
+    "overall_grade": "B",
+    "overall_mean": 0.472,
+    "total_problem_score": 0.421,
+    "total_ability_score": 0.528,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.35,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.6,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.477,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.55,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.665,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "lijre@lenovo.com",
+    "curved_scores_id": "0309f47f-d980-4c88-82db-b8726746c2e4",
+    "overall_grade": "B",
+    "overall_mean": 0.396,
+    "total_problem_score": 0.441,
+    "total_ability_score": 0.355,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.29,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.6,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.42,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.265,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "limy64@lenovo.com",
+    "curved_scores_id": "e805ff1f-7ab7-4992-bf30-87b8fc266b0d",
+    "overall_grade": "C",
+    "overall_mean": 0.328,
+    "total_problem_score": 0.347,
+    "total_ability_score": 0.31,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.26,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.485,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.383,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.08,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.34,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "list6@lenovo.com",
+    "curved_scores_id": "fc9a2f8a-0104-466a-912f-ecb9a825c583",
+    "overall_grade": "A",
+    "overall_mean": 0.642,
+    "total_problem_score": 0.768,
+    "total_ability_score": 0.537,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.325,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.65,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.393,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.6,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.715,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liuht10@lenovo.com",
+    "curved_scores_id": "d9fa68e8-d2fd-408f-84a3-768334d5c9c2",
+    "overall_grade": "A",
+    "overall_mean": 0.508,
+    "total_problem_score": 0.509,
+    "total_ability_score": 0.507,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.275,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.517,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.58,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.715,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liuhui46@lenovo.com",
+    "curved_scores_id": "86d0598f-a94a-4df7-971f-f231b5ab77c0",
+    "overall_grade": "C",
+    "overall_mean": 0.367,
+    "total_problem_score": 0.325,
+    "total_ability_score": 0.413,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.325,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.39,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.5,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liund1@lenovo.com",
+    "curved_scores_id": "7a50b053-048e-4ece-bc08-faf8f23ed96f",
+    "overall_grade": "D",
+    "overall_mean": 0.257,
+    "total_problem_score": 0.275,
+    "total_ability_score": 0.241,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.14,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.3,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.1,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.505,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liuxy47@lenovo.com",
+    "curved_scores_id": "67a7651b-8ab0-4bf7-9ac2-5523062200e1",
+    "overall_grade": "B",
+    "overall_mean": 0.42,
+    "total_problem_score": 0.418,
+    "total_ability_score": 0.423,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.29,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.365,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.32,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.58,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.56,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liuzw25@lenovo.com",
+    "curved_scores_id": "85258c0d-388f-4265-b63f-02f0cd4ba1d8",
+    "overall_grade": "C",
+    "overall_mean": 0.355,
+    "total_problem_score": 0.484,
+    "total_ability_score": 0.26,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.175,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.125,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.44,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liyao7@lenovo.com",
+    "curved_scores_id": "7aec47ec-1000-4e1b-9ffb-ffbd043d8f0d",
+    "overall_grade": "D",
+    "overall_mean": 0.162,
+    "total_problem_score": 0.142,
+    "total_ability_score": 0.183,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.215,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.26,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.137,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.1,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.205,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "masy6@lenovo.com",
+    "curved_scores_id": "7872702f-6667-4ddb-b0c6-7b45a3b9f92e",
+    "overall_grade": "B",
+    "overall_mean": 0.475,
+    "total_problem_score": 0.606,
+    "total_ability_score": 0.372,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.34,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.625,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.393,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.35,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "qiji@lenovo.com",
+    "curved_scores_id": "6f54fdbe-42e8-46c0-b55a-315912a15ac0",
+    "overall_grade": "C",
+    "overall_mean": 0.289,
+    "total_problem_score": 0.487,
+    "total_ability_score": 0.172,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.165,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.28,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.113,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.13,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.17,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "rongdi1@lenovo.com",
+    "curved_scores_id": "3de83215-e8db-4002-a1a5-d230ab0ef7a7",
+    "overall_grade": "B",
+    "overall_mean": 0.485,
+    "total_problem_score": 0.618,
+    "total_ability_score": 0.38,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.24,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.375,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.26,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.575,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "shanyw1@lenovo.com",
+    "curved_scores_id": "dcead449-f6c2-4bd2-9310-de3aad6ca612",
+    "overall_grade": "A",
+    "overall_mean": 0.513,
+    "total_problem_score": 0.446,
+    "total_ability_score": 0.589,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.525,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.66,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.593,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.55,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.615,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "suhang1@lenovo.com",
+    "curved_scores_id": "af879af4-66cf-496e-9060-6c547a53e1da",
+    "overall_grade": "B",
+    "overall_mean": 0.442,
+    "total_problem_score": 0.441,
+    "total_ability_score": 0.443,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.535,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.615,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.467,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.13,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.47,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wandc2@lenovo.com",
+    "curved_scores_id": "22a803f4-7cad-431a-86ba-cd981aacfcf2",
+    "overall_grade": "B",
+    "overall_mean": 0.443,
+    "total_problem_score": 0.355,
+    "total_ability_score": 0.553,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.6,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.517,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.6,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.65,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wangrp1@lenovo.com",
+    "curved_scores_id": "00fea7c8-f749-4e5f-aa6b-677eb17172fe",
+    "overall_grade": "D",
+    "overall_mean": 0.281,
+    "total_problem_score": 0.453,
+    "total_ability_score": 0.174,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.14,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.2,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.093,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.18,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.255,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wangxb21@lenovo.com",
+    "curved_scores_id": "6cad5614-9910-4308-906a-069236f416da",
+    "overall_grade": "C",
+    "overall_mean": 0.382,
+    "total_problem_score": 0.319,
+    "total_ability_score": 0.458,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.44,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.435,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.48,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.535,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wangxy169@lenovo.com",
+    "curved_scores_id": "18a745d5-07ab-42e4-91aa-498159194698",
+    "overall_grade": "C",
+    "overall_mean": 0.381,
+    "total_problem_score": 0.731,
+    "total_ability_score": 0.199,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.29,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.18,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.215,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wangzh40@lenovo.com",
+    "curved_scores_id": "5b55b275-41c2-432a-b3ba-3cecaf04428e",
+    "overall_grade": "C",
+    "overall_mean": 0.362,
+    "total_problem_score": 0.554,
+    "total_ability_score": 0.236,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.12,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.165,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.127,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.32,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wangzy87@lenovo.com",
+    "curved_scores_id": "8ed7447c-68ac-40ed-b8b3-5e144cde429b",
+    "overall_grade": "C",
+    "overall_mean": 0.357,
+    "total_problem_score": 0.335,
+    "total_ability_score": 0.381,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.325,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.5,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.34,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.35,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.39,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wuch17@lenovo.com",
+    "curved_scores_id": "f0e9793c-9124-4f40-b32f-b2388a704cae",
+    "overall_grade": "C",
+    "overall_mean": 0.366,
+    "total_problem_score": 0.382,
+    "total_ability_score": 0.352,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.375,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.333,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.25,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.4,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "wuwj6@lenovo.com",
+    "curved_scores_id": "39ed951a-33fb-46d8-adf9-90ec42c08c21",
+    "overall_grade": "D",
+    "overall_mean": 0.256,
+    "total_problem_score": 0.328,
+    "total_ability_score": 0.201,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.225,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.165,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.153,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.22,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.24,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "xiatianb@lenovo.com",
+    "curved_scores_id": "367d1acd-c1fc-4178-b041-8cc6b0b40f7b",
+    "overall_grade": "C",
+    "overall_mean": 0.332,
+    "total_problem_score": 0.306,
+    "total_ability_score": 0.361,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.31,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.635,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.36,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.25,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.25,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "xiett8@lenovo.com",
+    "curved_scores_id": "b0579146-47bf-460a-b8d4-49f243b92b54",
+    "overall_grade": "C",
+    "overall_mean": 0.382,
+    "total_problem_score": 0.392,
+    "total_ability_score": 0.372,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.425,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.5,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.333,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.35,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.25,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "xingcr1@lenovo.com",
+    "curved_scores_id": "a7fc51c5-9c71-4ddb-bc23-a76a1fa25da4",
+    "overall_grade": "B",
+    "overall_mean": 0.419,
+    "total_problem_score": 0.355,
+    "total_ability_score": 0.493,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.515,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.6,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.5,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "xuyf18@lenovo.com",
+    "curved_scores_id": "133276de-c505-4c13-89a0-616d146bc987",
+    "overall_grade": "C",
+    "overall_mean": 0.336,
+    "total_problem_score": 0.482,
+    "total_ability_score": 0.234,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.115,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.34,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.203,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.36,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "xuzz2@lenovo.com",
+    "curved_scores_id": "1a22be6e-94d2-4325-96be-661419c8de09",
+    "overall_grade": "D",
+    "overall_mean": 0.263,
+    "total_problem_score": 0.375,
+    "total_ability_score": 0.184,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.13,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.215,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.08,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.295,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "yangzh17@lenovo.com",
+    "curved_scores_id": "043efb6c-b3cf-4e93-92ec-433492a1f249",
+    "overall_grade": "A",
+    "overall_mean": 0.658,
+    "total_problem_score": 0.712,
+    "total_ability_score": 0.609,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.625,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.725,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.593,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.65,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "yyang28@lenovo.com",
+    "curved_scores_id": "67690669-fa96-4d2e-8466-99b4c7d9dd72",
+    "overall_grade": "B",
+    "overall_mean": 0.478,
+    "total_problem_score": 0.436,
+    "total_ability_score": 0.525,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.475,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.64,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.483,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.575,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "zhangjie56@lenovo.com",
+    "curved_scores_id": "df50bb13-e307-4d45-9847-40a65f946cc0",
+    "overall_grade": "B",
+    "overall_mean": 0.437,
+    "total_problem_score": 0.46,
+    "total_ability_score": 0.415,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.3,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.525,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "zhangyp34@lenovo.com",
+    "curved_scores_id": "0ef29a2a-7a7a-49c2-8556-bdefd7851b2f",
+    "overall_grade": "B",
+    "overall_mean": 0.448,
+    "total_problem_score": 0.708,
+    "total_ability_score": 0.284,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.265,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.35,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.26,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.345,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "zhaohj16@lenovo.com",
+    "curved_scores_id": "1346c798-a2e7-41ab-82b7-8a5db2a24bea",
+    "overall_grade": "B",
+    "overall_mean": 0.398,
+    "total_problem_score": 0.342,
+    "total_ability_score": 0.464,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.585,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.443,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.44,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "zhouyr9@lenovo.com",
+    "curved_scores_id": "6de99353-53fa-482f-8b75-0bb3a0a623ae",
+    "overall_grade": "C",
+    "overall_mean": 0.324,
+    "total_problem_score": 0.272,
+    "total_ability_score": 0.386,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.24,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.54,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.35,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.4,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "ahashim2@lenovo.com",
+    "curved_scores_id": "266d5fd8-bf8d-48ae-8403-2f120aac59b1",
+    "overall_grade": "D",
+    "overall_mean": 0.172,
+    "total_problem_score": 0.237,
+    "total_ability_score": 0.126,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.09,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.093,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.13,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.165,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "amcpeak@lenovo.com",
+    "curved_scores_id": "367f0a60-9d98-4aa5-9b7f-ed4b57d037bd",
+    "overall_grade": "B",
+    "overall_mean": 0.414,
+    "total_problem_score": 0.461,
+    "total_ability_score": 0.372,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.34,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.39,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.307,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.425,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "aphillips4@lenovo.com",
+    "curved_scores_id": "0e92281e-30cd-4ff0-b671-83c0f09f95da",
+    "overall_grade": "D",
+    "overall_mean": 0.263,
+    "total_problem_score": 0.36,
+    "total_ability_score": 0.192,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.2,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.25,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.2,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "asingh91@lenovo.com",
+    "curved_scores_id": "b22bcafd-af16-4e31-accf-e6c93cb441ef",
+    "overall_grade": "A",
+    "overall_mean": 0.516,
+    "total_problem_score": 0.509,
+    "total_ability_score": 0.524,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.59,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.495,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.423,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.63,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.48,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "chrisg@motorola.com",
+    "curved_scores_id": "f33e7fc6-7046-41c8-935d-5c2c3a942687",
+    "overall_grade": "A",
+    "overall_mean": 0.539,
+    "total_problem_score": 0.532,
+    "total_ability_score": 0.547,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.315,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.75,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.63,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.59,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "gpahlberg@lenovo.com",
+    "curved_scores_id": "c41c598c-5ec0-4fdd-aa4f-5eb9a27ef674",
+    "overall_grade": "B",
+    "overall_mean": 0.483,
+    "total_problem_score": 0.555,
+    "total_ability_score": 0.419,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.3,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.44,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.277,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.58,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.5,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "gpalanisamy@lenovo.com",
+    "curved_scores_id": "5b0066f0-718f-4fec-9691-a7a742ce9bfd",
+    "overall_grade": "B",
+    "overall_mean": 0.465,
+    "total_problem_score": 0.701,
+    "total_ability_score": 0.309,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.18,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.445,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.21,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.23,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.48,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "ipangracova@lenovo.com",
+    "curved_scores_id": "6fe40dd2-2d55-43ef-900a-adbfb96897ba",
+    "overall_grade": "C",
+    "overall_mean": 0.317,
+    "total_problem_score": 0.209,
+    "total_ability_score": 0.48,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.3,
+        "grade": "B"
+      },
+      "representation": {
+        "score": 0.525,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.4,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.55,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.625,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "istanciu@lenovo.com",
+    "curved_scores_id": "a3f9afa9-b5c1-48cb-ad41-50c8cbaa634d",
+    "overall_grade": "D",
+    "overall_mean": 0.216,
+    "total_problem_score": 0.272,
+    "total_ability_score": 0.172,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.09,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.18,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.093,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.345,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "jtisnado@lenovo.com",
+    "curved_scores_id": "76ad9454-04a0-427c-91d6-5f7756f0de3d",
+    "overall_grade": "D",
+    "overall_mean": 0.271,
+    "total_problem_score": 0.385,
+    "total_ability_score": 0.191,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.15,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.21,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.12,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.18,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.295,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "liujy72@lenovo.com",
+    "curved_scores_id": "3ad490b5-a96c-4041-b349-d0562e2c89a2",
+    "overall_grade": "B",
+    "overall_mean": 0.453,
+    "total_problem_score": 0.774,
+    "total_ability_score": 0.265,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.255,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.315,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.183,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.23,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.34,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "mbialoskorsk@lenovo.com",
+    "curved_scores_id": "821e555e-d67e-427f-90fc-0b1fa8838b8d",
+    "overall_grade": "B",
+    "overall_mean": 0.41,
+    "total_problem_score": 0.457,
+    "total_ability_score": 0.369,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.465,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.48,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.383,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.315,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "mbobus2@lenovo.com",
+    "curved_scores_id": "0c1b469e-cb93-4735-ad13-a91ef1f40a98",
+    "overall_grade": "C",
+    "overall_mean": 0.356,
+    "total_problem_score": 0.317,
+    "total_ability_score": 0.401,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.115,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.47,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.263,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.63,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.525,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "mszetyinszki@lenovo.com",
+    "curved_scores_id": "fe324433-19c6-4caf-81d7-5b06da58551b",
+    "overall_grade": "B",
+    "overall_mean": 0.454,
+    "total_problem_score": 0.375,
+    "total_ability_score": 0.551,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.505,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.655,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.5,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.58,
+        "grade": "A"
+      },
+      "self-verification": {
+        "score": 0.515,
+        "grade": "B"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "A",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "B",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "myusoff3@lenovo.com",
+    "curved_scores_id": "2f32904d-b5bf-4089-b029-05a03116e29f",
+    "overall_grade": "D",
+    "overall_mean": 0.239,
+    "total_problem_score": 0.286,
+    "total_ability_score": 0.2,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.25,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.23,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.133,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.13,
+        "grade": "D"
+      },
+      "self-verification": {
+        "score": 0.255,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "D",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "ngaur1@lenovo.com",
+    "curved_scores_id": "7ee8784b-f172-4f91-8f5c-d3ec0f07c8f3",
+    "overall_grade": "B",
+    "overall_mean": 0.421,
+    "total_problem_score": 0.685,
+    "total_ability_score": 0.259,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.195,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.305,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.16,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.28,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.355,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "pkulkarni3@lenovo.com",
+    "curved_scores_id": "13fb45c8-0fe1-42b0-ad68-71b6f8f9e524",
+    "overall_grade": "A",
+    "overall_mean": 0.547,
+    "total_problem_score": 0.531,
+    "total_ability_score": 0.564,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.48,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.7,
+        "grade": "A"
+      },
+      "iterative-refinement": {
+        "score": 0.567,
+        "grade": "A"
+      },
+      "exploratory": {
+        "score": 0.45,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.625,
+        "grade": "A"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "A"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "pr11@lenovo.com",
+    "curved_scores_id": "d41cae62-9c15-4de6-a832-bb6cda838ebc",
+    "overall_grade": "C",
+    "overall_mean": 0.366,
+    "total_problem_score": 0.573,
+    "total_ability_score": 0.233,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.125,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.34,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.207,
+        "grade": "C"
+      },
+      "exploratory": {
+        "score": 0.23,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.265,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "C",
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "rchan5@lenovo.com",
+    "curved_scores_id": "16d9f002-3c17-4fcc-a083-9e9fae50d6b8",
+    "overall_grade": "C",
+    "overall_mean": 0.344,
+    "total_problem_score": 0.304,
+    "total_ability_score": 0.389,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.665,
+        "grade": "A"
+      },
+      "representation": {
+        "score": 0.465,
+        "grade": "B"
+      },
+      "iterative-refinement": {
+        "score": 0.37,
+        "grade": "B"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.245,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": null,
+          "iterative-refinement": "B",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "A",
+          "representation": "A",
+          "iterative-refinement": "A",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "rsinghm@motorola.com",
+    "curved_scores_id": "e0e84d23-5fe1-450c-a829-d7f14776bc9f",
+    "overall_grade": "B",
+    "overall_mean": 0.436,
+    "total_problem_score": 0.926,
+    "total_ability_score": 0.206,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.09,
+        "grade": "D"
+      },
+      "representation": {
+        "score": 0.33,
+        "grade": "C"
+      },
+      "iterative-refinement": {
+        "score": 0.093,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.2,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.315,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "sg2@lenovo.com",
+    "curved_scores_id": "f4f6aca6-1084-4cda-8887-f8e942b31729",
+    "overall_grade": "C",
+    "overall_mean": 0.29,
+    "total_problem_score": 0.42,
+    "total_ability_score": 0.2,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.165,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.25,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.103,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.28,
+        "grade": "C"
+      },
+      "self-verification": {
+        "score": 0.2,
+        "grade": "D"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": null,
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "A",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "C",
+          "self-verification": "C"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "C",
+          "representation": "C",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  },
+  {
+    "participant_id": "sparimi1@lenovo.com",
+    "curved_scores_id": "c1de3fbc-d8f3-45fe-83fb-08d428c4ad74",
+    "overall_grade": "D",
+    "overall_mean": 0.278,
+    "total_problem_score": 0.305,
+    "total_ability_score": 0.254,
+    "ability_grades": {
+      "discovery": {
+        "score": 0.24,
+        "grade": "C"
+      },
+      "representation": {
+        "score": 0.19,
+        "grade": "D"
+      },
+      "iterative-refinement": {
+        "score": 0.143,
+        "grade": "D"
+      },
+      "exploratory": {
+        "score": 0.38,
+        "grade": "B"
+      },
+      "self-verification": {
+        "score": 0.315,
+        "grade": "C"
+      }
+    },
+    "problem_grades": [
+      {
+        "problem_id": {
+          "digit": "000341",
+          "name": "meeting-verify"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": "D"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "000501",
+          "name": "thinking-traps"
+        },
+        "task_grade": "B",
+        "dimension_grades": {
+          "discovery": "B",
+          "representation": null,
+          "iterative-refinement": "C",
+          "exploratory": null,
+          "self-verification": null
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001001",
+          "name": "ling-bing"
+        },
+        "task_grade": "D",
+        "dimension_grades": {
+          "discovery": null,
+          "representation": null,
+          "iterative-refinement": null,
+          "exploratory": "B",
+          "self-verification": "B"
+        }
+      },
+      {
+        "problem_id": {
+          "digit": "001111",
+          "name": "operationalize"
+        },
+        "task_grade": "C",
+        "dimension_grades": {
+          "discovery": "D",
+          "representation": "D",
+          "iterative-refinement": "D",
+          "exploratory": null,
+          "self-verification": null
+        }
+      }
+    ]
+  }
+]
