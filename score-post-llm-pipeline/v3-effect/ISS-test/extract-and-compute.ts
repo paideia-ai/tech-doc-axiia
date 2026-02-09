@@ -104,11 +104,6 @@ const SYNTHETIC_NOW = "2024-06-10T00:00:00.000Z";
 
 function buildSyntheticPromptSnapshot() {
   // Build plausible entries sorted by key
-  // Keys mirror the file hierarchy: prompts/{type}/{scope}/{name}.ext → {type}:{scope}:{name}
-  const problemFolderIds = Object.entries(PROBLEM_NAMES)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([digit, name]) => `${digit}-${name}`);
-
   const entryKeys = [
     "framework:en:ability-summary",
     "framework:en:expert-review",
@@ -116,10 +111,14 @@ function buildSyntheticPromptSnapshot() {
     "framework:zh:ability-summary",
     "framework:zh:expert-review",
     "framework:zh:task-eval",
-    ...problemFolderIds.flatMap((fid) => [
-      `problems:${fid}:scoring`,
-      `problems:${fid}:task-eval`,
-    ]),
+    "problem:000341:scoring",
+    "problem:000341:task-eval",
+    "problem:000501:scoring",
+    "problem:000501:task-eval",
+    "problem:001001:scoring",
+    "problem:001001:task-eval",
+    "problem:001111:scoring",
+    "problem:001111:task-eval",
   ];
 
   const entries = entryKeys.map((key) => ({

@@ -1,5 +1,5 @@
 {
-  "curve_id": "af11f42b-5455-4c7a-82cd-30d34f01c8da",
+  "curve_id": "d6eead1d-4611-47db-b915-fba999bc0975",
   "label": "ISS 2024 Curve (5-dim, from reports)",
   "source_event_ids": [
     "ISS-2024"
@@ -67,7 +67,7 @@
     ]
   },
   "dimension_map": {
-    "map_id": "1506fcfe-7a65-4cb9-8e6d-3438862f3003",
+    "map_id": "304f2aac-ebc5-4fac-9471-d2a3b3779dce",
     "label": "ISS 2024 Assessment (5-dim)",
     "created_at": "2024-06-10T00:00:00.000Z",
     "entries": [
