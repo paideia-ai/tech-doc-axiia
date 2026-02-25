@@ -103,3 +103,108 @@ Applying the same thresholds to the parent is mathematically valid but statistic
 **The repo's answer**: Curve children independently, curve the final aggregate independently, don't enforce cross-level consistency. This is the most statistically principled approach.
 
 The key insight: **"only curve B, C, D and compute A" works perfectly** — as long as A's grade threshold is computed from A's own score distribution, not borrowed from the children.
+
+---
+
+## Adding a New Problem: What Happens to the Overall Curve?
+
+### Scenario
+
+```
+Old exam:  P1, P2, P3       → curve_v1 covers problem_curves[P1,P2,P3] + overall_mean
+New exam:  P1, P2, P3, P4   → P1,P2,P3 curves still valid, P4 has no curve
+```
+
+Per-problem curves for P1, P2, P3 are still valid — each problem's score distribution hasn't changed. But `overall_mean` was computed from `avg(P1,P2,P3)`. Now total is `avg(P1,P2,P3,P4)` — different distribution, old threshold is invalid.
+
+### Solution: Lock the overall score's scope to the curve's coverage
+
+The overall score should be computed from **only the problems the curve covers**, not all problems in the exam.
+
+```
+New exam: P1, P2, P3, P4
+                │
+                ▼
+        Apply old curve_v1
+                │
+        ┌───────┴───────┐
+        │               │
+  P1,P2,P3: has curve  P4: no curve
+  → grade each ✓       → grade = null
+        │
+        ▼
+  A_score = avg(P1, P2, P3)     ← only graded subset
+  Apply old overall_mean threshold
+  → A_grade ✓   (scope matches: threshold was computed from same 3-problem avg)
+```
+
+This is the approach proposed in `partial-application-scenarios.md:171-175`:
+
+> With partial application, [aggregates] should be computed from the **graded subset** only (problems that had curve entries). Same formulas, narrower input.
+
+### Why this is valid
+
+The old `overall_mean` threshold was computed from the distribution of `avg(P1,P2,P3)` values across the cohort. As long as we still compute the overall score as `avg(P1,P2,P3)` at apply time, the threshold and score are **semantically matched** — they correspond to the same scope of aggregation.
+
+P4 simply doesn't participate in the overall grade yet. It has a raw score but no grade.
+
+### CurvedScores must record scope
+
+The result needs to explicitly declare which problems the overall grade is based on:
+
+```typescript
+{
+  overall_grade: "B",
+  overall_scope: ["P1", "P2", "P3"],    // overall grade based on these
+  skipped_problems: ["P4"],              // not covered by curve
+  problem_grades: {
+    P1: { task_grade: "A", ... },
+    P2: { task_grade: "B", ... },
+    P3: { task_grade: "C", ... },
+    P4: { task_grade: null, ... },       // no curve → no grade
+  }
+}
+```
+
+### Lifecycle: from old curve to new curve
+
+```
+Phase 1: Old exam [P1,P2,P3]
+  → Accumulate data → compute curve_v1 (P1,P2,P3 + overall_mean)
+  → Apply curve_v1 → all problems graded, overall normal
+
+Phase 2: New exam adds P4 [P1,P2,P3,P4], not enough P4 data yet
+  → Apply curve_v1 (partial):
+    P1,P2,P3 → graded ✓
+    P4       → null
+    overall  → avg(P1,P2,P3) with old threshold ✓ (scope matches)
+
+Phase 3: Enough P4 data accumulated
+  → Option A: Compute curve_v2 covering all [P1,P2,P3,P4]
+    overall_mean recomputed from avg(P1,P2,P3,P4) distribution
+    → Full apply, all graded, overall based on 4 problems
+
+  → Option B: Only add P4's problem_curve, keep overall scoped to P1-P3
+    Suitable when P4 is supplementary and shouldn't affect overall grade
+```
+
+### Connection to the intersection pool model
+
+This scenario is exactly what the `future-todos.md` intersection model (v2) is designed for:
+
+```
+Event A (old exam): [P1, P2, P3]
+Event B (new exam): [P1, P2, P3, P4]
+                      ─────────
+Intersection:         [P1, P2, P3]  ← curve only covers these
+```
+
+When both events' data is pooled:
+- v1 (strict): rejects — problem sets differ
+- v2 (intersection): accepts — uses overlap [P1,P2,P3] for curve computation
+
+The intersection-produced curve naturally covers only P1-P3. Applying it is inherently partial. The two features are designed as a unit:
+
+```
+Pool (intersection) → Curve (subset) → applyCurve (partial) → CurvedScores (P4=null, overall scoped)
+```
