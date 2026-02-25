@@ -72,14 +72,14 @@ Input score: `problemReport.score` (the task-level score for one problem).
 const newGrade = determineGrade(report.overallMean, curve.overallMean)
 ```
 
-Input score: `report.overallMean` (geometric mean of totalProblem × totalAbility).
+Input score: `report.overallMean` (arithmetic mean of totalProblem and totalAbility).
 
 ## What is NOT directly curved
 
 - **`totalProblem`** (mean of task scores) — no thresholds, no grade assigned. CSV column `overallTaskScore` exists but parser ignores it.
 - **`totalAbility`** (mean of ability scores) — same. CSV column `overallAbilityScore` exists but parser ignores it.
 
-These two sub-totals have no independent grade. Only their geometric mean (`overallMean`) gets curved.
+These two sub-totals have no independent grade. Only their arithmetic mean (`overallMean`) gets curved.
 
 ## Grades that are derived (not independently curved)
 

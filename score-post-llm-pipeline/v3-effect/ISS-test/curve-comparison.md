@@ -22,7 +22,7 @@ Note: `ISS-without-task-curve/` contains the historical reports where problem ta
 | B | 0.394 | 0.388 | -0.006 |
 | C | 0.291 | 0.284 | -0.007 |
 
-Differs because `final_total_score = sqrt(total_problem * total_ability)` and `total_ability` changes when computed from 5 vs 7 dimensions.
+Differs because `final_total_score = (total_problem + total_ability) / 2` and `total_ability` changes when computed from 5 vs 7 dimensions.
 
 ### Ability Curves
 

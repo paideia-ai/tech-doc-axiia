@@ -161,15 +161,12 @@ export class ProblemScore extends Schema.Class<ProblemScore>("ProblemScore")({
 //   ability_scores[dim]  = arithmetic mean of that dim across mapped problems
 //   total_problem_score  = arithmetic mean of task_scores
 //   total_ability_score  = arithmetic mean of the 5 ability scores
-//   final_total_score    = geometric mean: √(problem × ability)
+//   final_total_score    = arithmetic mean: (problem + ability) / 2
 // =============================================================================
 
 /** Arithmetic mean. Returns 0 for empty input. */
 const mean = (values: readonly number[]): number =>
   values.length === 0 ? 0 : values.reduce((a, b) => a + b, 0) / values.length;
-
-/** Geometric mean of two non-negative numbers: √(a × b) */
-const geoMean2 = (a: number, b: number): number => Math.sqrt(a * b);
 
 const toScoreValue = Schema.decodeSync(ScoreValue);
 
@@ -203,7 +200,7 @@ export class JSONScores extends Schema.Class<JSONScores>("JSONScores")({
       mean(this.problem_scores.map((p) => p.task_score))
     );
     const totalAbility = toScoreValue(mean(Object.values(abilities)));
-    const finalTotal = toScoreValue(geoMean2(totalProblem, totalAbility));
+    const finalTotal = toScoreValue((totalProblem + totalAbility) / 2);
     return {
       total_problem_score: totalProblem,
       total_ability_score: totalAbility,

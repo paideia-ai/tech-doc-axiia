@@ -116,7 +116,7 @@ Invalid data (e.g. `task_score: 1.5`) throws a `ParseError` at decode time.
 After decoding, `JSONScores` has two computed properties that exist only on the decoded instance:
 
 - **`ability_scores`** — per-dimension mean across mapped problems (skips `Option.None`)
-- **`totals`** — `total_problem_score` (mean of task_scores), `total_ability_score` (mean of 5 ability scores), `final_total_score` (geometric mean: √(problem × ability))
+- **`totals`** — `total_problem_score` (mean of task_scores), `total_ability_score` (mean of 5 ability scores), `final_total_score` (arithmetic mean: (problem + ability) / 2)
 
 These are **stripped on encode** — they never appear in stored JSON.
 

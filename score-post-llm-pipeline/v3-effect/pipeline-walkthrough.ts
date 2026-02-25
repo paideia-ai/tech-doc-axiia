@@ -101,7 +101,7 @@ console.log("");
 //   ability_scores[dim] = mean of that dim's scores across all problems (skip None)
 //   total_problem_score = mean of all task_scores
 //   total_ability_score = mean of the 5 ability scores
-//   final_total_score   = geometric mean: √(problem × ability)
+//   final_total_score   = arithmetic mean: (problem + ability) / 2
 
 console.log("╔═══════════════════════════════════════════════════════════════╗");
 console.log("║  Section 2: Derived getters                                 ║");

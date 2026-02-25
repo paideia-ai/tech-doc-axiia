@@ -138,7 +138,7 @@ All 5 dimension keys are always present. `null` (decoded as `Option.None`) means
 | `ability_scores[dim]` | Arithmetic mean of `Some` values for that dimension across all problems |
 | `totals.total_problem_score` | Arithmetic mean of all `task_score` values |
 | `totals.total_ability_score` | Arithmetic mean of the 5 ability scores |
-| `totals.final_total_score` | **Geometric mean**: `√(problem_total × ability_total)` |
+| `totals.final_total_score` | **Arithmetic mean**: `(problem_total + ability_total) / 2` |
 
 ### Encode behavior
 

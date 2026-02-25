@@ -14,7 +14,7 @@ How to curve A, B, C, D while maintaining consistency? Can we only curve B, C, D
 The repo has an analogous hierarchy:
 
 ```
-final_total_score  = √(total_problem × total_ability)    ← aggregate ("A")
+final_total_score  = (total_problem + total_ability) / 2  ← aggregate ("A")
 total_problem      = mean(per-problem task_scores)         ← intermediate
 total_ability      = mean(per-dimension ability_scores)    ← intermediate
 ability_score[dim] = mean(dim scores across problems)      ← leaf
@@ -211,7 +211,7 @@ Pool (intersection) → Curve (subset) → applyCurve (partial) → CurvedScores
 
 ---
 
-## Compositional Curve: Per-Problem Pooling + Monte Carlo Composition
+## Compositional Curve: Per-Problem Pooling + Parametric Composition
 
 ### Beyond intersection: compose instead of narrow
 
@@ -220,7 +220,7 @@ The intersection model narrows the curve's scope to shared problems. This works 
 The **compositional approach** solves both problems:
 
 1. **Per-problem curves**: Pool ALL available data per problem across exam versions. P1 gets 135 samples regardless of which exam the student took.
-2. **Overall curve**: Compose from per-problem distributions via Monte Carlo simulation, using each problem's full sample.
+2. **Overall curve**: Compose from per-problem distributions via parametric decomposition, using each problem's full sample for μ/σ and overlapping students for cross-problem covariance.
 
 ### Why per-problem pooling is valid
 
@@ -239,31 +239,32 @@ They do NOT depend on what other problems the student took. A P1 score of 0.82 m
 | `total_problem_score` | Yes (mean of all task_scores) | No — formula changes |
 | `final_total_score` | Yes (derived from above) | No — formula changes |
 
-### Monte Carlo composition
+### Parametric composition (Option D)
 
-Instead of computing `overall_mean` from a homogeneous pool (which requires all students to have the same problem set), we **simulate** the overall score distribution by sampling from per-problem distributions:
+Instead of computing `overall_mean` from a homogeneous pool (which requires all students to have the same problem set), we **analytically decompose** the aggregate score distribution using the linear combination formula.
+
+Since `final_total = (total_problem + total_ability) / 2` is a linear combination of per-problem scores:
 
 ```
-For each of N=10,000 trials:
-  For each problem Pi in target exam:
-    Sample one student's full data for Pi from the bank
-    (task_score + dimension_scores from the SAME student → preserves within-problem correlation)
+For each aggregate (ability_d, final_total):
+  1. Express as weighted sum: aggregate = Σ wᵢ Xᵢ
+     where Xᵢ are per-problem task_scores and dimension_scores
 
-  Compute derived values from sampled data:
-    total_problem = mean(sampled task_scores)
-    ability[dim]  = mean(sampled dim_scores across problems testing dim)
-    total_ability = mean(abilities)
-    final_total   = √(total_problem × total_ability)
+  2. μ(aggregate) = Σ wᵢ μ(Xᵢ)
+     Per-problem means from pooled data (large n, precise)
 
-  Store simulated final_total, abilities
+  3. σ²(aggregate) = Σᵢⱼ wᵢwⱼ Cov(Xᵢ, Xⱼ)
+     Same-problem covariances from pooled data (large n)
+     Cross-problem covariances from overlapping students
 
-Compute thresholds from 10,000 simulated values.
+  4. Thresholds = μ ± kσ (for std_dev method)
 ```
 
-**Assumption**: independence between problems (sampling P1 and P2 from different students). This is reasonable because:
-- Problems are graded independently by separate LLM calls
-- Student ability creates positive correlation, but the curve models the population-level distribution
-- The alternative (only using homogeneous pools) wastes far more information
+**Properties**:
+- μ and σ² formulas are exact for any distribution (no normality assumption)
+- Per-problem variances benefit from pooled data (larger samples)
+- Cross-problem covariances estimated from overlapping students (those who took both problems)
+- When no overlapping students exist for a pair, Cov defaults to 0 (independence)
 
 ### Implementation: ProblemScoreBank + composeCurve
 
@@ -298,8 +299,8 @@ Compute thresholds from 10,000 simulated values.
                               │  P3: from 135  │
                               │  P4: from  35  │
                               │               │
-                              │ ability_curves │  ← Monte Carlo simulated
-                              │ overall_mean   │  ← Monte Carlo simulated
+                              │ ability_curves │  ← parametric (μ ± kσ)
+                              │ overall_mean   │  ← parametric (μ ± kσ)
                               └───────┬───────┘
                                       │
                               applyCurve(curve,

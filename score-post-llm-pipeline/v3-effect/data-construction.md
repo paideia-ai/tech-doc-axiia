@@ -137,7 +137,7 @@ When you decode the JSON into the `JSONScores` class, three getters become avail
 | `ability_scores[dim]` | Mean of non-null values for that dimension across all problems |
 | `totals.total_problem_score` | Mean of all `task_score` values |
 | `totals.total_ability_score` | Mean of the 5 ability scores |
-| `totals.final_total_score` | Geometric mean: `√(total_problem × total_ability)` |
+| `totals.final_total_score` | Arithmetic mean: `(total_problem + total_ability) / 2` |
 
 Example for student-0042 (3 problems):
 
@@ -150,7 +150,7 @@ Iterative-Optimization:        mean(0.70, 0.68)         = 0.690
 
 total_problem = mean(0.80, 0.75, 0.82)   = 0.790
 total_ability = mean(0.877, 0.800, 0.755, 0.680, 0.690) = 0.760
-final_total   = √(0.790 × 0.760)         = 0.775
+final_total   = (0.790 + 0.760) / 2       = 0.775
 ```
 
 These are **not** stored in JSON. The class recomputes them on access.

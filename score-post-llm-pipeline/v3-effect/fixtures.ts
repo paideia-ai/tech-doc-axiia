@@ -49,27 +49,27 @@ const dimMap = {
     {
       problem_id: { digit: "000340", name: "meeting-verify" },
       dimensions: [
-        "Discovery-Self-Understanding",
-        "Expression-Translation",
-        "Exploratory-Discovery",
+        "discovery",
+        "representation",
+        "exploratory",
       ],
     },
     {
       problem_id: { digit: "000500", name: "thinking-traps" },
       dimensions: [
-        "Discovery-Self-Understanding",
-        "Verification-Confirmation",
-        "Iterative-Optimization",
+        "discovery",
+        "self-verification",
+        "iterative-refinement",
       ],
     },
     {
       problem_id: { digit: "001001", name: "ling-bing" },
       dimensions: [
-        "Discovery-Self-Understanding",
-        "Expression-Translation",
-        "Exploratory-Discovery",
-        "Verification-Confirmation",
-        "Iterative-Optimization",
+        "discovery",
+        "representation",
+        "exploratory",
+        "self-verification",
+        "iterative-refinement",
       ],
     },
   ],
@@ -94,11 +94,11 @@ export const jsonScoresStored = {
       problem_id: { digit: "000340", name: "meeting-verify" },
       task_score: 0.8,
       dimension_scores: {
-        "Discovery-Self-Understanding": 0.85,
-        "Expression-Translation": 0.78,
-        "Exploratory-Discovery": 0.72,
-        "Verification-Confirmation": null,
-        "Iterative-Optimization": null,
+        "discovery": 0.85,
+        "representation": 0.78,
+        "exploratory": 0.72,
+        "self-verification": null,
+        "iterative-refinement": null,
       },
     },
     {
@@ -106,11 +106,11 @@ export const jsonScoresStored = {
       problem_id: { digit: "000500", name: "thinking-traps" },
       task_score: 0.75,
       dimension_scores: {
-        "Discovery-Self-Understanding": 0.9,
-        "Expression-Translation": null,
-        "Exploratory-Discovery": null,
-        "Verification-Confirmation": 0.65,
-        "Iterative-Optimization": 0.7,
+        "discovery": 0.9,
+        "representation": null,
+        "exploratory": null,
+        "self-verification": 0.65,
+        "iterative-refinement": 0.7,
       },
     },
     {
@@ -118,11 +118,11 @@ export const jsonScoresStored = {
       problem_id: { digit: "001001", name: "ling-bing" },
       task_score: 0.82,
       dimension_scores: {
-        "Discovery-Self-Understanding": 0.88,
-        "Expression-Translation": 0.82,
-        "Exploratory-Discovery": 0.79,
-        "Verification-Confirmation": 0.71,
-        "Iterative-Optimization": 0.68,
+        "discovery": 0.88,
+        "representation": 0.82,
+        "exploratory": 0.79,
+        "self-verification": 0.71,
+        "iterative-refinement": 0.68,
       },
     },
   ],
@@ -141,7 +141,7 @@ export const jsonScoresStored = {
 //    totals derivation:
 //      total_problem_score = mean(0.80, 0.75, 0.82) = 0.7900
 //      total_ability_score = mean(0.8767, 0.80, 0.755, 0.68, 0.69) = 0.7603
-//      final_total_score   = √(0.79 × 0.7603) = 0.7750
+//      final_total_score   = (0.79 + 0.7603) / 2 = 0.7752
 // =============================================================================
 
 const scores = decodeJSONScores(jsonScoresStored);
@@ -160,42 +160,42 @@ export const curvedScoresStored = {
       problem_id: { digit: "000340", name: "meeting-verify" },
       task_grade: "B",
       dimension_grades: {
-        "Discovery-Self-Understanding": "A",
-        "Expression-Translation": "B",
-        "Exploratory-Discovery": "B",
-        "Verification-Confirmation": null,
-        "Iterative-Optimization": null,
+        "discovery": "A",
+        "representation": "B",
+        "exploratory": "B",
+        "self-verification": null,
+        "iterative-refinement": null,
       },
     },
     {
       problem_id: { digit: "000500", name: "thinking-traps" },
       task_grade: "B",
       dimension_grades: {
-        "Discovery-Self-Understanding": "A",
-        "Expression-Translation": null,
-        "Exploratory-Discovery": null,
-        "Verification-Confirmation": "C",
-        "Iterative-Optimization": "B",
+        "discovery": "A",
+        "representation": null,
+        "exploratory": null,
+        "self-verification": "C",
+        "iterative-refinement": "B",
       },
     },
     {
       problem_id: { digit: "001001", name: "ling-bing" },
       task_grade: "A",
       dimension_grades: {
-        "Discovery-Self-Understanding": "A",
-        "Expression-Translation": "A",
-        "Exploratory-Discovery": "B",
-        "Verification-Confirmation": "B",
-        "Iterative-Optimization": "B",
+        "discovery": "A",
+        "representation": "A",
+        "exploratory": "B",
+        "self-verification": "B",
+        "iterative-refinement": "B",
       },
     },
   ],
   ability_grades: {
-    "Discovery-Self-Understanding": "A",
-    "Expression-Translation": "B",
-    "Exploratory-Discovery": "B",
-    "Verification-Confirmation": "C",
-    "Iterative-Optimization": "B",
+    "discovery": "A",
+    "representation": "B",
+    "exploratory": "B",
+    "self-verification": "C",
+    "iterative-refinement": "B",
   },
   overall_grade: "B",
 };

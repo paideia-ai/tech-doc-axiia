@@ -9,7 +9,7 @@
  *   - ProblemScoreBank pools per-problem: P1=9, P2=9, P3=9, P4=3
  *   - composeCurve produces a valid Curve for the 4-problem exam
  *   - problem_curves benefit from pooled data (9 samples for P1-P3 vs 3 pool-only)
- *   - ability_curves + overall_mean are Monte Carlo composed
+ *   - ability_curves + overall_mean are computed via parametric decomposition
  *   - The Curve applies to a 4-problem student via standard applyCurve
  *
  * Run: npx tsx v3-effect/compose-curve-test.ts
@@ -324,13 +324,20 @@ assert(bank.slots["000500"].entries.length === 9, "P2 should have 9 samples (6 o
 assert(bank.slots["001001"].entries.length === 9, "P3 should have 9 samples (6 old + 3 new)");
 assert(bank.slots["002001"].entries.length === 3, "P4 should have 3 samples (new only)");
 console.log("Per-problem sample sizes correct: P1=9, P2=9, P3=9, P4=3");
+
+// Verify participant_id is preserved
+assert(
+  bank.slots["000340"].entries[0].participant_id === "old-aaaa0001",
+  "participant_id should be preserved in bank entries",
+);
+console.log("participant_id preserved in bank entries");
 console.log("  OK\n");
 
 // =============================================================================
 // 2. Compose a curve for the 4-problem exam
 // =============================================================================
 
-console.log("=== 2. Compose curve for 4-problem exam (std dev) ===\n");
+console.log("=== 2. Compose curve for 4-problem exam (std dev, parametric) ===\n");
 
 const stdDevMethod: CurveMethod = {
   type: "standard_deviation",
@@ -339,38 +346,15 @@ const stdDevMethod: CurveMethod = {
 
 // Decode the target dimension map for composeCurve
 const targetDimMap = decodeProblemDimensionMap(newDimMapRaw);
-const targetSnapshot = Schema.decodeUnknownSync(
-  Schema.Struct({
-    git_hash: Schema.String,
-    set_hash: Schema.String,
-    entries: Schema.Array(Schema.Struct({
-      key: Schema.String,
-      sha256: Schema.String,
-    })),
-  })
-)(newPromptSnapshot);
-// We need the full decoded PromptSnapshot for composeCurve
 const targetPromptSnapshot = Schema.decodeUnknownSync(
   (await import("./schemas.js")).PromptSnapshot
 )(newPromptSnapshot);
-
-// Use a seeded RNG for deterministic results
-function mulberry32(seed: number) {
-  return function () {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 const composedCurve = composeCurve(
   bank,
   { dimension_map: targetDimMap, prompt_snapshot: targetPromptSnapshot },
   stdDevMethod,
-  "Composed 4-problem curve (std dev)",
-  { nTrials: 10_000, rng: mulberry32(42) },
+  "Composed 4-problem curve (std dev, parametric)",
 );
 
 console.log("Problem curves:");
@@ -396,6 +380,21 @@ assert(om.A >= om.B && om.B >= om.C, "overall: A ≥ B ≥ C ordering violated")
 console.log(`\nMethod: ${composedCurve.method.type}`);
 console.log(`Sample size (min per-problem): ${composedCurve.sample_size}`);
 assert(composedCurve.sample_size === 3, "sample_size should be min per-problem = 3 (P4)");
+
+// Verify determinism: parametric approach should give identical results on re-run
+const composedCurve2 = composeCurve(
+  bank,
+  { dimension_map: targetDimMap, prompt_snapshot: targetPromptSnapshot },
+  stdDevMethod,
+  "Composed 4-problem curve (std dev, parametric) — 2nd run",
+);
+assert(
+  composedCurve.overall_mean.A === composedCurve2.overall_mean.A &&
+  composedCurve.overall_mean.B === composedCurve2.overall_mean.B &&
+  composedCurve.overall_mean.C === composedCurve2.overall_mean.C,
+  "Parametric approach should be deterministic (no randomness)",
+);
+console.log("Determinism verified: identical results on re-run");
 console.log("  OK\n");
 
 // =============================================================================
@@ -446,8 +445,7 @@ console.log(
   `  Pool-only (3 samples): A≥${poolOnlyCurve.problem_curves["002001"].A.toFixed(3)} B≥${poolOnlyCurve.problem_curves["002001"].B.toFixed(3)} C≥${poolOnlyCurve.problem_curves["002001"].C.toFixed(3)}`,
 );
 
-// For P1, composed uses 9 samples while pool-only uses 3 → different thresholds
-// For P4, both use 3 samples → should be identical
+// For P4, composed uses 3 samples while pool-only uses 3 → should be identical
 assert(
   composedCurve.problem_curves["002001"].A === poolOnlyCurve.problem_curves["002001"].A &&
   composedCurve.problem_curves["002001"].B === poolOnlyCurve.problem_curves["002001"].B &&
@@ -455,6 +453,42 @@ assert(
   "P4 thresholds should match between composed and pool-only (same 3 samples)",
 );
 console.log("\nP4 thresholds match (same data, same result)");
+console.log("  OK\n");
+
+// =============================================================================
+// 3b. Verify parametric matches direct for new-only bank (complete students)
+// =============================================================================
+
+console.log("=== 3b. Parametric vs direct for homogeneous data ===\n");
+
+// Build bank from only new-exam students (all have 4 problems = complete)
+const newOnlyBankResult = buildBank("New-only Bank", newScores);
+if ("_tag" in newOnlyBankResult) {
+  console.error(`New-only bank build failed: ${formatBankError(newOnlyBankResult)}`);
+  process.exit(1);
+}
+const newOnlyBank = newOnlyBankResult;
+
+const newOnlyComposed = composeCurve(
+  newOnlyBank,
+  { dimension_map: targetDimMap, prompt_snapshot: targetPromptSnapshot },
+  stdDevMethod,
+  "New-only composed curve",
+);
+
+// Compare overall_mean: parametric should match computeCurve for complete data
+const EPS = 0.002; // Allow tiny floating-point differences
+console.log("Overall (new-only composed vs pool-only computeCurve):");
+console.log(`  Composed:  A≥${newOnlyComposed.overall_mean.A.toFixed(4)} B≥${newOnlyComposed.overall_mean.B.toFixed(4)} C≥${newOnlyComposed.overall_mean.C.toFixed(4)}`);
+console.log(`  Pool-only: A≥${poolOnlyCurve.overall_mean.A.toFixed(4)} B≥${poolOnlyCurve.overall_mean.B.toFixed(4)} C≥${poolOnlyCurve.overall_mean.C.toFixed(4)}`);
+
+assert(
+  Math.abs(newOnlyComposed.overall_mean.A - poolOnlyCurve.overall_mean.A) < EPS &&
+  Math.abs(newOnlyComposed.overall_mean.B - poolOnlyCurve.overall_mean.B) < EPS &&
+  Math.abs(newOnlyComposed.overall_mean.C - poolOnlyCurve.overall_mean.C) < EPS,
+  "For homogeneous data (all complete students), parametric should match direct computation",
+);
+console.log("Parametric matches direct computation for homogeneous data");
 console.log("  OK\n");
 
 // =============================================================================
