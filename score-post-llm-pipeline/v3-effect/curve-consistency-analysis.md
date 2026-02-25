@@ -208,3 +208,140 @@ The intersection-produced curve naturally covers only P1-P3. Applying it is inhe
 ```
 Pool (intersection) → Curve (subset) → applyCurve (partial) → CurvedScores (P4=null, overall scoped)
 ```
+
+---
+
+## Compositional Curve: Per-Problem Pooling + Monte Carlo Composition
+
+### Beyond intersection: compose instead of narrow
+
+The intersection model narrows the curve's scope to shared problems. This works but **wastes information**: if P1 has 135 samples and P4 has 35, the intersection-only curve for [P1,P2,P3] uses 135 students for P1-P3 but ignores P4 entirely. To grade a 4-problem exam, you need a separate pool with only 35 students.
+
+The **compositional approach** solves both problems:
+
+1. **Per-problem curves**: Pool ALL available data per problem across exam versions. P1 gets 135 samples regardless of which exam the student took.
+2. **Overall curve**: Compose from per-problem distributions via Monte Carlo simulation, using each problem's full sample.
+
+### Why per-problem pooling is valid
+
+A problem's `task_score` and `dimension_scores` depend only on:
+- The problem's content (prompt + rubric)
+- The student's response
+- The scoring framework
+
+They do NOT depend on what other problems the student took. A P1 score of 0.82 means the same thing whether the student also took [P2,P3] or [P2,P3,P4].
+
+| Score level | Depends on other problems? | Can pool across exam versions? |
+|-------------|---------------------------|-------------------------------|
+| `task_score[P1]` | No | **Yes** |
+| `dimension_scores[P1][dim]` | No | **Yes** |
+| `ability_scores[dim]` | Yes (mean across problems) | No — formula changes with problem set |
+| `total_problem_score` | Yes (mean of all task_scores) | No — formula changes |
+| `final_total_score` | Yes (derived from above) | No — formula changes |
+
+### Monte Carlo composition
+
+Instead of computing `overall_mean` from a homogeneous pool (which requires all students to have the same problem set), we **simulate** the overall score distribution by sampling from per-problem distributions:
+
+```
+For each of N=10,000 trials:
+  For each problem Pi in target exam:
+    Sample one student's full data for Pi from the bank
+    (task_score + dimension_scores from the SAME student → preserves within-problem correlation)
+
+  Compute derived values from sampled data:
+    total_problem = mean(sampled task_scores)
+    ability[dim]  = mean(sampled dim_scores across problems testing dim)
+    total_ability = mean(abilities)
+    final_total   = √(total_problem × total_ability)
+
+  Store simulated final_total, abilities
+
+Compute thresholds from 10,000 simulated values.
+```
+
+**Assumption**: independence between problems (sampling P1 and P2 from different students). This is reasonable because:
+- Problems are graded independently by separate LLM calls
+- Student ability creates positive correlation, but the curve models the population-level distribution
+- The alternative (only using homogeneous pools) wastes far more information
+
+### Implementation: ProblemScoreBank + composeCurve
+
+```
+                    JSONScores (old exam)          JSONScores (new exam)
+                    [P1, P2, P3] × 100            [P1, P2, P3, P4] × 35
+                          │                               │
+                          └───────────┬───────────────────┘
+                                      │
+                                 buildBank()
+                                      │
+                              ┌───────▼───────┐
+                              │ ProblemScore   │
+                              │     Bank       │
+                              │               │
+                              │ P1: 135 samples│
+                              │ P2: 135 samples│
+                              │ P3: 135 samples│
+                              │ P4:  35 samples│
+                              └───────┬───────┘
+                                      │
+                            composeCurve(bank,
+                              target=[P1,P2,P3,P4],
+                              method=std_dev)
+                                      │
+                              ┌───────▼───────┐
+                              │    Curve       │  ← standard Curve type,
+                              │               │    compatible with applyCurve
+                              │ problem_curves │
+                              │  P1: from 135  │  ← direct from raw scores
+                              │  P2: from 135  │
+                              │  P3: from 135  │
+                              │  P4: from  35  │
+                              │               │
+                              │ ability_curves │  ← Monte Carlo simulated
+                              │ overall_mean   │  ← Monte Carlo simulated
+                              └───────┬───────┘
+                                      │
+                              applyCurve(curve,
+                                newExamStudent)
+                                      │
+                              ┌───────▼───────┐
+                              │ CurvedScores   │
+                              │ (all 4 problems│
+                              │  graded)       │
+                              └───────────────┘
+```
+
+### Validation in ProblemScoreBank
+
+Per-problem compatibility checks (not per-exam):
+
+| Check | Scope | What it validates |
+|-------|-------|-------------------|
+| Framework prompt match | Global | All scores share the same framework prompt entries |
+| Problem prompt match | Per-problem | For each problem, all contributing scores have the same `problem:{digit}:*` prompt entries |
+| Dimension set match | Per-problem | For each problem, all contributing scores have the same tested dimensions |
+
+Note: different `set_hash` values are acceptable (expected when problem sets differ). Only the relevant entries are compared.
+
+### Output: standard Curve type
+
+`composeCurve` produces a standard `Curve` — fully compatible with the existing `applyCurve` and `checkCompatibility`. The only difference is how the curve was computed, not what it looks like.
+
+`sample_size` is set to the minimum per-problem sample count (the statistical bottleneck). For the example above, that's 35 (P4's count).
+
+### Comparison with other approaches
+
+| Approach | Per-problem data utilization | Overall curve coverage | Implementation |
+|----------|------------------------------|----------------------|----------------|
+| Strict pool (v1) | 35 students for all problems | Full (4 problems) | Current `computeCurve` |
+| Intersection pool (v2) | 135 for P1-P3, P4 excluded | Partial (3 problems) | `future-todos.md` planned |
+| **Compositional** | 135 for P1-P3, 35 for P4 | **Full (4 problems)** | `compose-curve.ts` |
+
+The compositional approach strictly dominates the others for data utilization while maintaining full exam coverage.
+
+### When to use each approach
+
+- **`computeCurve` (pool-based)**: All students took the same exam. No need for composition.
+- **`composeCurve` (compositional)**: Students took different exams with overlapping problems. Maximizes data usage.
+- **Intersection pool**: When you need a curve that applies to BOTH old and new exam students (scope is the shared subset).
